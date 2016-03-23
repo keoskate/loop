@@ -28,6 +28,7 @@
 		7D0E73C219C460F70086274C /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E73BF19C460F70086274C /* Bolts.framework */; };
 		7D0E73C319C460F70086274C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E73C019C460F70086274C /* Parse.framework */; };
 		7D0E73C419C460F70086274C /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E73C119C460F70086274C /* ParseFacebookUtils.framework */; };
+		7D2A3EAC1CA286FD007B5C5D /* searchTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D2A3EAB1CA286FD007B5C5D /* searchTab@2x.png */; };
 		7D34D9B91AA5C30400E99564 /* KMAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */; };
 		7D60C4A419C480350064DF08 /* KMAUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */; };
 		7D6F5B4D1A0B405100E6359C /* add-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B341A0B405100E6359C /* add-selected@2x.png */; };
@@ -45,7 +46,6 @@
 		7D6F5B591A0B405100E6359C /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B401A0B405100E6359C /* placeholder@2x.png */; };
 		7D6F5B5A1A0B405100E6359C /* requests-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B411A0B405100E6359C /* requests-selected@2x.png */; };
 		7D6F5B5B1A0B405100E6359C /* requests@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B421A0B405100E6359C /* requests@2x.png */; };
-		7D6F5B5C1A0B405100E6359C /* search-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B431A0B405100E6359C /* search-2@2x.png */; };
 		7D6F5B5D1A0B405100E6359C /* search-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B441A0B405100E6359C /* search-selected@2x.png */; };
 		7D6F5B5E1A0B405100E6359C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B451A0B405100E6359C /* search@2x.png */; };
 		7D6F5B5F1A0B405100E6359C /* send-request@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B461A0B405100E6359C /* send-request@2x.png */; };
@@ -133,6 +133,7 @@
 		7D0E73BF19C460F70086274C /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "parse-library-1.3.0/Bolts.framework"; sourceTree = "<group>"; };
 		7D0E73C019C460F70086274C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "parse-library-1.3.0/Parse.framework"; sourceTree = "<group>"; };
 		7D0E73C119C460F70086274C /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = "parse-library-1.3.0/ParseFacebookUtils.framework"; sourceTree = "<group>"; };
+		7D2A3EAB1CA286FD007B5C5D /* searchTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchTab@2x.png"; sourceTree = "<group>"; };
 		7D34D9B71AA5C30400E99564 /* KMAWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAWebViewController.h; sourceTree = "<group>"; };
 		7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAWebViewController.m; sourceTree = "<group>"; };
 		7D60C4A219C480350064DF08 /* KMAUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAUserInfoViewController.h; sourceTree = "<group>"; };
@@ -152,7 +153,6 @@
 		7D6F5B401A0B405100E6359C /* placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder@2x.png"; path = "Images/placeholder@2x.png"; sourceTree = "<group>"; };
 		7D6F5B411A0B405100E6359C /* requests-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "requests-selected@2x.png"; path = "Images/requests-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B421A0B405100E6359C /* requests@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "requests@2x.png"; path = "Images/requests@2x.png"; sourceTree = "<group>"; };
-		7D6F5B431A0B405100E6359C /* search-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search-2@2x.png"; path = "Images/search-2@2x.png"; sourceTree = "<group>"; };
 		7D6F5B441A0B405100E6359C /* search-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search-selected@2x.png"; path = "Images/search-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B451A0B405100E6359C /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search@2x.png"; path = "Images/search@2x.png"; sourceTree = "<group>"; };
 		7D6F5B461A0B405100E6359C /* send-request@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "send-request@2x.png"; path = "Images/send-request@2x.png"; sourceTree = "<group>"; };
@@ -259,6 +259,82 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7D2A3EAD1CA29762007B5C5D /* Contacts Page */ = {
+			isa = PBXGroup;
+			children = (
+				7D0E73AC19C459F50086274C /* KMAContactViewController.h */,
+				7D0E73AD19C459F50086274C /* KMAContactViewController.m */,
+				7D88783A1A0A352C00BFA5C5 /* KMAContactsCell.h */,
+				7D88783B1A0A352C00BFA5C5 /* KMAContactsCell.m */,
+				7D0E73AF19C45AC70086274C /* KMAContactDetailViewController.h */,
+				7D0E73B019C45AC70086274C /* KMAContactDetailViewController.m */,
+				7D0E73B219C45B6D0086274C /* KMAManageContactsViewController.h */,
+				7D0E73B319C45B6D0086274C /* KMAManageContactsViewController.m */,
+				7D34D9B71AA5C30400E99564 /* KMAWebViewController.h */,
+				7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */,
+			);
+			name = "Contacts Page";
+			sourceTree = "<group>";
+		};
+		7D2A3EAE1CA297AD007B5C5D /* Login/Signup Page */ = {
+			isa = PBXGroup;
+			children = (
+				7D0E73A319C452CC0086274C /* KMALoginViewController.h */,
+				7D0E73A419C452CC0086274C /* KMALoginViewController.m */,
+				7D0E73A619C4578A0086274C /* KMASignUpViewController.h */,
+				7D0E73A719C4578A0086274C /* KMASignUpViewController.m */,
+			);
+			name = "Login/Signup Page";
+			sourceTree = "<group>";
+		};
+		7D2A3EAF1CA297D6007B5C5D /* Search Page */ = {
+			isa = PBXGroup;
+			children = (
+				7D8ED9091A0975E400D070F8 /* KMATapSearchViewController.h */,
+				7D8ED90A1A0975E400D070F8 /* KMATapSearchViewController.m */,
+				7D0E73A919C458E20086274C /* KMAHomeViewController.h */,
+				7D0E73AA19C458E20086274C /* KMAHomeViewController.m */,
+				7D8E0F891A01FE5400F1D29C /* KMAAddContactController.h */,
+				7D8E0F8A1A01FE5400F1D29C /* KMAAddContactController.m */,
+				7DB339E41A1EEFCD003907BC /* KMAShareCell.h */,
+				7DB339E51A1EEFCD003907BC /* KMAShareCell.m */,
+				7DB339E71A1EFFC3003907BC /* KMASocialMedia.h */,
+				7DB339E81A1EFFC3003907BC /* KMASocialMedia.m */,
+			);
+			name = "Search Page";
+			sourceTree = "<group>";
+		};
+		7D2A3EB01CA297F3007B5C5D /* Settings Page */ = {
+			isa = PBXGroup;
+			children = (
+				7D60C4A219C480350064DF08 /* KMAUserInfoViewController.h */,
+				7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */,
+			);
+			name = "Settings Page";
+			sourceTree = "<group>";
+		};
+		7D2A3EB11CA2984B007B5C5D /* Requests Page */ = {
+			isa = PBXGroup;
+			children = (
+				7DD3B7EC19D3C85B00EDA948 /* KMARequestsTableViewController.h */,
+				7DD3B7ED19D3C85B00EDA948 /* KMARequestsTableViewController.m */,
+				7DD3B7EF19D3E4AA00EDA948 /* KMARequestTableViewCell.h */,
+				7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */,
+				7DAFED821A0CDE9C0079B161 /* KMAAcceptPopUpView.h */,
+				7DAFED831A0CDE9C0079B161 /* KMAAcceptPopUpView.m */,
+			);
+			name = "Requests Page";
+			sourceTree = "<group>";
+		};
+		7D2A3EB21CA29914007B5C5D /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				7DFA5EBB19B811A900E67589 /* KMAViewController.h */,
+				7DFA5EBC19B811A900E67589 /* KMAViewController.m */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
 		7D3A66D21A01C80400BFF689 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,7 +353,6 @@
 				7D6F5B3F1A0B405100E6359C /* nope-button@2x.png */,
 				7D6F5B401A0B405100E6359C /* placeholder@2x.png */,
 				7D6F5B451A0B405100E6359C /* search@2x.png */,
-				7D6F5B431A0B405100E6359C /* search-2@2x.png */,
 				7D6F5B461A0B405100E6359C /* send-request@2x.png */,
 				7D6F5B491A0B405100E6359C /* snapchat@2x.png */,
 				7D6F5B4A1A0B405100E6359C /* thumb@2x.png */,
@@ -295,6 +370,7 @@
 		7D6F5B1B1A0B3F2600E6359C /* Tabbar */ = {
 			isa = PBXGroup;
 			children = (
+				7D2A3EAB1CA286FD007B5C5D /* searchTab@2x.png */,
 				7D6F5B441A0B405100E6359C /* search-selected@2x.png */,
 				7D6F5B3A1A0B405100E6359C /* contacts@2x.png */,
 				7D6F5B391A0B405100E6359C /* contacts-selected@2x.png */,
@@ -395,40 +471,12 @@
 			children = (
 				7DFA5EB519B811A900E67589 /* KMAAppDelegate.h */,
 				7DFA5EB619B811A900E67589 /* KMAAppDelegate.m */,
-				7DFA5EBB19B811A900E67589 /* KMAViewController.h */,
-				7DFA5EBC19B811A900E67589 /* KMAViewController.m */,
-				7D0E73A319C452CC0086274C /* KMALoginViewController.h */,
-				7D0E73A419C452CC0086274C /* KMALoginViewController.m */,
-				7D0E73A619C4578A0086274C /* KMASignUpViewController.h */,
-				7D0E73A719C4578A0086274C /* KMASignUpViewController.m */,
-				7D8ED9091A0975E400D070F8 /* KMATapSearchViewController.h */,
-				7D8ED90A1A0975E400D070F8 /* KMATapSearchViewController.m */,
-				7D0E73A919C458E20086274C /* KMAHomeViewController.h */,
-				7D0E73AA19C458E20086274C /* KMAHomeViewController.m */,
-				7D0E73AC19C459F50086274C /* KMAContactViewController.h */,
-				7D0E73AD19C459F50086274C /* KMAContactViewController.m */,
-				7D88783A1A0A352C00BFA5C5 /* KMAContactsCell.h */,
-				7D88783B1A0A352C00BFA5C5 /* KMAContactsCell.m */,
-				7D0E73AF19C45AC70086274C /* KMAContactDetailViewController.h */,
-				7D0E73B019C45AC70086274C /* KMAContactDetailViewController.m */,
-				7D0E73B219C45B6D0086274C /* KMAManageContactsViewController.h */,
-				7D0E73B319C45B6D0086274C /* KMAManageContactsViewController.m */,
-				7D60C4A219C480350064DF08 /* KMAUserInfoViewController.h */,
-				7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */,
-				7D8E0F891A01FE5400F1D29C /* KMAAddContactController.h */,
-				7D8E0F8A1A01FE5400F1D29C /* KMAAddContactController.m */,
-				7DD3B7EC19D3C85B00EDA948 /* KMARequestsTableViewController.h */,
-				7DD3B7ED19D3C85B00EDA948 /* KMARequestsTableViewController.m */,
-				7DD3B7EF19D3E4AA00EDA948 /* KMARequestTableViewCell.h */,
-				7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */,
-				7DAFED821A0CDE9C0079B161 /* KMAAcceptPopUpView.h */,
-				7DAFED831A0CDE9C0079B161 /* KMAAcceptPopUpView.m */,
-				7DB339E41A1EEFCD003907BC /* KMAShareCell.h */,
-				7DB339E51A1EEFCD003907BC /* KMAShareCell.m */,
-				7DB339E71A1EFFC3003907BC /* KMASocialMedia.h */,
-				7DB339E81A1EFFC3003907BC /* KMASocialMedia.m */,
-				7D34D9B71AA5C30400E99564 /* KMAWebViewController.h */,
-				7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */,
+				7D2A3EB21CA29914007B5C5D /* Other */,
+				7D2A3EAE1CA297AD007B5C5D /* Login/Signup Page */,
+				7D2A3EAF1CA297D6007B5C5D /* Search Page */,
+				7D2A3EB11CA2984B007B5C5D /* Requests Page */,
+				7D2A3EAD1CA29762007B5C5D /* Contacts Page */,
+				7D2A3EB01CA297F3007B5C5D /* Settings Page */,
 				7DFA5EBE19B811AA00E67589 /* Images.xcassets */,
 				7DFA5EAD19B811A900E67589 /* Supporting Files */,
 			);
@@ -559,6 +607,7 @@
 				7DEBA6661A6345B1005E9D3F /* login_loop_logo@2x.png in Resources */,
 				7D6F5B561A0B405100E6359C /* gmail@2x.png in Resources */,
 				7DEBA66A1A634C29005E9D3F /* sign_up_add_photo@2x.png in Resources */,
+				7D2A3EAC1CA286FD007B5C5D /* searchTab@2x.png in Resources */,
 				7DB28DA31B3A362B00C08645 /* send-request@2x.png in Resources */,
 				7DFA5EBF19B811AA00E67589 /* Images.xcassets in Resources */,
 				7D6F5B601A0B405100E6359C /* settings-selected@2x.png in Resources */,
@@ -567,7 +616,6 @@
 				7D6F5B5A1A0B405100E6359C /* requests-selected@2x.png in Resources */,
 				7D6F5B541A0B405100E6359C /* Default@2x.png in Resources */,
 				7D6F5B4F1A0B405100E6359C /* Anvaripour_Keion.jpg in Resources */,
-				7D6F5B5C1A0B405100E6359C /* search-2@2x.png in Resources */,
 				7DFA5EB119B811A900E67589 /* InfoPlist.strings in Resources */,
 				7D6F5B631A0B405100E6359C /* thumb@2x.png in Resources */,
 				7D6F5B531A0B405100E6359C /* contacts@2x.png in Resources */,

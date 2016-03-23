@@ -16,11 +16,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationItem.hidesBackButton = YES;
         
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
-        
         NSLog(@"Current User: %@", currentUser.username);
     }
     else {

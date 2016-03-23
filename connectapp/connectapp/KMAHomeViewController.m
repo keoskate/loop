@@ -38,16 +38,13 @@
     
     [self updateTextLabelsWithText: newString];
     
-    NSArray *wordsAndEmptyStrings = [newString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
-    
-    if (words.count > 1) {
-        NSLog(@"%@ , %@ ", words[0], words[1]);
-    }
+//    NSArray *wordsAndEmptyStrings = [newString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+//    NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
     
     return YES;
 }
 
+//search for user
 -(void)updateTextLabelsWithText:(NSString *)string
 {
     NSString *searchedUser = [string lowercaseString];
@@ -56,6 +53,11 @@
     NSArray *wordsAndEmptyStrings = [[string lowercaseString] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
     
+    if (words.count > 1) {
+        NSLog(@"%@ , %@ ", words[0], words[1]);
+    }
+    
+    //search using loopID
     if(searchToggle.selectedSegmentIndex == 0){
         PFQuery *query = [PFUser query];
         [query whereKey:@"username" equalTo:searchedUser];
@@ -73,6 +75,8 @@
             }
         }];
     }
+    
+    //search using first/last name
     if (searchToggle.selectedSegmentIndex == 1) {
         PFQuery *query = [PFUser query];
         if (words.count > 1) {
@@ -108,6 +112,7 @@
     return [self.foundUser count];
 }
 
+#warning buggy 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
