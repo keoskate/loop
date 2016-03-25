@@ -9,5 +9,6 @@
 #import "KMASocialMedia.h"
 
 @implementation KMASocialMedia
+@synthesize mediaImage, mediaData, mediaType;
 
 @end

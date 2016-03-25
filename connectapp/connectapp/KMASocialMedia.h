@@ -10,9 +10,9 @@
 
 @interface KMASocialMedia : NSObject
 
-@property (weak, nonatomic) UIImage *mediaImage;
-@property (weak, nonatomic) NSString *mediaType;
-@property (weak, nonatomic) NSString *mediaData;
+@property (strong, nonatomic) UIImage *mediaImage;
+@property (strong, nonatomic) NSString *mediaType;
+@property (strong, nonatomic) NSString *mediaData;
 
 
 @end

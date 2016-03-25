@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import "KMAContactViewController.h"
 
-@interface KMAContactDetailViewController : UITableViewController
+@interface KMAContactDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *userUsername;
 @property (weak, nonatomic) IBOutlet UILabel *userEmail;
@@ -30,7 +30,10 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *SnapchatCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *InstagramCell;
 
+@property (nonatomic, strong) NSMutableArray *shareOptions;
 
 - (IBAction)addContactToAddressBook:(id)sender;
+
+-(void)populateSelfData:(PFObject*) request;
 
 @end

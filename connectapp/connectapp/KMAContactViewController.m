@@ -10,6 +10,7 @@
 #import "KMAContactDetailViewController.h"
 #import "KMAManageContactsViewController.h"
 #import "KMAContactsCell.h"
+#import "KMASocialMedia.h"
 
 
 @interface KMAContactViewController ()
@@ -121,14 +122,50 @@
     [query whereKey:@"fromUser" equalTo:user];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
-            //NSLog(@"v.,... %@",[object objectForKey:@"email"]);
-            if ([([object objectForKey:@"email"]) isEqual:@YES]) {
-                contactDetailViewController.myUserEmail = user.email;
-            }else{
-                contactDetailViewController.myUserEmail = @"Request Email";
-            }
-            [self.navigationController pushViewController:contactDetailViewController animated:YES];
             
+            NSString *status = [object objectForKey:@"status"];
+            if ( [status  isEqual: @"accepted"]) {
+                contactDetailViewController.shareOptions = [[NSMutableArray alloc] init];
+                if ([[object objectForKey:@"email"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
+                    socialStuff.mediaType = @"Email";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+                    socialStuff.mediaData  = user.email;
+                    contactDetailViewController.myUserEmail = user.email;
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }else{
+                    contactDetailViewController.myUserEmail = @"Request Email";
+                }
+                
+                if ([[object objectForKey:@"facebook"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"Facebook";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+                    socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                
+            }else if ([status  isEqual: @"rejected"]){
+                NSLog(@"This User rejected you.");
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"Awkward!"
+                                          message:@"This user rejected you"
+                                          delegate:nil cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+                [alertView show];
+                
+            }else if([status  isEqual: @"requested"]){
+                NSLog(@"This user has not responded yet.");
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"Awkward!"
+                                          message:@"This user has not responded yet"
+                                          delegate:nil cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+                [alertView show];
+            }
+            
+            [self.navigationController pushViewController:contactDetailViewController animated:YES];
+        
         }else {
             NSLog(@"Error(fixbug) %@ %@",error, [error userInfo]);
         }

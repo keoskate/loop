@@ -71,7 +71,7 @@
                 
             }else {
                 //NSLog(@"Error: %@", error);//, [error userInfo]);
-                [self.tableView reloadData];
+                //[self.tableView reloadData];
             }
         }];
     }
@@ -121,11 +121,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
+    //
     
     PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
     [[user objectForKey:@"displayPicture"] getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (!error) {
             cell.imageView.image = [UIImage imageWithData:imageData];
+            if (!imageData) {
+                cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
+            }
             [self.tableView reloadData];
         }
     }];
@@ -150,7 +154,12 @@
     addDetailViewController.searchedUserPicFile = [user objectForKey:@"displayPicture"];
     [addDetailViewController.searchedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         if (!error) {
-            addDetailViewController.searchedUserPic = [UIImage imageWithData:imageData];
+            addDetailViewController.searchImage.image = [UIImage imageWithData:imageData];
+            if (!imageData) {
+                addDetailViewController.searchImage.image = [UIImage imageNamed:@"placeholder.png"];
+            }
+
+            //addDetailViewController.searchedUserPic = [UIImage imageWithData:imageData];
         }
     }];
     

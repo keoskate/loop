@@ -9,6 +9,8 @@
 #import "KMAContactDetailViewController.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
+#import "KMAShareCell.h"
+#import "KMASocialMedia.h"
 
 @interface KMAContactDetailViewController ()
 
@@ -30,10 +32,123 @@
     
     //test cell bool
     //if get snapchat availability; YES, NO
-    self.SnapchatCell.userInteractionEnabled = NO;
+    //self.SnapchatCell.userInteractionEnabled = NO;
     
+    
+    //[self populateSelfData];
     
     [self.thumbNailImageView loadInBackground];
+}
+
+-(void)populateSelfData{
+    self.shareOptions = [[NSMutableArray alloc] init];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"username" containsString:[myUserUsername lowercaseString]];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            //get the User object
+            PFUser *user = (PFUser *)object;  //searched user (toUser)
+            
+            PFQuery * friendRequest = [PFQuery queryWithClassName:@"FriendRequest"];
+            [friendRequest whereKey:@"toUser" equalTo:user];
+            [friendRequest whereKey:@"fromUser" equalTo:[PFUser currentUser]];
+            
+            [friendRequest getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                //if no request currently exists
+                if (!error) {
+                    NSString *status = [object objectForKey:@"status"];
+                    if ( [status  isEqual: @"accepted"]) {
+                        if ([[object objectForKey:@"email"]  isEqual: @YES]) {
+                            KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
+                            socialStuff.mediaType = @"Email";
+                            socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+                            socialStuff.mediaData  = user.email;
+                            self.userEmail.text = user.email;
+                            [self.shareOptions addObject:socialStuff];
+                        }else{
+                            self.userEmail.text = @"request email";
+                        }
+                        
+                        if ([[object objectForKey:@"facebook"]  isEqual: @YES]) {
+                            KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                            socialStuff.mediaType = @"Facebook";
+                            socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+                            socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
+                            [self.shareOptions addObject:socialStuff];
+                        }
+                        
+                        
+                    }else if ([status  isEqual: @"rejected"]){
+                        NSLog(@"This User rejected you.");
+                        UIAlertView *alertView = [[UIAlertView alloc]
+                                                  initWithTitle:@"Awkward!"
+                                                  message:@"This user rejected you"
+                                                  delegate:nil cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+                        [alertView show];
+                        
+                    }else if([status  isEqual: @"requested"]){
+                        NSLog(@"This user has not responded yet.");
+                        UIAlertView *alertView = [[UIAlertView alloc]
+                                                  initWithTitle:@"Awkward!"
+                                                  message:@"This user has not responded yet"
+                                                  delegate:nil cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+                        [alertView show];
+                    }
+
+                    
+                    
+                } else {
+                   NSLog(@"Relation not found error: : %@", error);
+                }
+
+            }];
+            
+        }else {
+            NSLog(@"Error: %@", error);//, [error userInfo]);
+        }
+    }];
+
+    /*
+    
+    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
+    socialStuff.mediaType = @"Email";
+    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+    socialStuff.mediaData  = currentUser.email;
+    [self.shareOptions addObject:socialStuff];
+    
+    
+    
+    if ([currentUser objectForKey:@"facebookURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Facebook";
+        socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"facebookURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+    
+    if ([currentUser objectForKey:@"instagramURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Instagram";
+        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+    
+    if ([currentUser objectForKey:@"snapchatURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Instagram";
+        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+     */
 }
 
 #pragma mark - Adding to Native Contact Book
@@ -148,5 +263,42 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Table view delegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    // NSLog(@"%lu ",self.shareOptions.count);
+    return [self.shareOptions count];
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"ShareCell";
+    KMAShareCell *shareCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
+    
+    if (shareCell == nil || shareStuff == nil){
+        shareCell = [[KMAShareCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                        reuseIdentifier:CellIdentifier];
+        return shareCell;
+    }
+    
+    shareCell.socialName.text = shareStuff.mediaType;
+    shareCell.socialImage.image = shareStuff.mediaImage;
+    shareCell.socialData.text = shareStuff.mediaData;
+    
+    return shareCell;
+}
+
 
 @end

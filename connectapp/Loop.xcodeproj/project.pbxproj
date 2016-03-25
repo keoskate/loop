@@ -238,12 +238,12 @@
 			children = (
 				7D0E73AC19C459F50086274C /* KMAContactViewController.h */,
 				7D0E73AD19C459F50086274C /* KMAContactViewController.m */,
+				7D0E73B219C45B6D0086274C /* KMAManageContactsViewController.h */,
+				7D0E73B319C45B6D0086274C /* KMAManageContactsViewController.m */,
 				7D88783A1A0A352C00BFA5C5 /* KMAContactsCell.h */,
 				7D88783B1A0A352C00BFA5C5 /* KMAContactsCell.m */,
 				7D0E73AF19C45AC70086274C /* KMAContactDetailViewController.h */,
 				7D0E73B019C45AC70086274C /* KMAContactDetailViewController.m */,
-				7D0E73B219C45B6D0086274C /* KMAManageContactsViewController.h */,
-				7D0E73B319C45B6D0086274C /* KMAManageContactsViewController.m */,
 				7D34D9B71AA5C30400E99564 /* KMAWebViewController.h */,
 				7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */,
 			);
@@ -527,7 +527,7 @@
 				ORGANIZATIONNAME = "Keion Anvaripour";
 				TargetAttributes = {
 					7DFA5EA219B811A900E67589 = {
-						DevelopmentTeam = ZARCDCJ6QV;
+						DevelopmentTeam = UAD7VU3U5C;
 					};
 				};
 			};
@@ -745,6 +745,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanvaripour.loopme;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -765,6 +767,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanvaripour.loopme;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

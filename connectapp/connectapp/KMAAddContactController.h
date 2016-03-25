@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface KMAAddContactController : UITableViewController
+@interface KMAAddContactController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet PFImageView *searchImage;
 @property (weak, nonatomic) IBOutlet UILabel *searchName; //attributed First+Last
@@ -19,11 +19,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *myInstagram;
 @property (weak, nonatomic) IBOutlet UIButton *gmailCheckButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookCheckButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)connectWithUser:(id)sender;
 @property (weak, nonatomic) UIImage *searchedUserPic;
 @property (weak, nonatomic) PFFile *searchedUserPicFile;
 @property (weak, nonatomic) NSString *searchedUserID;
 @property (weak, nonatomic) NSString *searchedUserName;
+
+
+@property (nonatomic, strong) NSMutableArray *shareOptions;
 
 @end

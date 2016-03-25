@@ -24,28 +24,11 @@
     [super viewDidLoad];
 
     PFUser *currentUser = [PFUser currentUser];
-    self.shareOptions = [[NSMutableArray alloc] init];
-    self.selectionTableView.scrollEnabled = false;
+    self.selectionTableView.scrollEnabled = true;
    
+    [self populateSelfData];
+    
     //[self.selectionTableView reloadData];
-    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-    KMASocialMedia* socialStuff2 = [[KMASocialMedia alloc]init];
-    KMASocialMedia* socialStuff3 = [[KMASocialMedia alloc]init];
-   
-    socialStuff.mediaType = @"Gmail";
-    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
-    
-    socialStuff2.mediaType = @"Facebook";
-    socialStuff2.mediaImage = [UIImage imageNamed:@"facebook.png"];
-    
-    socialStuff3.mediaType = @"Instagram";
-    socialStuff3.mediaImage = [UIImage imageNamed:@"instagram.png"];
-    
-    [self.shareOptions addObject:socialStuff];
-    [self.shareOptions addObject:socialStuff2];
-    [self.shareOptions addObject:socialStuff3];
-    
-    [self.selectionTableView reloadData];
     
 //    if (currentUser[@"facebookURL"]) {
 //        socialStuff.mediaType = @"Facebook";
@@ -53,47 +36,47 @@
 //    }
     
 }
+
+-(void)populateSelfData{
+    self.shareOptions = [[NSMutableArray alloc] init];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
+    socialStuff.mediaType = @"Email";
+    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+    socialStuff.mediaData  = currentUser.email;
+    [self.shareOptions addObject:socialStuff];
+    
+    if ([currentUser objectForKey:@"facebookURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Facebook";
+        socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"facebookURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+    
+    if ([currentUser objectForKey:@"instagramURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Instagram";
+        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+    
+    if ([currentUser objectForKey:@"snapchatURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Instagram";
+        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        [self.shareOptions addObject:socialStuff];
+    }
+}
     
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view delegate
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    // NSLog(@"%lu ",self.shareOptions.count);
-    return [self.shareOptions count];
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"ShareCell";
-    KMAShareCell *shareCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
-    
-    if (shareCell == nil || shareStuff == nil){
-        shareCell = [[KMAShareCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                       reuseIdentifier:CellIdentifier];
-        return shareCell;
-    }
-    
-    shareCell.socialName.text = shareStuff.mediaType;
-    shareCell.socialImage.image = shareStuff.mediaImage;
-    
-    return shareCell;
-
 }
 
 -(void)checkboxSelected:(id)sender
@@ -119,15 +102,20 @@
         if (!error) {
             //Adding contact to friend relations
             PFUser *fromUser = [(PFUser *)request objectForKey:@"fromUser"];  //searched user (toUser)
+            NSLog(@"From User: %@", fromUser);
             
-            [request setObject:@"accepted" forKey:@"status"]; //request[@"status"] = @"accepted";
+            //accept friend request 1
+            request[@"status"] = @"accepted";
             
             //need to create new FriendRequest with status = accepted = with toggle opptions
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (error) {
-                    NSLog(@"hi"); NSLog(@"Error1: %@", error);
+                    NSLog(@"Error1: %@", error);
                 }else {
+                    
+                    //Save fromUser to contacts
                     PFUser *currentUser = [PFUser currentUser];
+                    NSLog(@"Current User: %@", currentUser);
                     PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
                     [friendsRelation addObject:fromUser];
                     [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -135,9 +123,10 @@
                             NSLog(@"Error2: %@", error);
                         }
                         else{
-                             NSLog(@"added relation 1! ");
+                            NSLog(@"Added fromUser to friend relation! ");
                         }
                     }];
+                    
                     
                     // Need to add add friend using bool values from accept popup
                     // Need to grab the fromUser from pointer addres or DisplayID
@@ -150,62 +139,45 @@
                     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                         if (!error) {
                             
-                            //Adding contact to friend relations
+                            //Create Friend Request 2
                             PFUser *user = (PFUser *)object;  //searched user (toUser)
-                            NSLog(@"Found2: %@", [user objectForKey:@"firstName"]);
+                            /*
+                            //Save toUser to contacts
+                            PFUser *currentUser = [PFUser currentUser];
+                            PFRelation *friendsRelation2 = [user relationForKey:@"friendsRelation"];
+                            [friendsRelation2 addObject:currentUser];
+                            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                if (error) {
+                                    NSLog(@"Error2: %@", error);
+                                }
+                                else{
+                                    NSLog(@"Added toUser to friend relation! ");
+                                }
+                            }];
+                            */
+                            
                             [self requestFriendship:user];
                             
                         } else {
-                            NSLog(@"Error: %@", [error userInfo]);
+                            NSLog(@"Error getting user: %@", [error userInfo]);
                         }
                     }];
+                
                     
-                    
-                    /*
-                    
-                    PFUser *fromUserTemp = [(PFUser *)request objectForKey:@"displayID"];
-                    NSLog(@"%@", fromUserTemp);
-
-                    */
                     NSLog(@"Success! ");
-                     [self.view dismissPresentingPopup];
+                    //[self.view dismissPresentingPopup];
                     //self.userName.textColor = [UIColor greenColor];
                 }
             }];
+            
+
+
         } else {
             NSLog(@"Error3: %@", error);//, [error userInfo]);
         }
     }];
     
-   
-}
-
--(IBAction)denyRequest:(id)sender{
-    NSLog(@" Deny Pressed!@#");
-    
-    PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
-    [query whereKey:@"toUser" equalTo:[PFUser currentUser]];
-    [query whereKey:@"displayID" equalTo:_requestedUserID];
-    [query whereKey:@"status" equalTo:@"requested"];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            //Adding contact to friend relations
-            //PFUser *user = [(PFUser *)object objectForKey:@"fromUser"];  //searched user (toUser)
-            
-            [object setObject:@"rejected" forKey:@"status"];
-            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    NSLog(@"%@", error);
-                }
-            }];
-        }
-        else {
-            NSLog(@"Error: %@", error);//, [error userInfo]);
-        }
-    }];
-
-    [self.view dismissPresentingPopup];
+   [self.view dismissPresentingPopup];
 }
 
 -(void)requestFriendship:(PFUser *)user {
@@ -215,18 +187,12 @@
     [query whereKey:@"toUser" equalTo:user];
     [query whereKey:@"fromUser" equalTo:[PFUser currentUser]];
     
-    
-    PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
-    PFACL *settingACL = [PFACL ACL];
-    [settingACL setReadAccess:YES forUser:user];
-    [settingACL setReadAccess:YES forUser:currentUser];
-    [settingACL setWriteAccess:YES forUser:user];
-    [settingACL setWriteAccess:YES forUser:currentUser];
-    request.ACL = settingACL;
-    
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (error) {
             
+            PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
+            PFACL *settingACL = [PFACL ACL];
+
             //Swap currentUser for user
             request[@"fromUser"] = currentUser; //currentUser
             request[@"displayID"] = currentUser.username; //currentUser.username
@@ -236,23 +202,35 @@
             request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"]; //currentUser
             request[@"status"] = @"accepted"; //Status of request
             
-            /* SOCIAL MEDIA
-             
-            if ([_gmailCheckButton isSelected] == YES)
-                [request setObject:@YES forKey:@"email"];
-            else
-                [request setObject:@NO forKey:@"email"];
+            //iterate to see which cells are selected
+            for (int i = 0; i < [self.shareOptions count]; i++) {
+                
+                KMAShareCell *shareCell = [self.selectionTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                if ([shareCell.socialCheckbox isSelected]==YES)
+                    [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
+                else
+                    [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
+
+            }
             
-             */
+            [settingACL setReadAccess:YES forUser:user];
+            [settingACL setReadAccess:YES forUser:currentUser];
+            [settingACL setWriteAccess:YES forUser:user];
+            [settingACL setWriteAccess:YES forUser:currentUser];
+            request.ACL = settingACL;
+//            user.ACL = settingACL;
+//            currentUser.ACL = settingACL;
+            
             
             NSLog(@"Not found, creating new request2.");
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
                     //DO SUCCESFUL REQUEST SENT
                    
+                    /*
                     PFRelation *friendsRelation = [user relationForKey:@"friendsRelation"];
                     [friendsRelation addObject:[PFUser currentUser]];
-                    NSLog(@"%@", user);
+                    NSLog(@"USER: %@", user);
                     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         if(succeeded){
                             NSLog(@"added relation 2 succeeded! ");
@@ -262,9 +240,9 @@
                             //NSLog(@"added relation 2! ");
                         }
                     }];
-
+                    */
                     
-                    NSLog(@"Added to Relation!*&@^");
+                    //NSLog(@"Added to Relation!*&@^");
                     
                     UIAlertView *alertView = [[UIAlertView alloc]
                                               initWithTitle:@"Cool!"
@@ -272,7 +250,6 @@
                                               delegate:nil cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
                     [alertView show];
-                    //[self performSegueWithIdentifier:@"showHome" sender:self];
                 } else {
                     NSLog(@"Error3%@", error);
                     
@@ -310,6 +287,71 @@
             }
         }
     }];
+}
+
+-(IBAction)denyRequest:(id)sender{
+    NSLog(@" Deny Pressed!@#");
+    
+    PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
+    [query whereKey:@"toUser" equalTo:[PFUser currentUser]];
+    [query whereKey:@"displayID" equalTo:_requestedUserID];
+    [query whereKey:@"status" equalTo:@"requested"];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            //Adding contact to friend relations
+            //PFUser *user = [(PFUser *)object objectForKey:@"fromUser"];  //searched user (toUser)
+            
+            [object setObject:@"rejected" forKey:@"status"];
+            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error) {
+                    NSLog(@"%@", error);
+                }
+            }];
+        }
+        else {
+            NSLog(@"Error: %@", error);//, [error userInfo]);
+        }
+    }];
+    
+    [self.view dismissPresentingPopup];
+}
+
+#pragma mark - Table view delegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    // NSLog(@"%lu ",self.shareOptions.count);
+    return [self.shareOptions count];
+}
+
+#warning bug - image becomes null
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"ShareCell";
+    KMAShareCell *shareCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
+    
+    if (shareCell == nil || shareStuff == nil){
+        shareCell = [[KMAShareCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                        reuseIdentifier:CellIdentifier];
+        return shareCell;
+    }
+    NSLog(@"image: %@", shareStuff.mediaImage);
+    shareCell.socialImage.image = [UIImage imageNamed:@"gmail.png"];//shareStuff.mediaImage;
+    shareCell.socialName.text = shareStuff.mediaType;
+    shareCell.socialData.text = shareStuff.mediaData;
+    
+    return shareCell;
+    
 }
 
 @end
