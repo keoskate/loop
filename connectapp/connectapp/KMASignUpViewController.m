@@ -33,6 +33,11 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = YES;
     [self.tableView addGestureRecognizer:gestureRecognizer];
+    //self.tableView.autoresizesSubviews = true;
+    //self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+    //self.tableView.estimatedRowHeight = 80;
+    //self.tableView.rowHeight = UITableViewAutomaticDimension;
+   
 }
 
 - (void)didReceiveMemoryWarning
@@ -280,5 +285,9 @@
     [_lastNameField resignFirstResponder];
     [_passwordField resignFirstResponder];
 }
+
+
+
+
 
 @end
