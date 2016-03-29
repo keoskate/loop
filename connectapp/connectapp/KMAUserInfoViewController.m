@@ -70,6 +70,7 @@
         [segue.destinationViewController setHidesBottomBarWhenPushed:YES];
         
     }
+    
 }
 
 @end

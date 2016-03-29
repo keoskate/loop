@@ -68,6 +68,7 @@
 		7DB339E91A1EFFC3003907BC /* KMASocialMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB339E81A1EFFC3003907BC /* KMASocialMedia.m */; };
 		7DD3B7EE19D3C85B00EDA948 /* KMARequestsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3B7ED19D3C85B00EDA948 /* KMARequestsTableViewController.m */; };
 		7DD3B7F119D3E4AA00EDA948 /* KMARequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */; };
+		7DD823EE1CA8EA3F00567254 /* KMAEditPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD823ED1CA8EA3F00567254 /* KMAEditPageViewController.m */; };
 		7DEBA65D1A633A12005E9D3F /* loop_icon@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA65C1A633A12005E9D3F /* loop_icon@2x.jpg */; };
 		7DEBA6651A6345B1005E9D3F /* login_dividers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA6611A6345B1005E9D3F /* login_dividers@2x.png */; };
 		7DEBA6661A6345B1005E9D3F /* login_loop_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA6621A6345B1005E9D3F /* login_loop_logo@2x.png */; };
@@ -168,6 +169,8 @@
 		7DD3B7ED19D3C85B00EDA948 /* KMARequestsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMARequestsTableViewController.m; sourceTree = "<group>"; };
 		7DD3B7EF19D3E4AA00EDA948 /* KMARequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMARequestTableViewCell.h; sourceTree = "<group>"; };
 		7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMARequestTableViewCell.m; sourceTree = "<group>"; };
+		7DD823EC1CA8EA3F00567254 /* KMAEditPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAEditPageViewController.h; sourceTree = "<group>"; };
+		7DD823ED1CA8EA3F00567254 /* KMAEditPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAEditPageViewController.m; sourceTree = "<group>"; };
 		7DEBA65C1A633A12005E9D3F /* loop_icon@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "loop_icon@2x.jpg"; sourceTree = "<group>"; };
 		7DEBA6611A6345B1005E9D3F /* login_dividers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_dividers@2x.png"; sourceTree = "<group>"; };
 		7DEBA6621A6345B1005E9D3F /* login_loop_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_loop_logo@2x.png"; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 			children = (
 				7D60C4A219C480350064DF08 /* KMAUserInfoViewController.h */,
 				7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */,
+				7DD823EC1CA8EA3F00567254 /* KMAEditPageViewController.h */,
+				7DD823ED1CA8EA3F00567254 /* KMAEditPageViewController.m */,
 			);
 			name = "Settings Page";
 			sourceTree = "<group>";
@@ -611,6 +616,7 @@
 				7DFA5EB719B811A900E67589 /* KMAAppDelegate.m in Sources */,
 				7DB339E61A1EEFCD003907BC /* KMAShareCell.m in Sources */,
 				7DF64EAC1A11CCD20088B7E3 /* UIPopoverController.m in Sources */,
+				7DD823EE1CA8EA3F00567254 /* KMAEditPageViewController.m in Sources */,
 				7DD3B7EE19D3C85B00EDA948 /* KMARequestsTableViewController.m in Sources */,
 				7D60C4A419C480350064DF08 /* KMAUserInfoViewController.m in Sources */,
 				7DAFED841A0CDE9C0079B161 /* KMAAcceptPopUpView.m in Sources */,
