@@ -11,6 +11,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "KMAShareCell.h"
 #import "KMASocialMedia.h"
+#import <Contacts/Contacts.h>
 
 @interface KMAContactDetailViewController ()
 
@@ -156,42 +157,88 @@
     NSString *contactFirstName;
     NSString *contactLastName;
     NSString *contactPhoneNumber;
-    //NSString *contactEmail;
+    NSString *contactEmail;
     NSData *contactImageData;
 
     contactFirstName = myUserFirstName;
     contactLastName = myUserLastName;
     contactPhoneNumber = myUserPhone;
-    //contactEmail = myUserEmail;
+    contactEmail = myUserEmail;
     if (myUserPic) {
          contactImageData = UIImageJPEGRepresentation(myUserPic, 0.7f);
     }
    
+    
+    CNContactStore* addressBook = [[CNContactStore alloc]init];
+    CNMutableContact *contact = [[CNMutableContact alloc]init];
+    
+    contact.givenName = contactFirstName;
+    contact.familyName = contactLastName;
+    [myUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+        if (!error) {
+            contact.imageData = imageData;
+        }
+    }];
 
-    /*
-    if (socialAppButton.tag == 1){
-        //open up facebook
-    } else if (socialAppButton.tag == 2){
-        //open up twitter
-    }
-    else if (socialAppButton.tag == 3){
-        //open up instagram
-    }
-    */
+    contact.emailAddresses = @[ [CNLabeledValue labeledValueWithLabel:CNLabelEmailiCloud value:contactEmail] ];
+    contact.phoneNumbers = @[ [CNLabeledValue labeledValueWithLabel:CNLabelPhoneNumberiPhone value:[CNPhoneNumber phoneNumberWithStringValue:contactPhoneNumber]] ];
+    
+    
+    NSError* contactError;
+    CNContactStore* allContacts = [[CNContactStore alloc]init];
 
-    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
-    ABRecordRef contact = ABPersonCreate();
+//    [allContacts containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[allContacts.defaultContainerIdentifier]] error:&contactError];
+//    NSArray * keysToFetch =@[CNContactEmailAddressesKey, CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey];
+//    CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
+//    BOOL success = [allContacts enumerateContactsWithFetchRequest:request error:nil usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+//       // [self parseContactWithContact:contact];
+//        NSLog(@"hey");
+//    }];
+    if ([contact isKeyAvailable:CNContactPhoneNumbersKey]) {
+        CNSaveRequest *saveRequest = [[CNSaveRequest alloc]init];
+        [saveRequest addContact:contact toContainerWithIdentifier:nil];
+        
+        if ([addressBook executeSaveRequest:saveRequest error:nil]) {
+            UIAlertView *contactAddedAlert = [[UIAlertView alloc]initWithTitle:@"Contact Added" message:nil delegate:nil
+                                                             cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [contactAddedAlert show];
+        }else{
+            UIAlertView *contactFailedAlert = [[UIAlertView alloc]initWithTitle:@"Contact Failed To Add" message:nil delegate:nil
+                                                              cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [contactFailedAlert show];
+            
+        }
+
+    }
+    else{
+        //The contact already exists!
+        UIAlertView *contactExistsAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Sorry, %@ Already Exists!", contactFirstName]
+                                                                    message:nil delegate:nil cancelButtonTitle:@"OK"
+                                                          otherButtonTitles: nil];
+        [contactExistsAlert show];
+        return;
+    }
+    
+    
+    
+/*
+//    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
+//    ABRecordRef contact = ABPersonCreate();
 
     //info
-    ABRecordSetValue(contact, kABPersonFirstNameProperty, (__bridge CFStringRef)contactFirstName, nil);
-    ABRecordSetValue(contact, kABPersonLastNameProperty, (__bridge CFStringRef)contactLastName, nil);
+//    ABRecordSetValue(contact, kABPersonFirstNameProperty, (__bridge CFStringRef)contactFirstName, nil);
+//    ABRecordSetValue(contact, kABPersonLastNameProperty, (__bridge CFStringRef)contactLastName, nil);
 
     //numbers
-    ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-    ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)contactPhoneNumber, kABPersonPhoneMainLabel, NULL);
-    ABRecordSetValue(contact, kABPersonPhoneProperty, phoneNumbers, nil);
+    
+  //  CNLabeledValue
+//    ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+//    ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)contactPhoneNumber, kABPersonPhoneMainLabel, NULL);
+//    ABRecordSetValue(contact, kABPersonPhoneProperty, phoneNumbers, nil);
 
     //Check to see if already in contacts
+ 
+    
     NSArray *allContacts = (__bridge NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBookRef);
     for (id record in allContacts){
         ABRecordRef thisContact = (__bridge ABRecordRef)record;
@@ -218,13 +265,39 @@
     UIAlertView *contactAddedAlert = [[UIAlertView alloc]initWithTitle:@"Contact Added" message:nil delegate:nil
                                                      cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [contactAddedAlert show];
+ 
+ */
+}
+- (void)parseContactWithContact :(CNContact* )contact
+{
+    NSString * firstName =  contact.givenName;
+    NSString * lastName =  contact.familyName;
+    NSString * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
+    NSString * email = [contact.emailAddresses valueForKey:@"value"];
+    NSArray * addrArr = [self parseAddressWithContac:contact];
 }
 
+- (NSMutableArray *)parseAddressWithContac: (CNContact *)contact
+{
+    NSMutableArray * addrArr = [[NSMutableArray alloc]init];
+    CNPostalAddressFormatter * formatter = [[CNPostalAddressFormatter alloc]init];
+    NSArray * addresses = (NSArray*)[contact.postalAddresses valueForKey:@"value"];
+    if (addresses.count > 0) {
+        for (CNPostalAddress* address in addresses) {
+            [addrArr addObject:[formatter stringFromPostalAddress:address]];
+        }
+    }
+    return addrArr;
+}
 
 - (IBAction)addContactToAddressBook:(id)sender
 {
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied ||
-        ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusRestricted){
+//    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied ||
+//        ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusRestricted){
+//        
+        CNEntityType entityType = CNEntityTypeContacts;
+        if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusDenied ||
+           [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusRestricted){
         //1
         UIAlertView *cantAddContactAlert = [[UIAlertView alloc] initWithTitle: @"Cannot Add Contact"
                                                                       message: @"You must give the app permission to add the contact first."
@@ -232,14 +305,16 @@
                                                             otherButtonTitles: nil];
         [cantAddContactAlert show];
         NSLog(@"Denied");
-    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized){
+    } else if ([CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusAuthorized ){
         //2
         [self addToContacts];
         NSLog(@"Authorized");
     } else{ //ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined
         //3
-        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+//        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+        CNContactStore * contactStore = [[CNContactStore alloc] init];
+        [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
             if (!granted){
                 UIAlertView *cantAddContactAlert = [[UIAlertView alloc] initWithTitle: @"Cannot Add Contact"
                                                                               message: @"You must give the app permission to add the contact first."
@@ -252,9 +327,7 @@
             //5
             [self addToContacts];
             NSLog(@"Just authorized");
-            });
-        NSLog(@"Not determined");
-        });
+        }];
     }
 }
 

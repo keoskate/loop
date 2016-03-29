@@ -89,7 +89,10 @@
     self.popover.requestName.text = self.userName.text;
     self.popover.requestID.text = self.userID.text;
     self.popover.requestedUserID = self.requestedUserID;
-    
+
+    self.popover.requestImage.file = self.userPic.file;
+    self.popover.requestImage.image = [UIImage imageNamed:@"placeholder.png"];
+    [self.popover.requestImage loadInBackground];
     //API
     KLCPopupLayout layout = KLCPopupLayoutMake(KLCPopupHorizontalLayoutCustom,
                                                KLCPopupVerticalLayoutCustom);

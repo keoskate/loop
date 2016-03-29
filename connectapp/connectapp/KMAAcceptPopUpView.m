@@ -346,7 +346,7 @@
         return shareCell;
     }
     NSLog(@"image: %@", shareStuff.mediaImage);
-    shareCell.socialImage.image = [UIImage imageNamed:@"gmail.png"];//shareStuff.mediaImage;
+    shareCell.socialImage.image = shareStuff.mediaImage;
     shareCell.socialName.text = shareStuff.mediaType;
     shareCell.socialData.text = shareStuff.mediaData;
     

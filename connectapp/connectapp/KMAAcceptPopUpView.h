@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 #import "KLCPopup.h"
 
 
@@ -20,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *requestName;
 @property (weak, nonatomic) IBOutlet UILabel *requestID;
 @property (weak, nonatomic) IBOutlet UILabel *myConnLabel;
+@property (weak, nonatomic) IBOutlet PFImageView *requestImage;
 
 -(IBAction)connectRequest:(id)sender;
 -(IBAction)denyRequest:(id)sender;

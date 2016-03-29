@@ -79,11 +79,11 @@
     requestCell.userPic.image = [UIImage imageNamed:@"placeholder.png"];
     [requestCell.userPic loadInBackground];
     
-    [requestCell.requestedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            requestCell.requestedUserPic = [UIImage imageWithData:imageData];
-        }
-    }];
+//    [requestCell.requestedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+//        if (!error) {
+//            requestCell.requestedUserPic = [UIImage imageWithData:imageData];
+//        }
+//    }];
     
     return requestCell;
 }
