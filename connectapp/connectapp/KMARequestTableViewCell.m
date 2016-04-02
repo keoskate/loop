@@ -80,7 +80,7 @@
     self.popover = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"popoverController"];
     
     //popover UI
-    self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, 300, 500);
+    self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, 300, 700);
     self.popover.view.alpha = 1;
     //popover.selectionTableView.bounces = NO;
     //popover.selectionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

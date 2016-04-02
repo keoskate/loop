@@ -101,7 +101,7 @@
     contactDetailViewController.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil];
     
     contactDetailViewController.myUserUsername = user.username;
-    contactDetailViewController.myUserEmail = user.email;
+    //contactDetailViewController.myUserEmail = user.email;
     // Set this in every view controller so that the back button displays back instead of the root view controller name
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     contactDetailViewController.myUserFirstName = [user objectForKey:@"firstName"];
@@ -122,7 +122,7 @@
     [query whereKey:@"fromUser" equalTo:user];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
-            
+#warning - Add linkedin, Insta, Snap
             NSString *status = [object objectForKey:@"status"];
             if ( [status  isEqual: @"accepted"]) {
                 contactDetailViewController.shareOptions = [[NSMutableArray alloc] init];
@@ -142,6 +142,27 @@
                     socialStuff.mediaType = @"Facebook";
                     socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
                     socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                if ([[object objectForKey:@"instagram"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"Instagram";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+                    socialStuff.mediaData  = [user objectForKey:@"instagramURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                if ([[object objectForKey:@"snapchat"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"Snapchat";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"snapchat.png"];
+                    socialStuff.mediaData  = [user objectForKey:@"snapchatURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                if ([[object objectForKey:@"linkedin"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"LinkedIn";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"linkedin.png"];
+                    socialStuff.mediaData  = [user objectForKey:@"linkedinURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
                 

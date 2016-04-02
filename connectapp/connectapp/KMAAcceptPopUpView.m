@@ -29,12 +29,6 @@
     [self populateSelfData];
     
     //[self.selectionTableView reloadData];
-    
-//    if (currentUser[@"facebookURL"]) {
-//        socialStuff.mediaType = @"Facebook";
-//        [self.shareOptions addObject:socialStuff];
-//    }
-    
 }
 
 -(void)populateSelfData{
@@ -66,9 +60,9 @@
     
     if ([currentUser objectForKey:@"snapchatURL"]) {
         KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-        socialStuff.mediaType = @"Instagram";
-        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
-        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        socialStuff.mediaType = @"Snapchat";
+        socialStuff.mediaImage = [UIImage imageNamed:@"snapchat.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"snapchatURL"];
         [self.shareOptions addObject:socialStuff];
     }
 }
@@ -126,51 +120,51 @@
                             NSLog(@"Added fromUser to friend relation! ");
                         }
                     }];
-                    
-                    
-                    // Need to add add friend using bool values from accept popup
-                    // Need to grab the fromUser from pointer addres or DisplayID
-                    // Need to create a new friendsRelation with bool values stored from initial request
-                    
-                    NSString *searchedUser = [[(PFUser *)request objectForKey:@"displayID"] lowercaseString];
-                    PFQuery *query = [PFUser query];
-                    [query whereKey:@"username" containsString:searchedUser];
-                    
-                    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                        if (!error) {
-                            
-                            //Create Friend Request 2
-                            PFUser *user = (PFUser *)object;  //searched user (toUser)
-                            /*
-                            //Save toUser to contacts
-                            PFUser *currentUser = [PFUser currentUser];
-                            PFRelation *friendsRelation2 = [user relationForKey:@"friendsRelation"];
-                            [friendsRelation2 addObject:currentUser];
-                            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                if (error) {
-                                    NSLog(@"Error2: %@", error);
-                                }
-                                else{
-                                    NSLog(@"Added toUser to friend relation! ");
-                                }
-                            }];
-                            */
-                            
-                            [self requestFriendship:user];
-                            
-                        } else {
-                            NSLog(@"Error getting user: %@", [error userInfo]);
-                        }
-                    }];
                 
-                    
                     NSLog(@"Success! ");
                     //[self.view dismissPresentingPopup];
                     //self.userName.textColor = [UIColor greenColor];
                 }
             }];
             
-
+            
+            // Need to add add friend using bool values from accept popup
+            // Need to grab the fromUser from pointer addres or DisplayID
+            // Need to create a new friendsRelation with bool values stored from initial request
+            
+            NSString *searchedUser = [[(PFUser *)request objectForKey:@"displayID"] uppercaseString];
+            NSLog(@"SEARCHED USER:: %@", searchedUser);
+            PFQuery *query = [PFUser query];
+            [query whereKey:@"username" containsString:searchedUser];
+            
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                if (!error) {
+                    
+                    //Create Friend Request 2
+                    PFUser *user = (PFUser *)object;  //searched user (toUser)
+                    NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
+                    /*
+                     //Save toUser to contacts
+                     PFUser *currentUser = [PFUser currentUser];
+                     PFRelation *friendsRelation2 = [user relationForKey:@"friendsRelation"];
+                     [friendsRelation2 addObject:currentUser];
+                     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                     if (error) {
+                     NSLog(@"Error2: %@", error);
+                     }
+                     else{
+                     NSLog(@"Added toUser to friend relation! ");
+                     }
+                     }];
+                     */
+                    
+                    //[self requestFriendship:user];
+                    [self createFriendRequest:user];
+                    
+                } else {
+                    NSLog(@"Error getting user: %@", [error userInfo]);
+                }
+            }];
 
         } else {
             NSLog(@"Error3: %@", error);//, [error userInfo]);
@@ -179,6 +173,60 @@
     
    [self.view dismissPresentingPopup];
 }
+
+-(void)createFriendRequest:(PFUser *)user {
+    PFUser *currentUser = [PFUser currentUser];
+    PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
+    PFACL *settingACL = [PFACL ACL];
+    
+    //Swap currentUser for user
+    request[@"fromUser"] = currentUser; //currentUser
+    request[@"displayID"] = currentUser.username; //currentUser.username
+    request[@"toUser"] = user; //user
+    request[@"displayName"] = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]]; //currentUser
+    request[@"toPicture"] = [user objectForKey:@"displayPicture"];
+    request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"]; //currentUser
+    request[@"status"] = @"accepted"; //Status of request
+    
+    //iterate to see which cells are selected
+    for (int i = 0; i < [self.shareOptions count]; i++) {
+        
+        KMAShareCell *shareCell = [self.selectionTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        if ([shareCell.socialCheckbox isSelected]==YES)
+            [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
+        else
+            [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
+        
+    }
+    
+    [settingACL setReadAccess:YES forUser:user];
+    [settingACL setReadAccess:YES forUser:currentUser];
+    [settingACL setWriteAccess:YES forUser:user];
+    [settingACL setWriteAccess:YES forUser:currentUser];
+    request.ACL = settingACL;
+    //            user.ACL = settingACL;
+    //            currentUser.ACL = settingACL;
+    
+    NSLog(@"Not found, creating new request.");
+    [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error) {
+            NSLog(@"Error saving request %@", error);
+        }
+        else {
+            //DO SUCCESFUL REQUEST SENT
+            UIAlertView *alertView = [[UIAlertView alloc]
+                                      initWithTitle:@"Cool!"
+                                      message:@"You're In The Loop Now."
+                                      delegate:nil cancelButtonTitle:@"OK"
+                                      otherButtonTitles:nil];
+            [alertView show];
+            [self performSegueWithIdentifier:@"showHome" sender:self];
+        }
+    }];
+
+    
+}
+
 
 -(void)requestFriendship:(PFUser *)user {
     PFUser *currentUser = [PFUser currentUser];
@@ -221,40 +269,56 @@
 //            user.ACL = settingACL;
 //            currentUser.ACL = settingACL;
             
-            
-            NSLog(@"Not found, creating new request2.");
+            NSLog(@"Not found, creating new request.");
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (succeeded) {
+                if (error) {
+                    NSLog(@"Error saving request %@", error);
+                }
+                else {
                     //DO SUCCESFUL REQUEST SENT
-                   
-                    /*
-                    PFRelation *friendsRelation = [user relationForKey:@"friendsRelation"];
-                    [friendsRelation addObject:[PFUser currentUser]];
-                    NSLog(@"USER: %@", user);
-                    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        if(succeeded){
-                            NSLog(@"added relation 2 succeeded! ");
-                        }
-                        else{
-                            NSLog(@"Error2: %@", error);
-                            //NSLog(@"added relation 2! ");
-                        }
-                    }];
-                    */
-                    
-                    //NSLog(@"Added to Relation!*&@^");
-                    
                     UIAlertView *alertView = [[UIAlertView alloc]
                                               initWithTitle:@"Cool!"
                                               message:@"You're In The Loop Now."
                                               delegate:nil cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
                     [alertView show];
-                } else {
-                    NSLog(@"Error3%@", error);
-                    
+                    [self performSegueWithIdentifier:@"showHome" sender:self];
                 }
             }];
+//            NSLog(@"Not found, creating new request2.");
+//            [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                if (succeeded) {
+//                    //DO SUCCESFUL REQUEST SENT
+//                   
+//                    /*
+//                    PFRelation *friendsRelation = [user relationForKey:@"friendsRelation"];
+//                    [friendsRelation addObject:[PFUser currentUser]];
+//                    NSLog(@"USER: %@", user);
+//                    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                        if(succeeded){
+//                            NSLog(@"added relation 2 succeeded! ");
+//                        }
+//                        else{
+//                            NSLog(@"Error2: %@", error);
+//                            //NSLog(@"added relation 2! ");
+//                        }
+//                    }];
+//                   */
+//                    
+//                    //NSLog(@"Added to Relation!*&@^");
+//                    
+//                    UIAlertView *alertView = [[UIAlertView alloc]
+//                                              initWithTitle:@"Cool!"
+//                                              message:@"You're In The Loop Now."
+//                                              delegate:nil cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil];
+//                    [alertView show];
+//                } else {
+//                    NSLog(@"Error3%@", error);
+//                    
+//                }
+//            }];
+            
             
         } else { // No error (reqeuest already exists ? )
             NSString *status = [object objectForKey:@"status"];

@@ -65,9 +65,9 @@
     
     if ([currentUser objectForKey:@"snapchatURL"]) {
         KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-        socialStuff.mediaType = @"Instagram";
-        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
-        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        socialStuff.mediaType = @"Snapchat";
+        socialStuff.mediaImage = [UIImage imageNamed:@"snapchat.png"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"snapchatURL"];
         [self.shareOptions addObject:socialStuff];
     }
 }
