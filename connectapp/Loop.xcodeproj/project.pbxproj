@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5ED6A62E1CB4D808002FDB8C /* KMATutorialView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6A62D1CB4D808002FDB8C /* KMATutorialView.m */; };
 		7D0E738C19C451EA0086274C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738B19C451EA0086274C /* Parse.framework */; };
 		7D0E738E19C4520D0086274C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738D19C4520D0086274C /* Accounts.framework */; };
 		7D0E739919C452450086274C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738F19C452450086274C /* AudioToolbox.framework */; };
@@ -93,8 +92,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5ED6A62C1CB4D808002FDB8C /* KMATutorialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMATutorialView.h; sourceTree = "<group>"; };
-		5ED6A62D1CB4D808002FDB8C /* KMATutorialView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMATutorialView.m; sourceTree = "<group>"; };
 		7D0E738B19C451EA0086274C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		7D0E738D19C4520D0086274C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		7D0E738F19C452450086274C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -312,8 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				7DFA5EBB19B811A900E67589 /* KMAViewController.h */,
-				5ED6A62C1CB4D808002FDB8C /* KMATutorialView.h */,
-				5ED6A62D1CB4D808002FDB8C /* KMATutorialView.m */,
 				7DFA5EBC19B811A900E67589 /* KMAViewController.m */,
 			);
 			name = Other;
@@ -619,7 +614,6 @@
 				7DFAB30E1A0CE0DC0080EBDE /* KLCPopup.m in Sources */,
 				7D0E73B419C45B6D0086274C /* KMAManageContactsViewController.m in Sources */,
 				7DFA5EB719B811A900E67589 /* KMAAppDelegate.m in Sources */,
-				5ED6A62E1CB4D808002FDB8C /* KMATutorialView.m in Sources */,
 				7DB339E61A1EEFCD003907BC /* KMAShareCell.m in Sources */,
 				7DF64EAC1A11CCD20088B7E3 /* UIPopoverController.m in Sources */,
 				7DD823EE1CA8EA3F00567254 /* KMAEditPageViewController.m in Sources */,
@@ -759,7 +753,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kanvaripour.loopme;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
@@ -781,7 +775,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kanvaripour.loopme;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
