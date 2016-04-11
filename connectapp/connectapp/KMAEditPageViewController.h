@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 @interface KMAEditPageViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet PFImageView *photoField;
@@ -22,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *linkedinField;
 @property (weak, nonatomic) IBOutlet UITextField *instagramField;
 @property (weak, nonatomic) IBOutlet UITextField *snapchatField;
+@property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
+
 
 - (IBAction)saveButtonPressed:(id)sender;
 

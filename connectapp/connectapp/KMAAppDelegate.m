@@ -8,11 +8,15 @@
 
 #import <Parse/Parse.h>
 #import "KMAAppDelegate.h"
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 @implementation KMAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
+    [FBSDKLoginButton class];
     // Uncomment and fill in with your Parse credentials:
     [Parse setApplicationId:@"ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD"
                   clientKey:@"NhONajvTcZfylI29SVs3Tk46vuCl2940YaAf95gF"];
@@ -115,6 +119,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [FBSDKAppEvents activateApp];
+
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -122,5 +128,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                  openURL:url
+                                                        sourceApplication:sourceApplication
+                                                               annotation:annotation
+                    ];
+    // Add any custom logic here.
+    return handled;
+}
+
 
 @end
