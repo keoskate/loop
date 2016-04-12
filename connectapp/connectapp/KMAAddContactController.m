@@ -223,7 +223,7 @@
             }
         }
     }];
-    
+    [self.view dismissPresentingPopup];
 }
 
 

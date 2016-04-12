@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *requestID;
 @property (weak, nonatomic) IBOutlet UILabel *myConnLabel;
 @property (weak, nonatomic) IBOutlet PFImageView *requestImage;
+@property (weak, nonatomic) IBOutlet PFImageView *userImage;
 
 -(IBAction)connectRequest:(id)sender;
 -(IBAction)denyRequest:(id)sender;

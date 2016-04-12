@@ -8,13 +8,14 @@
 
 #import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
+#import "KMAAcceptPopUpView.h"
 
 @interface KMAHomeViewController : UIViewController
 <
 UITextFieldDelegate,
 UITableViewDelegate,
 UITableViewDataSource
->
+>{ BOOL isSearching; }
 
 @property (weak, nonatomic) IBOutlet UITextField *userSearchField;
 @property (weak, nonatomic) IBOutlet UILabel *resultText;
@@ -22,11 +23,14 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UISwitch *numberToggle;
 @property (weak, nonatomic) IBOutlet UISwitch *emailToggle;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchToggle;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) NSArray *foundUser;
 
+- (IBAction)requestWithPopover:(id)sender;
 
 - (IBAction)connectWithUser:(id)sender;
 - (IBAction)logout:(id)sender;

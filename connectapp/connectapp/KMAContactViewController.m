@@ -183,6 +183,15 @@
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
+            }else {
+                NSLog(@"Oops please respond to request.");
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"Awkward!"
+                                          message:@"Please respond to this request"
+                                          delegate:nil cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+                [alertView show];
+
             }
             
             [self.navigationController pushViewController:contactDetailViewController animated:YES];

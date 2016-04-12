@@ -8,6 +8,8 @@
 
 #import "KMAHomeViewController.h"
 #import "KMAAddContactController.h"
+#import "KMASeachTableViewCell.h"
+#import "KMARequestTableViewCell.h"
 
 @interface KMAHomeViewController ()
 
@@ -20,16 +22,23 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-    //self.navigationController.navigationBarHidden = YES;
+
+    PFUser *currentUser = [PFUser currentUser];
+    if (currentUser) {
+        NSLog(@"Current User: %@", currentUser.username);
+    } else {
+        [self performSegueWithIdentifier:@"showLogin" sender:self];
+    }
     
     // Set this in every view controller so that the back button displays back instead of the root view controller name
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    [_userSearchField becomeFirstResponder];
+    [self.userSearchField becomeFirstResponder];
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
-    
+        
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -44,9 +53,22 @@
     return YES;
 }
 
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSString *newString = [[self.searchBar.text stringByReplacingCharactersInRange:range withString:text] lowercaseString];
+    NSLog(@"%@ ", newString);
+    [self updateTextLabelsWithText: newString];
+    
+    //    NSArray *wordsAndEmptyStrings = [newString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    //    NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+    
+    return YES;
+}
+
 //search for user
 -(void)updateTextLabelsWithText:(NSString *)string
 {
+    isSearching = true;
     NSString *searchedUser = [string lowercaseString];
     //[searchedUser lowercaseString];
     
@@ -59,21 +81,24 @@
     
     //search using loopID
     if(searchToggle.selectedSegmentIndex == 0){
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"username" equalTo:searchedUser];
-        //[query whereKey:@"username" containsString:searchedUser];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                //Adding contact to friend relations
-                _foundUser = objects;  //searched user (toUser)
+        if (isSearching) {
+            PFQuery *query = [PFUser query];
+            [query whereKey:@"username" equalTo:searchedUser];
+            //[query whereKey:@"username" containsString:searchedUser];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
 
-                [self.tableView reloadData];
-                
-            }else {
-                //NSLog(@"Error: %@", error);//, [error userInfo]);
-                //[self.tableView reloadData];
-            }
-        }];
+                    //Adding contact to friend relations
+                    _foundUser = objects;  //searched user (toUser)
+                    isSearching = false;
+                    [self.tableView reloadData];
+                    
+                }else {
+                    //NSLog(@"Error: %@", error);//, [error userInfo]);
+                    //[self.tableView reloadData];
+                }
+            }];
+        }
     }
     
     //search using first/last name
@@ -116,27 +141,34 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    KMASeachTableViewCell *searchCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    if (searchCell == nil) {
+        searchCell = [[KMASeachTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    //
     
     PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
-    [[user objectForKey:@"displayPicture"] getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            cell.imageView.image = [UIImage imageWithData:imageData];
-            if (!imageData) {
-                cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
-            }
-            [self.tableView reloadData];
-        }
-    }];
-    cell.textLabel.text = user.username;
-    cell.detailTextLabel.text = user[@"firstName"];
+//    [[user objectForKey:@"displayPicture"] getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+//        if (!error) {
+//            searchCell.userThumbnail.image = [UIImage imageWithData:imageData];
+//            if (!imageData) {
+//                searchCell.userThumbnail.image = [UIImage imageNamed:@"placeholder.png"];
+//            }
+//            [self.tableView reloadData];
+//        }
+//    }];
     
-    return cell;
+    searchCell.userID.text = [user.username uppercaseString];
+    searchCell.requestedUserID = user.username;
+    searchCell.userName.text = [NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]];
+    searchCell.userPic.file = user[@"displayPicture"];
+    searchCell.userPic.image = [UIImage imageNamed:@"placeholder.png"];
+    [searchCell.userPic loadInBackground];
+    
+    //self.connectButton.hidden = false;
+    
+   
+    return searchCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -165,6 +197,20 @@
     
      [self.navigationController pushViewController:addDetailViewController animated:YES];
 }
+#pragma mark - search bar
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+   isSearching = YES;
+    NSLog(@"Is searching...");
+}
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"Cancel clicked");
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"Search Clicked");
+    //[self searchTableList];
+}
+
 
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -174,13 +220,25 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-//    if ([segue.identifier isEqualToString:@"showLogin"]) {
-//        [segue.destinationViewController setHidesBottomBarWhenPushed:YES];
-//    }
     if ([segue.identifier isEqualToString:@"goBack"]) {
         [segue.destinationViewController setHidesBottomBarWhenPushed:NO];
     }
+    else if ([segue.identifier isEqualToString:@"showLogin"]) {
+        [segue.destinationViewController setHidesBottomBarWhenPushed:YES];
+    }
+    else if ([segue.identifier isEqualToString:@"showSearch"]) {
+        [segue.destinationViewController setHidesBottomBarWhenPushed:NO];
+    }
+
 }
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    
+    //Do stuff here...
+    [self performSegueWithIdentifier:@"showSearch" sender:self];
+    
+}
+
 
 - (IBAction)goBack:(id)sender{
     _userSearchField.text = @"";

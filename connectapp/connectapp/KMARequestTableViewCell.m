@@ -79,20 +79,28 @@
     //init popover view
     self.popover = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"popoverController"];
     
-    //popover UI
-    self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, 300, 700);
+    //popover UI setup
+    self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, self.popover.view.frame.size.width-25, self.popover.view.frame.size.height-50);
     self.popover.view.alpha = 1;
     //popover.selectionTableView.bounces = NO;
     //popover.selectionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //Set data
-    self.popover.requestName.text = self.userName.text;
+    self.popover.requestName.text = [NSString stringWithFormat:@"%s/%@/%s", "What networks would you like to share with ", self.userName.text, "?"]; //;
     self.popover.requestID.text = self.userID.text;
     self.popover.requestedUserID = self.requestedUserID;
 
+    //User image
     self.popover.requestImage.file = self.userPic.file;
     self.popover.requestImage.image = [UIImage imageNamed:@"placeholder.png"];
     [self.popover.requestImage loadInBackground];
+    
+    //User image 2
+    PFUser *currentUser = [PFUser currentUser];
+    self.popover.userImage.file = [currentUser objectForKey:@"displayPicture"];
+    self.popover.userImage.image = [UIImage imageNamed:@"placeholder.png"];
+    [self.popover.userImage loadInBackground];
+    
     //API
     KLCPopupLayout layout = KLCPopupLayoutMake(KLCPopupHorizontalLayoutCustom,
                                                KLCPopupVerticalLayoutCustom);

@@ -8,18 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "KLCPopup.h"
 
 @interface KMAAddContactController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet PFImageView *searchImage;
 @property (weak, nonatomic) IBOutlet UILabel *searchName; //attributed First+Last
 @property (weak, nonatomic) IBOutlet UILabel *searchID;
-@property (weak, nonatomic) IBOutlet UILabel *myEmail;
-@property (weak, nonatomic) IBOutlet UILabel *myFacebook;
-@property (weak, nonatomic) IBOutlet UILabel *myInstagram;
+
+
 @property (weak, nonatomic) IBOutlet UIButton *gmailCheckButton;
 @property (weak, nonatomic) IBOutlet UIButton *facebookCheckButton;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 
 - (IBAction)connectWithUser:(id)sender;
 @property (weak, nonatomic) UIImage *searchedUserPic;
@@ -29,5 +29,14 @@
 
 
 @property (nonatomic, strong) NSMutableArray *shareOptions;
+@property (retain, nonatomic) IBOutlet UITableView *tableView;
+
+@property (weak, nonatomic) NSString *requestedUserID;
+@property (weak, nonatomic) IBOutlet UILabel *topContentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *requestName;
+@property (weak, nonatomic) IBOutlet UILabel *requestID;
+@property (weak, nonatomic) IBOutlet UILabel *myConnLabel;
+@property (weak, nonatomic) IBOutlet PFImageView *requestImage;
+@property (weak, nonatomic) IBOutlet PFImageView *userImage;
 
 @end

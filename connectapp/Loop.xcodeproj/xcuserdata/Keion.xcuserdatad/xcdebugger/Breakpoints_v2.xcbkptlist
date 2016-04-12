@@ -72,11 +72,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "connectapp/KMAHomeViewController.h"
-            timestampString = "436824415.594796"
+            timestampString = "482123601.465049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "userNameFound"
             landmarkType = "19">
             <Locations>
