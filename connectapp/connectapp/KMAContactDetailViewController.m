@@ -12,6 +12,7 @@
 #import "KMAShareCell.h"
 #import "KMASocialMedia.h"
 #import <Contacts/Contacts.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface KMAContactDetailViewController ()
 
@@ -37,6 +38,17 @@
     
     
     //[self populateSelfData];
+    
+    // new code
+    CALayer *imageLayer = _thumbNailImageView.layer;
+    [imageLayer setCornerRadius:5];
+    [imageLayer setBorderWidth:4];
+    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
+    [imageLayer setMasksToBounds:YES];
+    [_thumbNailImageView.layer setCornerRadius:_thumbNailImageView.frame.size.width/2];
+    [_thumbNailImageView.layer setMasksToBounds:YES];
+    
+    //end new code
     
     [self.thumbNailImageView loadInBackground];
 }

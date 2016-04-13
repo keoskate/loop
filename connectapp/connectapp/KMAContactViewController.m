@@ -11,6 +11,8 @@
 #import "KMAManageContactsViewController.h"
 #import "KMAContactsCell.h"
 #import "KMASocialMedia.h"
+#import <QuartzCore/QuartzCore.h>
+#include <math.h>
 
 
 @interface KMAContactViewController ()
@@ -65,6 +67,7 @@
 
 #pragma mark - Table view delegate
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -76,8 +79,28 @@
     contactCell.contactName.text = [[NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]] capitalizedString];
     
     contactCell.contactPic.file = user[@"displayPicture"];
-    contactCell.contactPic.image = [UIImage imageNamed:@"placeholder.png"];
+//    contactCell.contactPic.image = [UIImage imageNamed:@"placeholder.png"];
+    
+    
+    //new code
+    UIImage *image = [UIImage imageNamed:@"placeholder.png"];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+
+    CALayer *imageLayer = imageView.layer;
+    [imageLayer setCornerRadius:5];
+    [imageLayer setBorderWidth:1];
+    [imageLayer setMasksToBounds:YES];
+    [imageView.layer setCornerRadius:imageView.frame.size.width/2];
+    [imageView.layer setMasksToBounds:YES];
+
+    
+    contactCell.contactPic.image = imageView.image;
+    //end new code
+
+    
+    
     [contactCell.contactPic loadInBackground];
+    
 //    [contactCell.contactUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
 //        if (!error) {
 //            contactCell.contactUserPic = [UIImage imageWithData:imageData];
