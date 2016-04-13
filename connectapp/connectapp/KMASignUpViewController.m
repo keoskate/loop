@@ -120,7 +120,7 @@
         [_knnctID lowercaseString];
         [_email lowercaseString];
         PFUser *newUser = [PFUser user];
-        newUser.username = _knnctID;
+        newUser.username = [_knnctID lowercaseString];
         newUser.password = _password;
         newUser.email = _email;
         [newUser setObject:_firstName forKey:@"firstName"];

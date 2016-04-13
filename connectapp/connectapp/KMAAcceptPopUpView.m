@@ -127,12 +127,12 @@
                 }
             }];
             
-            
+            //NSLog(@"I am here..");
             // Need to add add friend using bool values from accept popup
             // Need to grab the fromUser from pointer addres or DisplayID
             // Need to create a new friendsRelation with bool values stored from initial request
             
-            NSString *searchedUser = [[(PFUser *)request objectForKey:@"displayID"] uppercaseString];
+            NSString *searchedUser = [[(PFUser *)request objectForKey:@"displayID"] lowercaseString];
             NSLog(@"SEARCHED USER:: %@", searchedUser);
             PFQuery *query = [PFUser query];
             [query whereKey:@"username" containsString:searchedUser];
@@ -140,7 +140,7 @@
             [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                 if (!error) {
                     
-                    //Create Friend Request 2
+                    
                     PFUser *user = (PFUser *)object;  //searched user (toUser)
                     NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
                     /*
@@ -150,14 +150,15 @@
                      [friendsRelation2 addObject:currentUser];
                      [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                      if (error) {
-                     NSLog(@"Error2: %@", error);
+                         NSLog(@"Error2: %@", error);
                      }
                      else{
-                     NSLog(@"Added toUser to friend relation! ");
+                         NSLog(@"Added toUser to friend relation! ");
                      }
                      }];
-                     */
-                    
+                    */
+                     
+                    //Create Friend Request 2
                     //[self requestFriendship:user];
                     [self createFriendRequest:user];
                     
@@ -175,6 +176,7 @@
 }
 
 -(void)createFriendRequest:(PFUser *)user {
+    NSLog(@"Called: createFriendRequest");
     PFUser *currentUser = [PFUser currentUser];
     PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
     PFACL *settingACL = [PFACL ACL];
@@ -214,6 +216,7 @@
         }
         else {
             //DO SUCCESFUL REQUEST SENT
+            NSLog(@"SUccesfull !!!!");
             UIAlertView *alertView = [[UIAlertView alloc]
                                       initWithTitle:@"Cool!"
                                       message:@"You're In The Loop Now."

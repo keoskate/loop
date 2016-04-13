@@ -98,8 +98,6 @@
         [alertView show];
         return;
     }
-    //self.userNameFound.text = @"Keion";
-    //self.userNameFound.text = user.username;
     
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
@@ -108,8 +106,8 @@
             PFUser *user = (PFUser *)object;  //searched user (toUser)
             NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
             
-            //Save toUser to contacts
             
+              //Save toUser to contacts
             PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
             [friendsRelation addObject:user];
             [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -120,6 +118,7 @@
                     NSLog(@"Added toUser to friend relation! ");
                 }
             }];
+            
             
             [self requestFriendship:user];
         }else {
