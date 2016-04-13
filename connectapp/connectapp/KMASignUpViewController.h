@@ -24,17 +24,17 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
 
 
-@property (weak, nonatomic) IBOutlet UITextField *knnctIDField;
-@property (weak, nonatomic) IBOutlet UITextField *passwordField;
-@property (weak, nonatomic) IBOutlet UITextField *emailField;
-@property (weak, nonatomic) IBOutlet UITextField *firstNameField;
-@property (weak, nonatomic) IBOutlet UITextField *lastNameField;
-@property (weak, nonatomic) IBOutlet UITextField *phoneNumberField;
+@property (strong, nonatomic) IBOutlet UITextField *knnctIDField;
+@property (strong, nonatomic) IBOutlet UITextField *passwordField;
+@property (strong, nonatomic) IBOutlet UITextField *emailField;
+@property (strong, nonatomic) IBOutlet UITextField *firstNameField;
+@property (strong, nonatomic) IBOutlet UITextField *lastNameField;
+@property (strong, nonatomic) IBOutlet UITextField *phoneNumberField;
 
 - (IBAction)imageSelectionButtonWasPressed:(id)sender;
 
-@property (weak, nonatomic) IBOutlet UIButton *imageButton;
-@property (weak, nonatomic) IBOutlet UIImageView *thumbnailPic;
+@property (strong, nonatomic) IBOutlet UIButton *imageButton;
+@property (strong, nonatomic) IBOutlet UIImageView *thumbnailPic;
 
 @property (weak, nonatomic) IBOutlet UIImageView *fbPic;
 
@@ -45,6 +45,7 @@ UITableViewDataSource
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *fbID;
 
 
 - (IBAction)skipPage:(id)sender;

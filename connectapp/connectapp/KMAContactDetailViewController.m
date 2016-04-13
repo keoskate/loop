@@ -384,6 +384,15 @@
     
     return shareCell;
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [currentUser objectForKey:@"facebookURL"]];
+    
+    
+    NSURL *url = [NSURL URLWithString:fbURL];
+    [[UIApplication sharedApplication] openURL:url];
+    
+}
 
 @end

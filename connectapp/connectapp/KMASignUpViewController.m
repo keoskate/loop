@@ -127,6 +127,7 @@
         [newUser setObject:_lastName forKey:@"lastName"];
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
         [newUser setObject:imageFile forKey:@"displayPicture"];
+        [newUser setObject:_fbID forKey:@"facebookURL"];
 
         //happens in background without annoying users - block - events that happen asynchronously
         [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -300,6 +301,7 @@
         suvc.lastName = self.lastNameField.text;
         suvc.phoneNumber = self.phoneNumberField.text;
         suvc.pickedImage = _pickedImage;
+        suvc.fbID = _fbID;
         
     }
     if ([segue.identifier isEqualToString:@"skip"]) {
@@ -312,6 +314,20 @@
         suvc.firstName = _firstName;
         suvc.lastName = _lastName;
         suvc.phoneNumber = _phoneNumber;
+        suvc.fbID = _fbID;
+        
+    }
+    if ([segue.identifier isEqualToString:@"showBasic"]) {
+        //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
+        KMASignUpViewController *suvc = [segue destinationViewController];
+        
+        //suvc.facebook = _facebook;
+        suvc.pickedImage = _pickedImage;
+        suvc.emailField.text = _email;
+        suvc.firstNameField.text = @"hello world";
+        suvc.lastNameField.text = _lastName;
+        NSLog(@"LAST NAME: %@", _lastName);
+        
         
     }
 
@@ -343,11 +359,24 @@
             self.firstNameField.text = [result objectForKey:@"first_name"];
             self.lastNameField.text = [result objectForKey:@"last_name"];
             self.emailField.text = [result objectForKey:@"email"];
-           
+            
+            _firstName =[result objectForKey:@"first_name"];
+            _lastName = [result objectForKey:@"last_name"];
+            _email =[result objectForKey:@"email"];
+            _fbID =[result objectForKey:@"id"];
+            
+            NSLog(@"email: %@", _email);
             NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
             _pickedImage=[UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
             self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
 
+            //[self performSegueWithIdentifier:@"showBasic" sender:self];
+            
+//            KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"showBasic"];
+//            signUpView.lastNameField.text = [result objectForKey:@"last_name"];
+//            signUpView.emailField.text = [result objectForKey:@"email"];
+//            
+//             [self.navigationController pushViewController:signUpView animated:YES];
             
         }];
         

@@ -17,9 +17,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *testURL = [NSString stringWithFormat:@"https://www.facebook.com/app_scoped_user_id/%@", [currentUser objectForKey:@"facebookURL"]];
     
-    NSString *testURL = @"https://www.facebook.com/kanvari";
-    [self loadRequestFromString:testURL];
+        NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [currentUser objectForKey:@"facebookURL"]];
+
+    [self loadRequestFromString:fbURL];
     
    // [self loadRequestFromString:_webUrl];
 }
