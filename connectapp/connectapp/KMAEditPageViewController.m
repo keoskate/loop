@@ -7,7 +7,8 @@
 //
 
 #import "KMAEditPageViewController.h"
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 @interface KMAEditPageViewController ()
 
 @end
@@ -37,6 +38,11 @@
     self.instagramField.placeholder = [currentUser objectForKey:@"instagramURL"];
     self.snapchatField.placeholder = [currentUser objectForKey:@"snapchatURL"];
     
+    self.fb.readPermissions = @[@"public_profile", @"email"];
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,6 +61,8 @@
         currentUser[@"phoneNumber"] = self.phoneField.text;
     }
     if (self.facebookField.text.length > 0) {
+        currentUser[@"facebook"]=self.facebookField.text;
+        
         currentUser[@"facebookURL"] = self.facebookField.text;
     }
     if (self.linkedinField.text.length > 0) {
@@ -70,6 +78,34 @@
     NSLog(@"Saving...");
     [currentUser saveInBackground];
 }
+
+- (void)observeTokenChange:(NSNotification *)notfication {
+    
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        
+        
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                      initWithGraphPath:@"me"
+                                      parameters:@{@"fields":  @"id, first_name, last_name, picture.type(normal), email"}
+                                      HTTPMethod:@"GET"];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                              id result,
+                                              NSError *error) {
+        
+            NSString *link = [NSString stringWithFormat:@"fb://profile/%@", [result objectForKey:@"id"]];
+            self.facebookField.text = link;
+            NSURL *facebookURL = [NSURL URLWithString:link];
+            
+            
+        }];
+        
+        
+    }
+    
+}
+
+
 
 
 /*

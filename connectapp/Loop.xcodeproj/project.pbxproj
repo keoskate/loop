@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7BF10B181CBB606300AC7F68 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B151CBB606300AC7F68 /* FBSDKCoreKit.framework */; };
+		7BF10B191CBB606300AC7F68 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B161CBB606300AC7F68 /* FBSDKLoginKit.framework */; };
+		7BF10B1A1CBB606300AC7F68 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B171CBB606300AC7F68 /* FBSDKShareKit.framework */; };
 		7D0E738C19C451EA0086274C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738B19C451EA0086274C /* Parse.framework */; };
 		7D0E738E19C4520D0086274C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738D19C4520D0086274C /* Accounts.framework */; };
 		7D0E739919C452450086274C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D0E738F19C452450086274C /* AudioToolbox.framework */; };
@@ -94,6 +97,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7BF10B151CBB606300AC7F68 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		7BF10B161CBB606300AC7F68 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		7BF10B171CBB606300AC7F68 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		7D0E738B19C451EA0086274C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		7D0E738D19C4520D0086274C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		7D0E738F19C452450086274C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -219,12 +225,14 @@
 			files = (
 				7D0E739919C452450086274C /* AudioToolbox.framework in Frameworks */,
 				7D0E739A19C452450086274C /* CFNetwork.framework in Frameworks */,
+				7BF10B191CBB606300AC7F68 /* FBSDKLoginKit.framework in Frameworks */,
 				7D0E73C419C460F70086274C /* ParseFacebookUtils.framework in Frameworks */,
 				7D0E739B19C452450086274C /* CoreLocation.framework in Frameworks */,
 				7D0E739C19C452450086274C /* libz.dylib in Frameworks */,
 				7D0E739D19C452450086274C /* MobileCoreServices.framework in Frameworks */,
 				7D0E739E19C452450086274C /* QuartzCore.framework in Frameworks */,
 				7D0E73C319C460F70086274C /* Parse.framework in Frameworks */,
+				7BF10B181CBB606300AC7F68 /* FBSDKCoreKit.framework in Frameworks */,
 				7D0E739F19C452450086274C /* Security.framework in Frameworks */,
 				7D0E73A019C452450086274C /* Social.framework in Frameworks */,
 				7D0E73A119C452450086274C /* StoreKit.framework in Frameworks */,
@@ -232,6 +240,7 @@
 				7DFA5EA919B811A900E67589 /* CoreGraphics.framework in Frameworks */,
 				7D0E738E19C4520D0086274C /* Accounts.framework in Frameworks */,
 				7DFA5EAB19B811A900E67589 /* UIKit.framework in Frameworks */,
+				7BF10B1A1CBB606300AC7F68 /* FBSDKShareKit.framework in Frameworks */,
 				7D0E738C19C451EA0086274C /* Parse.framework in Frameworks */,
 				7DFA5EA719B811A900E67589 /* Foundation.framework in Frameworks */,
 				7D0E73C219C460F70086274C /* Bolts.framework in Frameworks */,
@@ -429,6 +438,9 @@
 		7DFA5EA519B811A900E67589 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7BF10B151CBB606300AC7F68 /* FBSDKCoreKit.framework */,
+				7BF10B161CBB606300AC7F68 /* FBSDKLoginKit.framework */,
+				7BF10B171CBB606300AC7F68 /* FBSDKShareKit.framework */,
 				7D0E73BF19C460F70086274C /* Bolts.framework */,
 				7D0E73C019C460F70086274C /* Parse.framework */,
 				7D0E73C119C460F70086274C /* ParseFacebookUtils.framework */,
@@ -753,6 +765,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -775,6 +788,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

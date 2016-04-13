@@ -7,8 +7,9 @@
 //
 
 #import "KMASignUpViewController.h"
-
-@interface KMASignUpViewController ()
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@interface KMASignUpViewController ()<FBSDKLoginButtonDelegate>
 
 @end
 
@@ -37,7 +38,39 @@
     //self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
     //self.tableView.estimatedRowHeight = 80;
     //self.tableView.rowHeight = UITableViewAutomaticDimension;
-   
+    /*
+    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    loginButton.center = self.view.center;
+    [self.view addSubview:loginButton];
+    loginButton.readPermissions =
+    @[@"public_profile", @"email", @"user_friends"];
+    */
+    self.fb.readPermissions = @[@"public_profile", @"email"];
+
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+    
+    // NSString *accessToken = (NSString*)[FBSDKAccessToken currentAccessToken];
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
+    /*
+    if ([FBSDKAccessToken currentAccessToken]) {
+        
+        
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                      initWithGraphPath:@"me"
+                                      parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}
+                                      HTTPMethod:@"GET"];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                              id result,
+                                              NSError *error) {
+             NSLog(@"email is %@", [result objectForKey:@"user_id"]);
+            self.firstNameField.text = [result objectForKey:@"first_name"];
+            self.lastNameField.text = [result objectForKey:@"last_name"];
+            
+        }];
+       
+        
+        // User is logged in, do work such as go to next view controller.
+    }*/
 }
 
 - (void)didReceiveMemoryWarning
@@ -77,6 +110,10 @@
 //        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
 //        UIGraphicsEndImageContext();
 //        NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+        
+        
+        
+        
         NSData *imageData = UIImagePNGRepresentation(_pickedImage);
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
 
@@ -204,7 +241,9 @@
     _pickedImage = pickedImage;
     
     if (pickedImage == nil) {
+        
         [self.imageButton setImage:[UIImage imageNamed:@"icn_noimage"] forState:UIControlStateNormal];
+        
     } else {
         //[self.imageButton setImage:pickedImage forState:UIControlStateNormal];
         self.thumbnailPic.image = pickedImage;
@@ -287,7 +326,35 @@
 }
 
 
+- (void)observeTokenChange:(NSNotification *)notfication {
+ 
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        
+        
+        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                      initWithGraphPath:@"me"
+                                      parameters:@{@"fields":  @"id, first_name, last_name, picture.type(normal), email"}
+                                      HTTPMethod:@"GET"];
+        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                              id result,
+                                              NSError *error) {
+            NSLog(@"picture is %@", [result objectForKey:@"id"]);
+            self.firstNameField.text = [result objectForKey:@"first_name"];
+            self.lastNameField.text = [result objectForKey:@"last_name"];
+            self.emailField.text = [result objectForKey:@"email"];
+           
+            NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+            _pickedImage=[UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+            self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
 
+            
+        }];
+        
+       
+    }
+
+}
 
 
 @end

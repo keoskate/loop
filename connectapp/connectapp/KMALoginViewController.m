@@ -8,6 +8,8 @@
 
 #import <Parse/Parse.h>
 #import "KMALoginViewController.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 @interface KMALoginViewController ()
 
@@ -20,8 +22,7 @@
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationBarHidden = YES;
-    
-
+  
 }
 //- (void)viewWillAppear:(BOOL)animated
 //{

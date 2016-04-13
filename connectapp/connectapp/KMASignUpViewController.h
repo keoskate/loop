@@ -9,7 +9,8 @@
 #import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
 #include <stdlib.h>
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 @interface KMASignUpViewController : UITableViewController
 <
 UIActionSheetDelegate,
@@ -19,6 +20,9 @@ UITextFieldDelegate,
 UITableViewDelegate,
 UITableViewDataSource
 >
+
+@property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
+
 
 @property (weak, nonatomic) IBOutlet UITextField *knnctIDField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
@@ -31,6 +35,8 @@ UITableViewDataSource
 
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnailPic;
+
+@property (weak, nonatomic) IBOutlet UIImageView *fbPic;
 
 @property (nonatomic, strong) UIImage *pickedImage;
 @property (nonatomic, strong) NSString *knnctID;
