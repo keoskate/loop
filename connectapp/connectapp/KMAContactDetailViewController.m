@@ -45,7 +45,7 @@
     [imageLayer setBorderWidth:4];
     [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
     [imageLayer setMasksToBounds:YES];
-    [_thumbNailImageView.layer setCornerRadius:_thumbNailImageView.frame.size.width/2];
+    [_thumbNailImageView.layer setCornerRadius:_thumbNailImageView.frame.size.width/7];
     [_thumbNailImageView.layer setMasksToBounds:YES];
     
     //end new code

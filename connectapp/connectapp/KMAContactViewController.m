@@ -79,25 +79,16 @@
     contactCell.contactName.text = [[NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]] capitalizedString];
     
     contactCell.contactPic.file = user[@"displayPicture"];
-//    contactCell.contactPic.image = [UIImage imageNamed:@"placeholder.png"];
+    contactCell.contactPic.image = [UIImage imageNamed:@"placeholder.png"];
     
     
-    //new code
-    UIImage *image = [UIImage imageNamed:@"placeholder.png"];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-
-    CALayer *imageLayer = imageView.layer;
+    CALayer *imageLayer = contactCell.contactPic.layer;
     [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:1];
+    [imageLayer setBorderWidth:4];
+    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
     [imageLayer setMasksToBounds:YES];
-    [imageView.layer setCornerRadius:imageView.frame.size.width/2];
-    [imageView.layer setMasksToBounds:YES];
-
-    
-    contactCell.contactPic.image = imageView.image;
-    //end new code
-
-    
+    [contactCell.contactPic.layer setCornerRadius:contactCell.contactPic.frame.size.width/7];
+    [contactCell.contactPic.layer setMasksToBounds:YES];
     
     [contactCell.contactPic loadInBackground];
     

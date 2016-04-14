@@ -292,6 +292,7 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    
     if ([segue.identifier isEqualToString:@"part2"]) {
         //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
         KMASignUpViewController *suvc = [segue destinationViewController];
@@ -317,7 +318,7 @@
         suvc.fbID = _fbID;
         
     }
-    if ([segue.identifier isEqualToString:@"showBasic"]) {
+    if ([segue.identifier isEqualToString:@"basic"]) {
         //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
         KMASignUpViewController *suvc = [segue destinationViewController];
         
@@ -326,6 +327,13 @@
         suvc.emailField.text = _email;
         suvc.firstNameField.text = @"hello world";
         suvc.lastNameField.text = _lastName;
+        
+        suvc.thumbnailPic.image = _pickedImage;
+        suvc.email = _email;
+        suvc.firstName = _firstName;
+        suvc.lastName = _lastName;
+        suvc.phoneNumber = _phoneNumber;
+        suvc.fbID = _fbID;
         NSLog(@"LAST NAME: %@", _lastName);
         
         
@@ -356,21 +364,28 @@
                                               id result,
                                               NSError *error) {
             NSLog(@"picture is %@", [result objectForKey:@"id"]);
-            self.firstNameField.text = [result objectForKey:@"first_name"];
-            self.lastNameField.text = [result objectForKey:@"last_name"];
-            self.emailField.text = [result objectForKey:@"email"];
+            NSLog(@"email: %@", _email);
             
+//            self.firstNameField.text = [result objectForKey:@"first_name"];
+//            self.lastNameField.text = [result objectForKey:@"last_name"];
+//            self.emailField.text = [result objectForKey:@"email"];
+            
+            
+            
+            NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+            _pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
             _firstName =[result objectForKey:@"first_name"];
             _lastName = [result objectForKey:@"last_name"];
             _email =[result objectForKey:@"email"];
             _fbID =[result objectForKey:@"id"];
-            
-            NSLog(@"email: %@", _email);
-            NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
-            _pickedImage=[UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-            self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
 
-            //[self performSegueWithIdentifier:@"showBasic" sender:self];
+            self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+   
+            self.emailField.text = _email;
+            self.firstNameField.text = _firstName;
+            self.lastNameField.text = _lastName;
+            
+            //[self performSegueWithIdentifier:@"basic" sender:self];
             
 //            KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"showBasic"];
 //            signUpView.lastNameField.text = [result objectForKey:@"last_name"];
