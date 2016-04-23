@@ -78,6 +78,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 #warning 1
 //Set up tab bar
 -(void)setUpUI {
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
+    //[ UIColor colorWithRed:0.0f green:190.0f blue:255.0f alpha:1.0f]];
+    //[UIColor colorWithRed:24.0f/255.0f green:186.0f/255.0f blue:249.0f/255.0f alpha:1.0]
+    
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBar *tabBar = tabBarController.tabBar;
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];

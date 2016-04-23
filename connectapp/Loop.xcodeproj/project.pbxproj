@@ -35,6 +35,7 @@
 		7D34D9B91AA5C30400E99564 /* KMAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D34D9B81AA5C30400E99564 /* KMAWebViewController.m */; };
 		7D59DEF21CBB9D6700F88DFA /* temp_logo .png in Resources */ = {isa = PBXBuildFile; fileRef = 7D59DEF11CBB9D6700F88DFA /* temp_logo .png */; };
 		7D60C4A419C480350064DF08 /* KMAUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */; };
+		7D6232981CCA6AB40005F270 /* KMAEditFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6232971CCA6AB40005F270 /* KMAEditFieldTableViewCell.m */; };
 		7D6F5B4D1A0B405100E6359C /* add-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B341A0B405100E6359C /* add-selected@2x.png */; };
 		7D6F5B4E1A0B405100E6359C /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B351A0B405100E6359C /* add@2x.png */; };
 		7D6F5B4F1A0B405100E6359C /* Anvaripour_Keion.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B361A0B405100E6359C /* Anvaripour_Keion.jpg */; };
@@ -133,6 +134,8 @@
 		7D59DEF11CBB9D6700F88DFA /* temp_logo .png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "temp_logo .png"; sourceTree = "<group>"; };
 		7D60C4A219C480350064DF08 /* KMAUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAUserInfoViewController.h; sourceTree = "<group>"; };
 		7D60C4A319C480350064DF08 /* KMAUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAUserInfoViewController.m; sourceTree = "<group>"; };
+		7D6232961CCA6AB40005F270 /* KMAEditFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAEditFieldTableViewCell.h; sourceTree = "<group>"; };
+		7D6232971CCA6AB40005F270 /* KMAEditFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAEditFieldTableViewCell.m; sourceTree = "<group>"; };
 		7D6F5B341A0B405100E6359C /* add-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add-selected@2x.png"; path = "Images/add-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B351A0B405100E6359C /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Images/add@2x.png"; sourceTree = "<group>"; };
 		7D6F5B361A0B405100E6359C /* Anvaripour_Keion.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Anvaripour_Keion.jpg; path = Images/Anvaripour_Keion.jpg; sourceTree = "<group>"; };
@@ -274,6 +277,8 @@
 				7D0E73A419C452CC0086274C /* KMALoginViewController.m */,
 				7D0E73A619C4578A0086274C /* KMASignUpViewController.h */,
 				7D0E73A719C4578A0086274C /* KMASignUpViewController.m */,
+				7D6232961CCA6AB40005F270 /* KMAEditFieldTableViewCell.h */,
+				7D6232971CCA6AB40005F270 /* KMAEditFieldTableViewCell.m */,
 			);
 			name = "Login/Signup Page";
 			sourceTree = "<group>";
@@ -632,6 +637,7 @@
 				7D0E73A519C452CC0086274C /* KMALoginViewController.m in Sources */,
 				7D0E73AB19C458E20086274C /* KMAHomeViewController.m in Sources */,
 				7DFA5EBD19B811A900E67589 /* KMAViewController.m in Sources */,
+				7D6232981CCA6AB40005F270 /* KMAEditFieldTableViewCell.m in Sources */,
 				7DFAB30E1A0CE0DC0080EBDE /* KLCPopup.m in Sources */,
 				7D0E73B419C45B6D0086274C /* KMAManageContactsViewController.m in Sources */,
 				7DFA5EB719B811A900E67589 /* KMAAppDelegate.m in Sources */,
@@ -765,6 +771,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -788,6 +795,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

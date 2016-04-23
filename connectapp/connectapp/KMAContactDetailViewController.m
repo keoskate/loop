@@ -386,6 +386,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#warning THIS LINKS TO CUR_USER PROFILE -> need contacts profile 
     PFUser *currentUser = [PFUser currentUser];
     NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [currentUser objectForKey:@"facebookURL"]];
     

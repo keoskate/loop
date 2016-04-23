@@ -22,7 +22,11 @@ UITableViewDataSource
 >
 
 @property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
+//@property (weak, nonatomic) IBOutlet UIButton *joinWithFacebookButton;
 
+- (IBAction)joinWithFacebook:(id)sender;
+- (IBAction)createAccount:(id)sender;
+- (IBAction)continueAction:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UITextField *knnctIDField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;
@@ -31,10 +35,22 @@ UITableViewDataSource
 @property (strong, nonatomic) IBOutlet UITextField *lastNameField;
 @property (strong, nonatomic) IBOutlet UITextField *phoneNumberField;
 
+@property (weak, nonatomic) IBOutlet UITextField *textField1;
+@property (weak, nonatomic) IBOutlet UITextField *textField2;
+@property (weak, nonatomic) IBOutlet UITextField *textField3;
+@property (weak, nonatomic) IBOutlet UITextField *textField4;
+
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIButton *skipButton;
+
+@property (weak, nonatomic) IBOutlet UITextField *snapchatField;
+@property (weak, nonatomic) IBOutlet UITextField *instagramField;
+
+
 - (IBAction)imageSelectionButtonWasPressed:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIButton *imageButton;
-@property (strong, nonatomic) IBOutlet UIImageView *thumbnailPic;
+@property (strong, nonatomic) IBOutlet PFImageView *thumbnailPic;
 
 @property (weak, nonatomic) IBOutlet UIImageView *fbPic;
 

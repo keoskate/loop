@@ -34,6 +34,28 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = YES;
     [self.tableView addGestureRecognizer:gestureRecognizer];
+    
+    
+    self.thumbnailPic.image = self.pickedImage;
+    if (!self.thumbnailPic.image) {
+        self.thumbnailPic.image = [UIImage imageNamed:@"placeholder.png"];
+    }
+    self.emailField.text = self.email;
+    self.firstNameField.text = self.firstName;
+    self.lastNameField.text = self.lastName;
+    
+    CALayer *imageLayer = self.thumbnailPic.layer;
+    [imageLayer setCornerRadius:5];
+    [imageLayer setBorderWidth:4];
+    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
+    [imageLayer setMasksToBounds:YES];
+    [self.thumbnailPic.layer setCornerRadius:self.thumbnailPic.frame.size.width/7];
+    [self.thumbnailPic.layer setMasksToBounds:YES];
+    
+    [self.thumbnailPic loadInBackground];
+    
+    [self.textField1 becomeFirstResponder];
+    
     //self.tableView.autoresizesSubviews = true;
     //self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
     //self.tableView.estimatedRowHeight = 80;
@@ -49,9 +71,11 @@
 
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
     
-    // NSString *accessToken = (NSString*)[FBSDKAccessToken currentAccessToken];
-   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
     /*
+     
+     // NSString *accessToken = (NSString*)[FBSDKAccessToken currentAccessToken];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
+     
     if ([FBSDKAccessToken currentAccessToken]) {
         
         
@@ -81,14 +105,18 @@
 
 - (IBAction)signup:(id)sender
 {
+    self.doneButton.enabled = NO;
+    self.doneButton.titleLabel.text = @"Waiting...";
+    self.skipButton.enabled = NO;
     
-    _knnctID = [self.knnctIDField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    _password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//    _knnctID = [self.knnctIDField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//   
+//    _password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
     if ([_knnctID length] == 0 || [_password length] == 0 ) {
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Oops!"
-                                  message: @"Make sure you enter Username/Password/Email/Phone"
+                                  message: @"Make sure you enter all required fields."
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -97,7 +125,7 @@
     else if ([_knnctID length] != 4){
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Oops!"
-                                  message: @"Knnct ID must be 4 letters and/or numbers"
+                                  message: @"Loop ID must be 4 letters and/or numbers"
                                   delegate:nil
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -105,20 +133,18 @@
 
     }
     else {
+#warning - flip captured photo before saving
 //        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
 //        [_pickedImage drawInRect: CGRectMake(0, 0, 640, 960)];
 //        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
 //        UIGraphicsEndImageContext();
 //        NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
         
-        
-        
-        
         NSData *imageData = UIImagePNGRepresentation(_pickedImage);
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
 
-        [_knnctID lowercaseString];
-        [_email lowercaseString];
+        _knnctID = [_knnctID lowercaseString]; //make sure LOWERCASE
+        _email = [_email lowercaseString];
         PFUser *newUser = [PFUser user];
         newUser.username = [_knnctID lowercaseString];
         newUser.password = _password;
@@ -128,7 +154,9 @@
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
         [newUser setObject:imageFile forKey:@"displayPicture"];
         [newUser setObject:_fbID forKey:@"facebookURL"];
-
+        [newUser setObject:self.snapchatField.text forKey:@"snapchatURL"];
+        [newUser setObject:self.instagramField.text forKey:@"instagramURL"];
+        
         //happens in background without annoying users - block - events that happen asynchronously
         [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (error) {
@@ -140,6 +168,9 @@
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
+                self.doneButton.enabled = YES;
+                self.doneButton.titleLabel.text = @"Done";
+                self.skipButton.enabled = YES;
             }
             else {
 
@@ -251,6 +282,7 @@
     }
 }
 
+#pragma mark - IBActions
 - (IBAction)imageSelectionButtonWasPressed:(id)sender {
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -267,13 +299,16 @@
 
 - (IBAction)nextPage:(id)sender {
     
-    _email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//    _email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
     _firstName =
     [self.firstNameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
     _lastName = [self.lastNameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+   
     _phoneNumber = [self.phoneNumberField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    if ([_firstName length] == 0 || [_lastName length] == 0 || [_email length] == 0 || [_phoneNumber length] == 0) {
+    if ([_firstName length] == 0 || [_lastName length] == 0 || [self.passwordField.text length] == 0 || [_phoneNumber length] == 0 || [_email length] == 0) {
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Oops!"
                                   message: @"Make sure you fill out all fields."
@@ -283,15 +318,188 @@
         [alertView show];
     }
     else {
-        [self performSegueWithIdentifier:@"part2" sender:self];
+        [self performSegueWithIdentifier:@"create3" sender:self];
     }
     
+}
+
+- (IBAction)createAccount:(id)sender {
+    
+    NSString *emailRegEx =
+    @"(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}"
+    @"~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
+    @"x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-"
+    @"z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5"
+    @"]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-"
+    @"9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21"
+    @"-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", emailRegEx];
+
+    _email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([_email length] == 0  || ![emailTest evaluateWithObject:_email]) {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Oops!"
+                                  message: @"Make sure you entered a valid email."
+                                  delegate:nil
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+    else {
+        [self performSegueWithIdentifier:@"create1" sender:self];
+    }
+}
+
+- (IBAction)continueAction:(id)sender {
+    
+   
+    NSString *c1 = [self.textField1.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *c2 = [self.textField2.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *c3 = [self.textField3.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *c4 = [self.textField4.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSMutableString *loopID = [NSMutableString stringWithString:c1];
+    [loopID appendString:c2];
+    [loopID appendString:c3];
+    [loopID appendString:c4];
+    loopID = [loopID lowercaseString];
+    [loopID stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    self.knnctID = loopID;
+    NSLog(@"LoopID: %@", loopID);
+    
+   
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"username" equalTo:loopID];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            UIAlertView *alertView = [[UIAlertView alloc]
+                                      initWithTitle:@"Oops!"
+                                      message: @"That username is already taken."
+                                      delegate:nil
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles:nil];
+            [alertView show];
+            self.textField1.text = @"";
+            self.textField2.text = @"";
+            self.textField3.text = @"";
+            self.textField4.text = @"";
+            [loopID setString:@""];
+            [self.textField1 becomeFirstResponder];
+            
+        }else {
+            if ([loopID length] != 4 ) {
+                UIAlertView *alertView = [[UIAlertView alloc]
+                                          initWithTitle:@"Oops!"
+                                          message: @"Your Loop ID must be 4 characters long."
+                                          delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+                [alertView show];
+            }
+            else {
+                [self performSegueWithIdentifier:@"create2" sender:self];
+            }
+            
+        }
+
+    }];
+}
+
+#pragma mark - text field
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    BOOL shouldProcess = NO; //default to reject
+    BOOL shouldMoveToNextField = NO; //default to remaining on the current field
+    
+    int insertStringLength = [string length];
+    if(insertStringLength == 0){ //backspace
+        shouldProcess = YES; //Process if the backspace character was pressed
+    }
+    else {
+        if([[textField text] length] == 0) {
+            shouldProcess = YES; //Process if there is only 1 character right now
+        }
+    }
+    
+    //here we deal with the UITextField on our own
+    if(shouldProcess){
+        //grab a mutable copy of what's currently in the UITextField
+        NSMutableString* mstring = [[textField text] mutableCopy];
+        if([mstring length] == 0){
+            //nothing in the field yet so append the replacement string
+            [mstring appendString:string];
+            
+            shouldMoveToNextField = YES;
+        }
+        else{
+            //adding a char or deleting?
+            if(insertStringLength > 0){
+                [mstring insertString:string atIndex:range.location];
+            }
+            else {
+                //delete case - the length of replacement string is zero for a delete
+                [mstring deleteCharactersInRange:range];
+            }
+        }
+        
+        //set the text now
+        [textField setText:mstring];
+        
+        if (shouldMoveToNextField) {
+            //
+            //MOVE TO NEXT INPUT FIELD HERE
+            //
+            NSInteger nextTag = textField.tag + 1;
+            // Try to find next responder
+            UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
+//            if (! nextResponder)
+//                nextResponder = [textField.superview viewWithTag:1];
+            
+            if (nextResponder)
+                // Found next responder, so set it.
+                [nextResponder becomeFirstResponder];
+
+        }
+    }
+    
+    //always return no since we are manually changing the text field
+    return NO;
 }
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if ([segue.identifier isEqualToString:@"create1"]) {
+
+        KMASignUpViewController *suvc = [segue destinationViewController];
+        suvc.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+    }
+    if ([segue.identifier isEqualToString:@"create2"]) {
+        
+        KMASignUpViewController *suvc = [segue destinationViewController];
+        suvc.pickedImage =  self.pickedImage;
+        suvc.firstName = self.firstName;
+        suvc.lastName = self.lastName;
+        suvc.email = self.email;
+        suvc.fbID = self.fbID;
+        suvc.knnctID = self.knnctID;
+    }
+    
+    if ([segue.identifier isEqualToString:@"create3"]) {
+        
+        KMASignUpViewController *suvc = [segue destinationViewController];
+        suvc.pickedImage =  self.pickedImage;
+        suvc.firstName = self.firstName;
+        suvc.lastName = self.lastName;
+        suvc.email = self.email;
+        suvc.fbID = self.fbID;
+        suvc.knnctID = self.knnctID;
+        
+        suvc.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
     
     if ([segue.identifier isEqualToString:@"part2"]) {
         //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
@@ -349,7 +557,7 @@
     [_passwordField resignFirstResponder];
 }
 
-
+/*
 - (void)observeTokenChange:(NSNotification *)notfication {
  
     
@@ -363,16 +571,12 @@
         [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
                                               id result,
                                               NSError *error) {
+           
             NSLog(@"picture is %@", [result objectForKey:@"id"]);
             NSLog(@"email: %@", _email);
             
-//            self.firstNameField.text = [result objectForKey:@"first_name"];
-//            self.lastNameField.text = [result objectForKey:@"last_name"];
-//            self.emailField.text = [result objectForKey:@"email"];
-            
-            
-            
             NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+           
             _pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
             _firstName =[result objectForKey:@"first_name"];
             _lastName = [result objectForKey:@"last_name"];
@@ -385,7 +589,7 @@
             self.firstNameField.text = _firstName;
             self.lastNameField.text = _lastName;
             
-            //[self performSegueWithIdentifier:@"basic" sender:self];
+            [self performSegueWithIdentifier:@"basic" sender:self];
             
 //            KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"showBasic"];
 //            signUpView.lastNameField.text = [result objectForKey:@"last_name"];
@@ -399,6 +603,81 @@
     }
 
 }
+*/
+
+- (IBAction)joinWithFacebook:(id)sender {
+    NSLog(@"joining with facebook ...");
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions:@[@"email"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        if (error) {
+            // Process error
+            NSLog(@"error %@", error);
+        } else if (result.isCancelled) {
+            // Handle cancellations
+            NSLog(@"Cancelled");
+        } else {
+            if ([result.grantedPermissions containsObject:@"email"]) {
+                // Do work
+                [self fetchUserInfo];
+            }
+        }
+    }];
+}
 
 
+
+-(void)fetchUserInfo {
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        
+        NSLog(@"Token is available");
+        
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(normal), email"}]
+         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+             if (!error) {
+                 NSLog(@"Fetched User Information:%@", result);
+                 
+                 NSLog(@"picture is %@", [result objectForKey:@"id"]);
+                 
+                 NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+                 
+//                 _pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+//                 _firstName =[result objectForKey:@"first_name"];
+//                 _lastName = [result objectForKey:@"last_name"];
+//                 _email =[result objectForKey:@"email"];
+//                 _fbID =[result objectForKey:@"id"];
+//                 
+//                 self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+//                 
+//                 self.emailField.text = _email;
+//                 self.firstNameField.text = _firstName;
+//                 self.lastNameField.text = _lastName;
+                 
+                 //[self performSegueWithIdentifier:@"basic" sender:self];
+                 
+//                KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"basicView"];
+                 
+                 KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"create2"];
+
+                 //KMASignUpViewController *signUpView = [[KMASignUpViewController alloc] init];
+                 signUpView.pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+                 signUpView.firstName =[result objectForKey:@"first_name"];
+                 signUpView.lastName = [result objectForKey:@"last_name"];
+                 signUpView.email =[result objectForKey:@"email"];
+                 signUpView.fbID =[result objectForKey:@"id"];
+                 
+                 
+                 [self.navigationController pushViewController:signUpView animated:YES];
+                 
+             }
+             else {
+                 NSLog(@"Error %@",error);
+             }
+         }];
+        
+    } else {
+        NSLog(@"User is not Logged in");
+    }
+}
 @end
