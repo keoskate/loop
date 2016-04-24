@@ -27,8 +27,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden = NO;
-    
+   // self.navigationController.navigationBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
@@ -144,18 +145,27 @@
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
 
         _knnctID = [_knnctID lowercaseString]; //make sure LOWERCASE
-        _email = [_email lowercaseString];
+        
         PFUser *newUser = [PFUser user];
         newUser.username = [_knnctID lowercaseString];
         newUser.password = _password;
-        newUser.email = _email;
+        newUser.email = [_email lowercaseString];
         [newUser setObject:_firstName forKey:@"firstName"];
         [newUser setObject:_lastName forKey:@"lastName"];
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
         [newUser setObject:imageFile forKey:@"displayPicture"];
         [newUser setObject:_fbID forKey:@"facebookURL"];
-        [newUser setObject:self.snapchatField.text forKey:@"snapchatURL"];
-        [newUser setObject:self.instagramField.text forKey:@"instagramURL"];
+        
+        if ([self.snapchatField.text isEqualToString:@""]) {
+            [newUser setObject:[self.snapchatField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"snapchatURL"];
+        }
+        if (![self.instagramField.text  isEqualToString: @""]) {
+            [newUser setObject:[self.instagramField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"instagramURL"];
+        }
+        
+        
+        
+#warning add more API URLs
         
         //happens in background without annoying users - block - events that happen asynchronously
         [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -295,6 +305,10 @@
 
 - (IBAction)skipPage:(id)sender {
     [self performSegueWithIdentifier:@"skip" sender:self];
+    
+    
+    
+    
 }
 
 - (IBAction)nextPage:(id)sender {
@@ -318,6 +332,14 @@
         [alertView show];
     }
     else {
+        
+        
+        
+        
+        
+        
+        
+        
         [self performSegueWithIdentifier:@"create3" sender:self];
     }
     
@@ -347,7 +369,16 @@
         [alertView show];
     }
     else {
+        
+//        KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"create2"];
+//        signUpView.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//         [self.navigationController pushViewController:signUpView animated:YES];
+        
+        
         [self performSegueWithIdentifier:@"create1" sender:self];
+        
+        
+        
     }
 }
 
@@ -494,6 +525,7 @@
         suvc.pickedImage =  self.pickedImage;
         suvc.firstName = self.firstName;
         suvc.lastName = self.lastName;
+        suvc.phoneNumber = self.phoneNumber;
         suvc.email = self.email;
         suvc.fbID = self.fbID;
         suvc.knnctID = self.knnctID;
@@ -543,8 +575,6 @@
         suvc.phoneNumber = _phoneNumber;
         suvc.fbID = _fbID;
         NSLog(@"LAST NAME: %@", _lastName);
-        
-        
     }
 
 }
@@ -642,31 +672,12 @@
                  
                  NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
                  
-//                 _pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-//                 _firstName =[result objectForKey:@"first_name"];
-//                 _lastName = [result objectForKey:@"last_name"];
-//                 _email =[result objectForKey:@"email"];
-//                 _fbID =[result objectForKey:@"id"];
-//                 
-//                 self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-//                 
-//                 self.emailField.text = _email;
-//                 self.firstNameField.text = _firstName;
-//                 self.lastNameField.text = _lastName;
-                 
-                 //[self performSegueWithIdentifier:@"basic" sender:self];
-                 
-//                KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"basicView"];
-                 
                  KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"create2"];
-
-                 //KMASignUpViewController *signUpView = [[KMASignUpViewController alloc] init];
                  signUpView.pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
                  signUpView.firstName =[result objectForKey:@"first_name"];
                  signUpView.lastName = [result objectForKey:@"last_name"];
                  signUpView.email =[result objectForKey:@"email"];
                  signUpView.fbID =[result objectForKey:@"id"];
-                 
                  
                  [self.navigationController pushViewController:signUpView animated:YES];
                  

@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     NSString *temp = _searchedUserName;
     self.searchName.text = [temp capitalizedString];
     temp = _searchedUserID;

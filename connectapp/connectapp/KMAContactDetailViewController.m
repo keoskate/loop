@@ -307,9 +307,9 @@
 //    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied ||
 //        ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusRestricted){
 //        
-        CNEntityType entityType = CNEntityTypeContacts;
-        if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusDenied ||
-           [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusRestricted){
+    CNEntityType entityType = CNEntityTypeContacts;
+    if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusDenied ||
+        [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusRestricted){
         //1
         UIAlertView *cantAddContactAlert = [[UIAlertView alloc] initWithTitle: @"Cannot Add Contact"
                                                                       message: @"You must give the app permission to add the contact first."

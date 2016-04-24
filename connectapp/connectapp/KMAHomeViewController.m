@@ -22,7 +22,8 @@
 {
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
-
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
         NSLog(@"Current User: %@", currentUser.username);
