@@ -12,6 +12,8 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 @interface KMAEditPageViewController : UITableViewController
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
+
 @property (weak, nonatomic) IBOutlet PFImageView *photoField;
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -24,8 +26,16 @@
 @property (weak, nonatomic) IBOutlet UITextField *instagramField;
 @property (weak, nonatomic) IBOutlet UITextField *snapchatField;
 @property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
+@property (weak, nonatomic) IBOutlet UITableViewCell *fbTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *liTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *igTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *scTableViewCell;
+
+@property (weak, nonatomic) IBOutlet UIButton *fbConnectButton;
+@property (weak, nonatomic) IBOutlet UIButton *liConnectButton;
 
 
 - (IBAction)saveButtonPressed:(id)sender;
+- (IBAction)joinWithFacebook:(id)sender;
 
 @end

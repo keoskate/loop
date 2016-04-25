@@ -95,20 +95,24 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
     UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
     UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:3];
+    UITabBarItem *tabBarItem5 = [tabBar.items objectAtIndex:4];
     
     //    [[tabBarController.view.subviews objectAtIndex:0] setFrame:CGRectMake(0, 0, 320, 440)];
     //    [tabBarController.tabBar setFrame:CGRectMake(0, 440, 320, 50)];
     //
     tabBarItem1.title = @"Search";
-    tabBarItem2.title = @"Requests";
-    tabBarItem3.title = @"Contact";
-    tabBarItem4.title = @"Settings";
+    tabBarItem2.title = @"Notifications";
+    tabBarItem3.title = @"Profile";
+    tabBarItem4.title = @"Contact";
+    tabBarItem5.title = @"Settings";
+    
     
     
     [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"search-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"searchTab.png"]];
     [tabBarItem2 setFinishedSelectedImage:[UIImage imageNamed:@"requests-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"requests"]];
-    [tabBarItem3 setFinishedSelectedImage:[UIImage imageNamed:@"contacts-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"contacts.png"]];
-    [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"settings-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"settings.png"]];
+    
+    [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"contacts-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"contacts.png"]];
+    [tabBarItem5 setFinishedSelectedImage:[UIImage imageNamed:@"settings-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"settings.png"]];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

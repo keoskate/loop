@@ -17,6 +17,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.view.backgroundColor = [UIColor whiteColor];
     
     //[self.tableView reloadData];
     PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
@@ -77,6 +79,16 @@
     requestCell.userName.text = [object[@"displayName"] capitalizedString];
     requestCell.userPic.file = object[@"fromPicture"];
     requestCell.userPic.image = [UIImage imageNamed:@"placeholder.png"];
+    [requestCell.userPic loadInBackground];
+    
+    CALayer *imageLayer = requestCell.userPic.layer;
+    [imageLayer setCornerRadius:5];
+    [imageLayer setBorderWidth:4];
+    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
+    [imageLayer setMasksToBounds:YES];
+    [requestCell.userPic.layer setCornerRadius:requestCell.userPic.frame.size.width/7];
+    [requestCell.userPic.layer setMasksToBounds:YES];
+    
     [requestCell.userPic loadInBackground];
     
 //    [requestCell.requestedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {

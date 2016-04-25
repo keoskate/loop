@@ -32,6 +32,9 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
+    //fix weird choppy bug
+    self.navigationController.view.backgroundColor = [UIColor whiteColor];
+    
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = YES;
     [self.tableView addGestureRecognizer:gestureRecognizer];
@@ -71,31 +74,6 @@
     self.fb.readPermissions = @[@"public_profile", @"email"];
 
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
-    
-    /*
-     
-     // NSString *accessToken = (NSString*)[FBSDKAccessToken currentAccessToken];
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
-     
-    if ([FBSDKAccessToken currentAccessToken]) {
-        
-        
-        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
-                                      initWithGraphPath:@"me"
-                                      parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}
-                                      HTTPMethod:@"GET"];
-        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
-                                              id result,
-                                              NSError *error) {
-             NSLog(@"email is %@", [result objectForKey:@"user_id"]);
-            self.firstNameField.text = [result objectForKey:@"first_name"];
-            self.lastNameField.text = [result objectForKey:@"last_name"];
-            
-        }];
-       
-        
-        // User is logged in, do work such as go to next view controller.
-    }*/
 }
 
 - (void)didReceiveMemoryWarning
@@ -663,7 +641,7 @@
         
         NSLog(@"Token is available");
         
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(normal), email"}]
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(square), email"}]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
                  NSLog(@"Fetched User Information:%@", result);

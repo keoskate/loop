@@ -26,6 +26,7 @@
 {
     [super viewDidLoad];
     [self.tableView reloadData];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendsRelation"];
     PFQuery *query = [self.friendsRelation query];
     [query orderByAscending:@"username"];

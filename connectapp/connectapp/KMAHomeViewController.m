@@ -165,15 +165,13 @@
     searchCell.userPic.file = user[@"displayPicture"];
     searchCell.userPic.image = [UIImage imageNamed:@"placeholder.png"];
     
-    CALayer *imageLayer = searchCell.userPic.layer;
-    [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:4];
-    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer setMasksToBounds:YES];
-    [searchCell.userPic.layer setCornerRadius:searchCell.userPic.frame.size.width/7];
-    [searchCell.userPic.layer setMasksToBounds:YES];
+
     
     [searchCell.userPic loadInBackground];
+    searchCell.userPic.layer.borderWidth = 2;
+    searchCell.userPic.layer.borderColor = [UIColor whiteColor].CGColor;
+    searchCell.userPic.layer.cornerRadius = 50;
+    searchCell.userPic.clipsToBounds = YES;
     
     //self.connectButton.hidden = false;
     

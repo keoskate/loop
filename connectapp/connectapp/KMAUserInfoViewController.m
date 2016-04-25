@@ -18,6 +18,7 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
     PFUser *currentUser = [PFUser currentUser];
 

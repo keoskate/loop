@@ -25,6 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.userEmail.text = myUserEmail;
     self.userName.text = [[NSString stringWithFormat:@"%@ %@", myUserFirstName, myUserLastName] capitalizedString];
     self.userUsername.text = [myUserUsername uppercaseString];
@@ -38,19 +39,15 @@
     
     
     //[self populateSelfData];
-    
-    // new code
-    CALayer *imageLayer = _thumbNailImageView.layer;
-    [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:4];
-    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer setMasksToBounds:YES];
-    [_thumbNailImageView.layer setCornerRadius:_thumbNailImageView.frame.size.width/7];
-    [_thumbNailImageView.layer setMasksToBounds:YES];
-    
-    //end new code
+
     
     [self.thumbNailImageView loadInBackground];
+    self.thumbNailImageView.layer.borderWidth = 2;
+    self.thumbNailImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.thumbNailImageView.layer.cornerRadius = 130/2;
+    self.thumbNailImageView.clipsToBounds = YES;
+
+    
 }
 
 -(void)populateSelfData{
@@ -386,13 +383,38 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#warning THIS LINKS TO CUR_USER PROFILE -> need contacts profile 
-    PFUser *currentUser = [PFUser currentUser];
-    NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [currentUser objectForKey:@"facebookURL"]];
+ 
+     KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
     
+
+    if ([shareStuff.mediaType isEqualToString:@"Facebook"]) {
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [user objectForKey:@"facebookURL"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Instagram"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"instagram://user?username=%@", [user objectForKey:@"instagramURL"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Email"]){
+        //Open up Email to this user ... Apple Mail API
+    }
+
     
-    NSURL *url = [NSURL URLWithString:fbURL];
-    [[UIApplication sharedApplication] openURL:url];
+  
     
 }
 
