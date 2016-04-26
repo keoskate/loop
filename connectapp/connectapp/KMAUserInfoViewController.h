@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *userLastName;
 @property (strong, nonatomic) IBOutlet UILabel *userEmail;
 @property (strong, nonatomic) IBOutlet UILabel *userPhone;
+@property (strong, nonatomic) IBOutlet UILabel *userScore;
 @property (weak, nonatomic)   IBOutlet PFImageView *userPicture;
 
 - (IBAction)logout:(id)sender;

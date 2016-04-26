@@ -154,61 +154,48 @@
     }
     
     PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
-//    [[user objectForKey:@"displayPicture"] getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-//        if (!error) {
-//            searchCell.userThumbnail.image = [UIImage imageWithData:imageData];
-//            if (!imageData) {
-//                searchCell.userThumbnail.image = [UIImage imageNamed:@"placeholder.png"];
-//            }
-//            [self.tableView reloadData];
-//        }
-//    }];
-    
     searchCell.userID.text = [user.username uppercaseString];
     searchCell.requestedUserID = user.username;
     searchCell.userName.text = [NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]];
     searchCell.userPic.file = user[@"displayPicture"];
     searchCell.userPic.image = [UIImage imageNamed:@"placeholder.png"];
     
-
-    
     [searchCell.userPic loadInBackground];
     searchCell.userPic.layer.borderWidth = 2;
     searchCell.userPic.layer.borderColor = [UIColor whiteColor].CGColor;
-    searchCell.userPic.layer.cornerRadius = 50;
+    searchCell.userPic.layer.cornerRadius =30;
     searchCell.userPic.clipsToBounds = YES;
     
     //self.connectButton.hidden = false;
-    
    
     return searchCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KMAAddContactController *addDetailViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"showAddContact"];
+//    KMAAddContactController *addDetailViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"showAddContact"];
+//    
+//    PFUser *currentUser = [PFUser currentUser];
+//    PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
+//    
+//    //Freebee info - anyone accepted get it
+//    addDetailViewController.title = user[@"firstName"];
+//    addDetailViewController.searchedUserName = [NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]];
+//    addDetailViewController.searchedUserID = user.username;
+//    
+//    addDetailViewController.searchedUserPicFile = [user objectForKey:@"displayPicture"];
+//    [addDetailViewController.searchedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+//        if (!error) {
+//            addDetailViewController.searchImage.image = [UIImage imageWithData:imageData];
+//            if (!imageData) {
+//                addDetailViewController.searchImage.image = [UIImage imageNamed:@"placeholder.png"];
+//            }
+//
+//            //addDetailViewController.searchedUserPic = [UIImage imageWithData:imageData];
+//        }
+//    }];
     
-    PFUser *currentUser = [PFUser currentUser];
-    PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
-    
-    //Freebee info - anyone accepted get it
-    addDetailViewController.title = user[@"firstName"];
-    addDetailViewController.searchedUserName = [NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]];
-    addDetailViewController.searchedUserID = user.username;
-    
-    addDetailViewController.searchedUserPicFile = [user objectForKey:@"displayPicture"];
-    [addDetailViewController.searchedUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-        if (!error) {
-            addDetailViewController.searchImage.image = [UIImage imageWithData:imageData];
-            if (!imageData) {
-                addDetailViewController.searchImage.image = [UIImage imageNamed:@"placeholder.png"];
-            }
-
-            //addDetailViewController.searchedUserPic = [UIImage imageWithData:imageData];
-        }
-    }];
-    
-     [self.navigationController pushViewController:addDetailViewController animated:YES];
+     //[self.navigationController pushViewController:addDetailViewController animated:YES];
 }
 #pragma mark - search bar
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {

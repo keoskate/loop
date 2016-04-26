@@ -27,7 +27,8 @@
     self.userFirstName.text = [currentUser objectForKey:@"firstName"];
     self.userLastName.text = [currentUser objectForKey:@"lastName"];
     self.userPhone.text = [currentUser objectForKey:@"phoneNumber"];
-    
+    NSNumber *score = [currentUser objectForKey:@"score"];
+    self.userScore.text = [score stringValue];
     self.userPicture.file = [currentUser objectForKey:@"displayPicture"];
     self.userPicture.image = [UIImage imageNamed:@"placeholder.png"];
     [self.userPicture loadInBackground];

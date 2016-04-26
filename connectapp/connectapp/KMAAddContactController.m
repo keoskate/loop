@@ -132,6 +132,7 @@
 -(void)requestFriendship:(PFUser *)user {
     
     PFUser *currentUser = [PFUser currentUser];
+    __block NSNumber *loopScore = [NSNumber numberWithInt:1];
     
     PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
     [query whereKey:@"toUser" equalTo:user];
@@ -158,11 +159,22 @@
             // iterate to see which cells are selected
             for (int i = 0; i < [self.shareOptions count]; i++) {
                 KMAShareCell *shareCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                if ([shareCell.socialCheckbox isSelected]==YES)
+                if ([shareCell.socialCheckbox isSelected]==YES){
                     [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
-                else
+                    int value = [loopScore intValue];
+                    loopScore = [NSNumber numberWithInt:value + 1];
+                }else{
                     [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
+                }
             }
+            NSNumber *curScore = currentUser[@"score"];
+            int oldScore = [curScore intValue];
+            int newScore = [loopScore intValue];
+            newScore += oldScore;
+            loopScore = [NSNumber numberWithInt:newScore];
+            
+            [currentUser setObject:loopScore forKey:@"score"];
+            [currentUser saveInBackground];
             
             [settingACL setReadAccess:YES forUser:user];
             [settingACL setReadAccess:YES forUser:currentUser];

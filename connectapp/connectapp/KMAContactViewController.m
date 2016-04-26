@@ -35,10 +35,13 @@
             NSLog(@"Error %@ %@",error, [error userInfo]);
         }
         else {
-            self.friends = objects;
-            [self.tableView reloadData];
+            self.allUsers = objects;
+            self.friends = [NSMutableArray arrayWithArray:self.allUsers];
+            [self updateFriends];
         }
     }];
+    
+    
    //spinner - refresh friends - not needed 
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(reloadFriends) forControlEvents:UIControlEventValueChanged];
@@ -50,6 +53,32 @@
     [self reloadFriends];
 }
 
+-(void)updateFriends {
+
+    PFUser *currentUser = [PFUser currentUser];
+    for (PFUser *user in self.friends) {
+        
+        PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
+        [query whereKey:@"toUser" equalTo:user]; //this is what info the user sent current user
+        [query whereKey:@"fromUser" equalTo:currentUser];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error) {
+                NSString *status = [object objectForKey:@"status"];
+                if ( [status  isEqual: @"accepted"]) {
+                    
+                }else {
+                    [self.friends removeObject:user];
+                     [self.tableView reloadData];
+                }
+                
+            }else {
+                NSLog(@"Error(fixbug) %@ %@",error, [error userInfo]);
+            }
+        }];
+    }
+    
+   
+}
 
 
 #pragma mark - Table view data source
@@ -92,16 +121,10 @@
     [contactCell.contactPic.layer setMasksToBounds:YES];
     
     [contactCell.contactPic loadInBackground];
-    
-//    [contactCell.contactUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-//        if (!error) {
-//            contactCell.contactUserPic = [UIImage imageWithData:imageData];
-//        }
-//    }];
-
 
     return contactCell;
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -234,8 +257,10 @@
             }
         }
         else {
-            self.friends = objects;
-            [self.tableView reloadData];
+            self.allUsers = objects;
+            //self.friends = [NSMutableArray arrayWithArray:self.allUsers];
+            //[self updateFriends];
+            
             if ([self.refreshControl isRefreshing]) {
                 [self.refreshControl endRefreshing];
             }
