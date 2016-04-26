@@ -71,6 +71,8 @@
 {
     isSearching = true;
     NSString *searchedUser = [string lowercaseString];
+    [searchedUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
     //[searchedUser lowercaseString];
     
     NSArray *wordsAndEmptyStrings = [[string lowercaseString] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -82,7 +84,7 @@
     
     //search using loopID
     if(searchToggle.selectedSegmentIndex == 0){
-        if (isSearching) {
+        if (isSearching && searchedUser.length == 4) {
             PFQuery *query = [PFUser query];
             [query whereKey:@"username" equalTo:searchedUser];
             //[query whereKey:@"username" containsString:searchedUser];
@@ -99,6 +101,9 @@
                     //[self.tableView reloadData];
                 }
             }];
+        }else{
+            _foundUser = [[NSArray alloc]init];
+            [self.tableView reloadData];
         }
     }
     

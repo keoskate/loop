@@ -186,9 +186,13 @@
     request[@"displayID"] = currentUser.username; //currentUser.username
     request[@"toUser"] = user; //user
     request[@"displayName"] = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]]; //currentUser
-    request[@"toPicture"] = [user objectForKey:@"displayPicture"];
-    request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"]; //currentUser
     request[@"status"] = @"accepted"; //Status of request
+    
+    if ([user objectForKey:@"displayPicture"] != nil)
+        request[@"toPicture"] = [user objectForKey:@"displayPicture"];
+    if ([currentUser objectForKey:@"displayPicture"] != nil)
+        request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"];
+
     
     //iterate to see which cells are selected
     for (int i = 0; i < [self.shareOptions count]; i++) {
@@ -216,7 +220,7 @@
         }
         else {
             //DO SUCCESFUL REQUEST SENT
-            NSLog(@"SUccesfull !!!!");
+            NSLog(@"Succesfull !!!!");
             UIAlertView *alertView = [[UIAlertView alloc]
                                       initWithTitle:@"Cool!"
                                       message:@"You're In The Loop Now."

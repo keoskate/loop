@@ -121,9 +121,9 @@
             }];
             
             
-            [self requestFriendship:user];
+            [self requestFriendship:(PFUser *)object];
         }else {
-            NSLog(@"Error: %@", error);//, [error userInfo]);
+            NSLog(@"ErrorA: %@", error);//, [error userInfo]);
         }
     }];
 }
@@ -137,13 +137,10 @@
     [query whereKey:@"toUser" equalTo:user];
     [query whereKey:@"fromUser" equalTo:[PFUser currentUser]];
     
-    //    [query whereKey:@"status" notEqualTo:@"requested"];
-    //    [query whereKey:@"status" notEqualTo:@"rejected"];
-    //    [query whereKey:@"status" notEqualTo:@"accepted"];
-    
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         //if no request currently exists
         if (error) {
+            
             PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
             PFACL *settingACL = [PFACL ACL];
             
@@ -152,14 +149,13 @@
             request[@"displayID"] = currentUser.username;
             request[@"toUser"] = user;
             request[@"displayName"] = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
-            request[@"toPicture"] = [user objectForKey:@"displayPicture"];
-            request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"];
             request[@"status"] = @"requested";
-           
-//            CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-//            NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+            if ([user objectForKey:@"displayPicture"] != nil)
+                request[@"toPicture"] = [user objectForKey:@"displayPicture"];
+            if ([currentUser objectForKey:@"displayPicture"] != nil)
+                request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"];
             
-            ////iterate to see which cells are selected
+            // iterate to see which cells are selected
             for (int i = 0; i < [self.shareOptions count]; i++) {
                 KMAShareCell *shareCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                 if ([shareCell.socialCheckbox isSelected]==YES)
@@ -174,7 +170,7 @@
             [settingACL setWriteAccess:YES forUser:currentUser];
             request.ACL = settingACL;
             //currentUser.ACL = settingACL;
-            
+
             NSLog(@"Not found, creating new request.");
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (error) {
@@ -220,6 +216,8 @@
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
+            }else{
+                NSLog(@"Something is wrong...");
             }
         }
     }];
