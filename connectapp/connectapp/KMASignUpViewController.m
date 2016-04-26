@@ -131,20 +131,23 @@
         [newUser setObject:_firstName forKey:@"firstName"];
         [newUser setObject:_lastName forKey:@"lastName"];
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
-        [newUser setObject:imageFile forKey:@"displayPicture"];
-        [newUser setObject:_fbID forKey:@"facebookURL"];
         
-        if ([self.snapchatField.text isEqualToString:@""]) {
+        if (_pickedImage != nil) {
+            [newUser setObject:imageFile forKey:@"displayPicture"];
+        }
+        
+        if (![_fbID isEqualToString:@""] && _fbID != nil) {
+            [newUser setObject:_fbID forKey:@"facebookURL"];
+        }
+        if (![self.snapchatField.text isEqualToString:@""] && self.snapchatField.text != nil) {
             [newUser setObject:[self.snapchatField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"snapchatURL"];
         }
-        if (![self.instagramField.text  isEqualToString: @""]) {
+        if (![self.instagramField.text  isEqualToString: @""] && self.instagramField.text != nil) {
             [newUser setObject:[self.instagramField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"instagramURL"];
         }
         
         
-        
 #warning add more API URLs
-        
         //happens in background without annoying users - block - events that happen asynchronously
         [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (error) {
