@@ -3397,7 +3397,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="3A7-vX-LcD"/>
                                                     <include reference="jUD-st-3A6"/>
@@ -3438,7 +3438,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="FRV-pN-fJh"/>
                                                     <include reference="qf3-0H-rZh"/>
@@ -3479,7 +3479,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="3Ad-aT-86U"/>
                                                     <include reference="4RM-Ze-TSJ"/>
@@ -3520,7 +3520,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="QhU-5B-Ubq"/>
                                                     <include reference="TVB-9X-UaQ"/>
@@ -3618,7 +3618,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="99.5"/>
                                                 <mask key="constraints">
                                                     <include reference="E2x-xr-Y3q"/>
                                                     <include reference="FWa-vi-QZo"/>

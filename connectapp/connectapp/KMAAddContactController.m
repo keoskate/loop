@@ -108,17 +108,17 @@
             NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
             
 #warning - (HACK) remove when cloud code works
-              //Save toUser to contacts
-            PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
-            [friendsRelation addObject:user];
-            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    NSLog(@"Error2: %@", error);
-                }
-                else{
-                    NSLog(@"Added toUser to friend relation! ");
-                }
-            }];
+//            //Save toUser to contacts
+//            PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
+//            [friendsRelation addObject:user];
+//            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                if (error) {
+//                    NSLog(@"Error2: %@", error);
+//                }
+//                else{
+//                    NSLog(@"Added toUser to friend relation! ");
+//                }
+//            }];
         
             [self requestFriendship:(PFUser *)object];
         }else {
@@ -166,6 +166,7 @@
                     [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
                 }
             }
+            
             NSNumber *curScore = currentUser[@"score"];
             int oldScore = [curScore intValue];
             int newScore = [loopScore intValue];

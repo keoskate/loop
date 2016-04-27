@@ -120,7 +120,6 @@
                             NSLog(@"Added fromUser to friend relation! ");
                         }
                     }];
-                
                     NSLog(@"Success! ");
                     //[self.view dismissPresentingPopup];
                     //self.userName.textColor = [UIColor greenColor];
@@ -143,7 +142,8 @@
                     
                     PFUser *user = (PFUser *)object;  //searched user (toUser)
                     NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
-#warning - need to add cloud code for this to work
+#warning - coud code
+                    [PFCloud callFunction:@"editUser" withParameters:@{ @"userId": user.objectId }];
 //                     //Save toUser to contacts
 //                     PFUser *currentUser = [PFUser currentUser];
 //                     PFRelation *friendsRelation2 = [user relationForKey:@"friendsRelation"];

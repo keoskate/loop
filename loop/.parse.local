@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Loop": {
+      "applicationId": "ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD"
+    },
+    "_default": {
+      "link": "Loop"
+    }
+  }
+}
