@@ -29,15 +29,17 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendsRelation"];
     PFQuery *query = [self.friendsRelation query];
+#warning - sorting func
     [query orderByAscending:@"username"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (error) {
             NSLog(@"Error %@ %@",error, [error userInfo]);
         }
         else {
-            self.allUsers = objects;
-            self.friends = [NSMutableArray arrayWithArray:self.allUsers];
-            [self updateFriends];
+            self.friends = objects;
+            //self.friends = [[NSMutableArray alloc] init];
+            [self.tableView reloadData];
+            //[self updateFriends];
         }
     }];
     
@@ -54,7 +56,7 @@
 }
 
 -(void)updateFriends {
-
+    //[self.friends removeAllObjects];
     PFUser *currentUser = [PFUser currentUser];
     for (PFUser *user in self.friends) {
         
@@ -65,10 +67,9 @@
             if (!error) {
                 NSString *status = [object objectForKey:@"status"];
                 if ( [status  isEqual: @"accepted"]) {
-                    
-                }else {
-                    [self.friends removeObject:user];
-                     [self.tableView reloadData];
+                    //[self.allUsers addObject:user];
+                    [self.tableView reloadData];
+                    NSLog(@"Added obj %@", user );
                 }
                 
             }else {
@@ -76,8 +77,9 @@
             }
         }];
     }
-    
-   
+//    
+//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"username" ascending:YES];
+//    [self.friends sortUsingDescriptors:[NSMutableArray arrayWithObject:sort]];
 }
 
 
@@ -257,10 +259,10 @@
             }
         }
         else {
-            self.allUsers = objects;
-            //self.friends = [NSMutableArray arrayWithArray:self.allUsers];
+            self.friends = objects;
+            //self.friends = [[NSMutableArray alloc] init];
             //[self updateFriends];
-            
+            [self.tableView reloadData];
             if ([self.refreshControl isRefreshing]) {
                 [self.refreshControl endRefreshing];
             }

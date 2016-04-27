@@ -12,8 +12,8 @@
 @interface KMAContactViewController : UITableViewController
 
 @property (nonatomic,strong) PFRelation *friendsRelation;
-@property (nonatomic,strong) NSArray *allUsers;
-@property (nonatomic,strong) NSMutableArray *friends;
+@property (nonatomic,strong) NSArray *friends;
+//@property (atomic,strong) NSMutableArray *allUsers;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 - (IBAction)reloadFriendsAction:(id)sender;
 

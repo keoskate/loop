@@ -107,20 +107,19 @@
             PFUser *user = (PFUser *)object;  //searched user (toUser)
             NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
             
-            
-              //Save toUser to contacts
-            PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
-            [friendsRelation addObject:user];
-            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    NSLog(@"Error2: %@", error);
-                }
-                else{
-                    NSLog(@"Added toUser to friend relation! ");
-                }
-            }];
-            
-            
+#warning - (HACK) need to add cloud code for this to work
+//              //Save toUser to contacts
+//            PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
+//            [friendsRelation addObject:user];
+//            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                if (error) {
+//                    NSLog(@"Error2: %@", error);
+//                }
+//                else{
+//                    NSLog(@"Added toUser to friend relation! ");
+//                }
+//            }];
+        
             [self requestFriendship:(PFUser *)object];
         }else {
             NSLog(@"ErrorA: %@", error);//, [error userInfo]);
