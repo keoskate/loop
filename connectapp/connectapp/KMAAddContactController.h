@@ -31,6 +31,7 @@
 @property (nonatomic, strong) NSMutableArray *shareOptions;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 
+
 @property (weak, nonatomic) NSString *requestedUserID;
 @property (weak, nonatomic) IBOutlet UILabel *topContentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *requestName;

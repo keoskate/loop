@@ -39,7 +39,9 @@
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:gestureRecognizer];
-        
+    
+    //UITableViewController *searchResultsController = [[UITableViewController alloc] init];
+    
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -167,6 +169,9 @@
     searchCell.userPic.clipsToBounds = YES;
     
     //self.connectButton.hidden = false;
+    
+    
+    NSLog(@"in cellforrowatindexpath");
    
     return searchCell;
 }

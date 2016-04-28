@@ -23,6 +23,12 @@
 
 -(IBAction)acceptWithPopover{
     //init popover view
+    //UIVisualEffect *blurEffect;
+    //blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    //UIVisualEffectView *visualEffectView;
+    //visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    //visualEffectView.frame =
+    
     self.popover = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"popoverController1"];
     
     //popover UI setup
