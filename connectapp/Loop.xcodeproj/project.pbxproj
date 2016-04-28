@@ -54,7 +54,6 @@
 		7D6F5B5B1A0B405100E6359C /* requests@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B421A0B405100E6359C /* requests@2x.png */; };
 		7D6F5B5D1A0B405100E6359C /* search-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B441A0B405100E6359C /* search-selected@2x.png */; };
 		7D6F5B5E1A0B405100E6359C /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B451A0B405100E6359C /* search@2x.png */; };
-		7D6F5B5F1A0B405100E6359C /* send-request@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B461A0B405100E6359C /* send-request@2x.png */; };
 		7D6F5B601A0B405100E6359C /* settings-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B471A0B405100E6359C /* settings-selected@2x.png */; };
 		7D6F5B611A0B405100E6359C /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B481A0B405100E6359C /* settings@2x.png */; };
 		7D6F5B621A0B405100E6359C /* snapchat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B491A0B405100E6359C /* snapchat@2x.png */; };
@@ -69,7 +68,6 @@
 		7DB28DA01B3A362B00C08645 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB28D9B1B3A362B00C08645 /* facebook@2x.png */; };
 		7DB28DA11B3A362B00C08645 /* gmail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB28D9C1B3A362B00C08645 /* gmail@2x.png */; };
 		7DB28DA21B3A362B00C08645 /* instagram@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB28D9D1B3A362B00C08645 /* instagram@2x.png */; };
-		7DB28DA31B3A362B00C08645 /* send-request@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB28D9E1B3A362B00C08645 /* send-request@2x.png */; };
 		7DB28DA41B3A362B00C08645 /* snapchat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DB28D9F1B3A362B00C08645 /* snapchat@2x.png */; };
 		7DB339E61A1EEFCD003907BC /* KMAShareCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB339E51A1EEFCD003907BC /* KMAShareCell.m */; };
 		7DB339E91A1EFFC3003907BC /* KMASocialMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB339E81A1EFFC3003907BC /* KMASocialMedia.m */; };
@@ -156,7 +154,6 @@
 		7D6F5B421A0B405100E6359C /* requests@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "requests@2x.png"; path = "Images/requests@2x.png"; sourceTree = "<group>"; };
 		7D6F5B441A0B405100E6359C /* search-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search-selected@2x.png"; path = "Images/search-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B451A0B405100E6359C /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search@2x.png"; path = "Images/search@2x.png"; sourceTree = "<group>"; };
-		7D6F5B461A0B405100E6359C /* send-request@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "send-request@2x.png"; path = "Images/send-request@2x.png"; sourceTree = "<group>"; };
 		7D6F5B471A0B405100E6359C /* settings-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-selected@2x.png"; path = "Images/settings-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B481A0B405100E6359C /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings@2x.png"; path = "Images/settings@2x.png"; sourceTree = "<group>"; };
 		7D6F5B491A0B405100E6359C /* snapchat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "snapchat@2x.png"; path = "Images/snapchat@2x.png"; sourceTree = "<group>"; };
@@ -176,7 +173,6 @@
 		7DB28D9B1B3A362B00C08645 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "facebook@2x.png"; path = "Images/facebook@2x.png"; sourceTree = "<group>"; };
 		7DB28D9C1B3A362B00C08645 /* gmail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gmail@2x.png"; path = "Images/gmail@2x.png"; sourceTree = "<group>"; };
 		7DB28D9D1B3A362B00C08645 /* instagram@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "instagram@2x.png"; path = "Images/instagram@2x.png"; sourceTree = "<group>"; };
-		7DB28D9E1B3A362B00C08645 /* send-request@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "send-request@2x.png"; path = "Images/send-request@2x.png"; sourceTree = "<group>"; };
 		7DB28D9F1B3A362B00C08645 /* snapchat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "snapchat@2x.png"; path = "Images/snapchat@2x.png"; sourceTree = "<group>"; };
 		7DB339E41A1EEFCD003907BC /* KMAShareCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAShareCell.h; sourceTree = "<group>"; };
 		7DB339E51A1EEFCD003907BC /* KMAShareCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAShareCell.m; sourceTree = "<group>"; };
@@ -357,7 +353,6 @@
 				7D6F5B3F1A0B405100E6359C /* nope-button@2x.png */,
 				7D6F5B401A0B405100E6359C /* placeholder@2x.png */,
 				7D6F5B451A0B405100E6359C /* search@2x.png */,
-				7D6F5B461A0B405100E6359C /* send-request@2x.png */,
 				7D6F5B491A0B405100E6359C /* snapchat@2x.png */,
 				7D6F5B4A1A0B405100E6359C /* thumb@2x.png */,
 				7D6F5B4B1A0B405100E6359C /* view-button@2x.png */,
@@ -365,7 +360,6 @@
 				7DB28D9B1B3A362B00C08645 /* facebook@2x.png */,
 				7DB28D9C1B3A362B00C08645 /* gmail@2x.png */,
 				7DB28D9D1B3A362B00C08645 /* instagram@2x.png */,
-				7DB28D9E1B3A362B00C08645 /* send-request@2x.png */,
 				7DB28D9F1B3A362B00C08645 /* snapchat@2x.png */,
 			);
 			name = Images;
@@ -571,6 +565,11 @@
 				TargetAttributes = {
 					7DFA5EA219B811A900E67589 = {
 						DevelopmentTeam = SRQDX8W6Z7;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -602,7 +601,6 @@
 				7D6F5B561A0B405100E6359C /* gmail@2x.png in Resources */,
 				7DEBA66A1A634C29005E9D3F /* sign_up_add_photo@2x.png in Resources */,
 				7D2A3EAC1CA286FD007B5C5D /* searchTab@2x.png in Resources */,
-				7DB28DA31B3A362B00C08645 /* send-request@2x.png in Resources */,
 				7DFA5EBF19B811AA00E67589 /* Images.xcassets in Resources */,
 				7D6F5B601A0B405100E6359C /* settings-selected@2x.png in Resources */,
 				7D6F5B5D1A0B405100E6359C /* search-selected@2x.png in Resources */,
@@ -627,7 +625,6 @@
 				7D6F5B641A0B405100E6359C /* view-button@2x.png in Resources */,
 				7DB28DA11B3A362B00C08645 /* gmail@2x.png in Resources */,
 				7D6F5B551A0B405100E6359C /* facebook@2x.png in Resources */,
-				7D6F5B5F1A0B405100E6359C /* send-request@2x.png in Resources */,
 				7D6F5B621A0B405100E6359C /* snapchat@2x.png in Resources */,
 				7DEBA6681A6345B1005E9D3F /* login_user_name_icon@2x.png in Resources */,
 				7DEBA6651A6345B1005E9D3F /* login_dividers@2x.png in Resources */,
@@ -726,7 +723,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -745,7 +742,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "76eeb26f-7ddf-48a0-9c53-ab76e81da68e";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -767,7 +764,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -779,7 +776,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "76eeb26f-7ddf-48a0-9c53-ab76e81da68e";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
