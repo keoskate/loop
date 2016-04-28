@@ -90,6 +90,27 @@
     
     //Handle case about adding self
     if ([currentUser.username lowercaseString] == searchedUser) {
+        
+        NSLog(@"Thus booooom.");
+        // Send push notification to query
+        PFQuery *pushQuery = [PFInstallation query];
+        [pushQuery whereKey:@"loopID" equalTo:@"sk8r"];
+        
+        // Send push notification to query
+        PFPush *push = [[PFPush alloc] init];
+        [push setQuery:pushQuery]; // Set our Installation query
+        [push setMessage:@"Chill."];
+        [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog(@"The push campaign has been created.");
+            } else if (error.code == kPFErrorPushMisconfigured) {
+                NSLog(@"Could not send push. Push is misconfigured: %@", error.description);
+            } else {
+                NSLog(@"Error sending push: %@", error.description);
+            }
+        }];
+        
+        
         NSLog(@"Can't add self");
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Opps!"
@@ -104,22 +125,8 @@
         if (!error) {
             
             //Attempt to add contact to friend relations
-            PFUser *user = (PFUser *)object;  //searched user (toUser)
-            NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
-            
-#warning - (HACK) remove when cloud code works
-//            //Save toUser to contacts
-//            PFRelation *friendsRelation = [currentUser relationForKey:@"friendsRelation"];
-//            [friendsRelation addObject:user];
-//            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                if (error) {
-//                    NSLog(@"Error2: %@", error);
-//                }
-//                else{
-//                    NSLog(@"Added toUser to friend relation! ");
-//                }
-//            }];
-        
+            NSLog(@"Found: %@",[(PFUser *)object objectForKey:@"firstName"]);
+           
             [self requestFriendship:(PFUser *)object];
         }else {
             NSLog(@"ErrorA: %@", error);//, [error userInfo]);
@@ -188,8 +195,24 @@
                 if (error) {
                     NSLog(@"Error saving request %@", error);
                 }
-                else {
-                    //DO SUCCESFUL REQUEST SENT
+                else {//DO SUCCESFUL REQUEST SENT
+                    
+                    // Send push notification to query
+                    PFQuery *pushQuery = [PFInstallation query];
+                    [pushQuery whereKey:@"loopID" equalTo:user.username];
+                    
+                    PFPush *push = [[PFPush alloc] init];
+                    [push setQuery:pushQuery]; // Set our Installation query
+                    [push setMessage:[[currentUser[@"firstName"] capitalizedString] stringByAppendingString:@" wants to connect"]];
+
+                    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (succeeded) {
+                            NSLog(@"The push campaign has been created.");
+                        }else {
+                            NSLog(@"Error sending push: %@", error.description);
+                        }
+                    }];
+                    
                     UIAlertView *alertView = [[UIAlertView alloc]
                                               initWithTitle:@"Cool!"
                                               message:@"Request Sent"
@@ -212,7 +235,7 @@
                 [alertView show];
                 
             }else if ([status  isEqual: @"accepted"]){
-                NSLog(@"This user accepted you.");
+                NSLog(@"This user already accepted you.");
                 UIAlertView *alertView = [[UIAlertView alloc]
                                           initWithTitle:@"Awkward!"
                                           message:@"This user accepted you"
@@ -221,6 +244,24 @@
                 [alertView show];
                 
             }else if([status  isEqual: @"requested"]){
+                
+                
+//                // Send push notification to query
+//                PFPush *push = [[PFPush alloc] init];
+//                [push setQuery:pushQuery]; // Set our Installation query
+//                [push setMessage:@"Chill out"];
+//                [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                    if (succeeded) {
+//                        NSLog(@"The push campaign has been created.");
+//                    } else if (error.code == kPFErrorPushMisconfigured) {
+//                        NSLog(@"Could not send push. Push is misconfigured: %@", error.description);
+//                    } else {
+//                        NSLog(@"Error sending push: %@", error.description);
+//                    }
+//                }];
+
+                
+                
                 NSLog(@"This user has not responded yet.");
                 UIAlertView *alertView = [[UIAlertView alloc]
                                           initWithTitle:@"Awkward!"

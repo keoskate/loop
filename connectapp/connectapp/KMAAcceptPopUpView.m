@@ -126,11 +126,6 @@
                 }
             }];
             
-            //NSLog(@"I am here..");
-            // Need to add add friend using bool values from accept popup
-            // Need to grab the fromUser from pointer addres or DisplayID
-            // Need to create a new friendsRelation with bool values stored from initial request
-            
             NSString *searchedUser = [[(PFUser *)request objectForKey:@"displayID"] lowercaseString];
             NSLog(@"SEARCHED USER:: %@", searchedUser);
             PFQuery *query = [PFUser query];
@@ -142,24 +137,8 @@
                     
                     PFUser *user = (PFUser *)object;  //searched user (toUser)
                     NSLog(@"Found: %@",[user objectForKey:@"firstName"]);
-#warning - coud code
                     [PFCloud callFunction:@"editUser" withParameters:@{ @"userId": user.objectId }];
-//                     //Save toUser to contacts
-//                     PFUser *currentUser = [PFUser currentUser];
-//                     PFRelation *friendsRelation2 = [user relationForKey:@"friendsRelation"];
-//                     [friendsRelation2 addObject:currentUser];
-//                         [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                         if (error) {
-//                             NSLog(@"Error2: %@", error);
-//                         }
-//                         else{
-//                             NSLog(@"Added toUser to friend relation! ");
-//                         }
-//                     }];
-                    
-                     
-                    //Create Friend Request 2
-                    //[self requestFriendship:user];
+
                     [self createFriendRequest:user];
                     
                 } else {
@@ -204,23 +183,36 @@
             [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
         
     }
-    
+#pragma warning - not secure
     [settingACL setReadAccess:YES forUser:user];
     [settingACL setReadAccess:YES forUser:currentUser];
     [settingACL setWriteAccess:YES forUser:user];
     [settingACL setWriteAccess:YES forUser:currentUser];
     request.ACL = settingACL;
-    //            user.ACL = settingACL;
-    //            currentUser.ACL = settingACL;
-    
+
     NSLog(@"Not found, creating new request.");
     [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
             NSLog(@"Error saving request %@", error);
         }
-        else {
-            //DO SUCCESFUL REQUEST SENT
-            NSLog(@"Succesfull !!!!");
+        else { //DO SUCCESFUL REQUEST SENT
+
+            // Send push notification to query
+            PFQuery *pushQuery = [PFInstallation query];
+            [pushQuery whereKey:@"loopID" equalTo:user.username];
+            
+            PFPush *push = [[PFPush alloc] init];
+            [push setQuery:pushQuery]; // Set our Installation query
+            [push setMessage:[@"You are not connected with " stringByAppendingString:[currentUser[@"firstName"] capitalizedString]]];
+            
+            [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"The push campaign has been created.");
+                } else {
+                    NSLog(@"Error sending push: %@", error.description);
+                }
+            }];
+            
             UIAlertView *alertView = [[UIAlertView alloc]
                                       initWithTitle:@"Cool!"
                                       message:@"You're In The Loop Now."

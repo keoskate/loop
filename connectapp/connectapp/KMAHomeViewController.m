@@ -27,6 +27,10 @@
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
         NSLog(@"Current User: %@", currentUser.username);
+        [[PFInstallation currentInstallation] setObject:currentUser forKey:@"user"];
+        [[PFInstallation currentInstallation] setObject:currentUser.username forKey:@"loopID"];
+        [[PFInstallation currentInstallation] saveInBackground];
+         
     } else {
         [self performSegueWithIdentifier:@"showLogin" sender:self];
     }
