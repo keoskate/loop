@@ -203,7 +203,7 @@
             
             PFPush *push = [[PFPush alloc] init];
             [push setQuery:pushQuery]; // Set our Installation query
-            [push setMessage:[@"You are not connected with " stringByAppendingString:[currentUser[@"firstName"] capitalizedString]]];
+            [push setMessage:[@"You are now connected with " stringByAppendingString:[currentUser[@"firstName"] capitalizedString]]];
             
             [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
