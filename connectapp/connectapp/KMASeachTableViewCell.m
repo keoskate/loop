@@ -23,8 +23,15 @@
 
 -(IBAction)acceptWithPopover{
     //init popover view
+    //UIVisualEffect *blurEffect;
+    //blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    //UIVisualEffectView *visualEffectView;
+    //visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    //visualEffectView.frame =
+    
     self.popover = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"popoverController1"];
     
+#warning buggy popover
     //popover UI setup
     self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, self.popover.view.frame.size.width-25, self.popover.view.frame.size.height-50);
     self.popover.view.alpha = 1;

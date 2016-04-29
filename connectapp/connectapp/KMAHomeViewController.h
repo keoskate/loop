@@ -24,6 +24,7 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UISwitch *emailToggle;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchToggle;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchController *searchController;
 
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

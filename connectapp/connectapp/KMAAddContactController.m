@@ -25,6 +25,26 @@
     temp = _searchedUserID;
     self.searchID.text = [temp uppercaseString];
     
+//    UIVisualEffect *blurEffect;
+//    blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIVisualEffectView *visualEffectView;
+//    visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+//    visualEffectView.frame = self.view.bounds;
+//    [self.view addSubview:visualEffectView];
+    
+    // for blurring
+    /*NSLog(@"rounding and blurring");
+    UIView *view = self.view;
+    while (view != nil) {
+        view = view.superview;
+        if (view.layer.cornerRadius > 0) {
+            view.layer.cornerRadius = 2.0;
+            view = nil;
+        }
+    }*/
+    
+   
+    
     //Thumbnail - need mask (circular)
 //    self.searchImage.file = searchedUserPicFile;
 //    self.searchImage.image = [UIImage imageNamed:@"placeholder.png"];
@@ -194,8 +214,7 @@
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (error) {
                     NSLog(@"Error saving request %@", error);
-                }
-                else {//DO SUCCESFUL REQUEST SENT
+                }else {//DO SUCCESFUL REQUEST SENT
                     
                     // Send push notification to query
                     PFQuery *pushQuery = [PFInstallation query];
@@ -213,23 +232,30 @@
                         }
                     }];
                     
+                    NSString *alertnameFirst = user[@"firstName"];
+                    NSString *alertnameLast = user[@"lastName"];
                     UIAlertView *alertView = [[UIAlertView alloc]
                                               initWithTitle:@"Cool!"
-                                              message:@"Request Sent"
+                                              //message:@"Request Sent"
+                                              message:[NSString stringWithFormat:@"Request sent to %@ %@.", alertnameFirst, alertnameLast]
                                               delegate:nil cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
                     [alertView show];
                     [self performSegueWithIdentifier:@"showHome" sender:self];
+            
                 }
             }];
             
         } else {
             NSString *status = [object objectForKey:@"status"];
+            NSString *alertnameFirst = user[@"firstName"];
+            NSString *alertnameLast = user[@"lastName"];
             if ([status  isEqual: @"rejected"]) {
                 NSLog(@"This User rejected you.");
                 UIAlertView *alertView = [[UIAlertView alloc]
                                           initWithTitle:@"Awkward!"
-                                          message:@"This user rejected you"
+                                          //message:@"This user rejected you"
+                                          message:[NSString stringWithFormat:@"%@ %@ rejected you.", alertnameFirst, alertnameLast]
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
@@ -238,7 +264,8 @@
                 NSLog(@"This user already accepted you.");
                 UIAlertView *alertView = [[UIAlertView alloc]
                                           initWithTitle:@"Awkward!"
-                                          message:@"This user accepted you"
+                                          //message:@"This user accepted you"
+                                          message:[NSString stringWithFormat:@"%@ %@ accepted you.", alertnameFirst, alertnameFirst]
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
@@ -265,7 +292,8 @@
                 NSLog(@"This user has not responded yet.");
                 UIAlertView *alertView = [[UIAlertView alloc]
                                           initWithTitle:@"Awkward!"
-                                          message:@"This user has not responded yet"
+                                          //message:@"This user has not responded yet"
+                                          message:[NSString stringWithFormat:@"%@ %@ has not responded yet.", alertnameFirst, alertnameLast]
                                           delegate:nil cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
                 [alertView show];
