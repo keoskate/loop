@@ -10,10 +10,18 @@
 #import "KMAAppDelegate.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import "Mixpanel.h"
+#define MIXPANEL_TOKEN @"9ed3003ebccc7cd883383bcbb46b43d0"
+
+
 @implementation KMAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //set up mixpanel
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    
+    
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [FBSDKLoginButton class];
