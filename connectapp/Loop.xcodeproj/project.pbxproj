@@ -96,7 +96,6 @@
 		7DFAB30E1A0CE0DC0080EBDE /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFAB30D1A0CE0DC0080EBDE /* KLCPopup.m */; };
 		C126B8111CD2B30E008E9066 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C126B8101CD2B30E008E9066 /* CoreTelephony.framework */; };
 		C126B8131CD2B319008E9066 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C126B8121CD2B319008E9066 /* Accelerate.framework */; };
-		C126B8171CD2B4B2008E9066 /* mixpanel-iphone in Resources */ = {isa = PBXBuildFile; fileRef = C126B8161CD2B4B2008E9066 /* mixpanel-iphone */; };
 		C126B81C1CD2B931008E9066 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C126B81B1CD2B931008E9066 /* libicucore.tbd */; };
 		C126B8211CD2B9EE008E9066 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = C126B81F1CD2B9EE008E9066 /* _MPTweakBindObserver.m */; };
 		C126B8AF1CD2BA09008E9066 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = C126B8231CD2BA09008E9066 /* Mixpanel.m */; };
@@ -304,7 +303,6 @@
 		C126B80E1CD2B2AA008E9066 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		C126B8101CD2B30E008E9066 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		C126B8121CD2B319008E9066 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		C126B8161CD2B4B2008E9066 /* mixpanel-iphone */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "mixpanel-iphone"; path = "/Users/wolx1/Desktop/loop/connectapp/mixpanel-iphone"; sourceTree = "<absolute>"; };
 		C126B81B1CD2B931008E9066 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		C126B81E1CD2B9EE008E9066 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
 		C126B81F1CD2B9EE008E9066 /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
@@ -1008,7 +1006,6 @@
 				7D6F5B531A0B405100E6359C /* contacts@2x.png in Resources */,
 				7DEBA65D1A633A12005E9D3F /* loop_icon@2x.jpg in Resources */,
 				C126B8D21CD2BA09008E9066 /* MPNotification~iphoneportrait.storyboard in Resources */,
-				C126B8171CD2B4B2008E9066 /* mixpanel-iphone in Resources */,
 				7D6F5B591A0B405100E6359C /* placeholder@2x.png in Resources */,
 				7DB28DA41B3A362B00C08645 /* snapchat@2x.png in Resources */,
 				7DEBA6671A6345B1005E9D3F /* login_pass_icon@2x.png in Resources */,
