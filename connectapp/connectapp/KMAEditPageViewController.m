@@ -65,7 +65,7 @@
             [gaussianBlurFilter setDefaults];
             CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@10 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];
@@ -80,9 +80,6 @@
     self.photoField.layer.cornerRadius = 130/2;
     self.photoField.clipsToBounds = YES;
     
-
-    
-
     self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
     self.loopidLabel.text = [currentUser.username uppercaseString];
     
@@ -121,6 +118,7 @@
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
 }
+
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -194,11 +192,13 @@
         currentUser[@"instagramURL"] = self.instagramField.text;
         self.instagramField.placeholder = self.instagramField.text;
         self.instagramField.text = @"";
+        self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     if (self.snapchatField.text.length > 0) {
         currentUser[@"snapchatURL"] = self.snapchatField.text;
         self.snapchatField.placeholder = self.snapchatField.text;
         self.snapchatField.text = @"";
+        self.scTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
     NSLog(@"Saving...");

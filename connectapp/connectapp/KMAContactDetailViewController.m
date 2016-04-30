@@ -33,24 +33,20 @@
     self.thumbNailImageView.file = myUserPicFile;
     self.thumbNailImageView.image = [UIImage imageNamed:@"placeholder.png"];
     
-    //test cell bool
-    //if get snapchat availability; YES, NO
-    //self.SnapchatCell.userInteractionEnabled = NO;
-    
-    
-    //[self populateSelfData];
-
-    
-//    [self.thumbNailImageView loadInBackground];
-    
     [self.thumbNailImageView loadInBackground:^(UIImage *image, NSError *error) {
         if (!error) {
             /* Blur effect */
             CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
             [gaussianBlurFilter setDefaults];
-            CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
+            CIImage *inputImage;
+            if (image == nil) {
+                inputImage = [CIImage imageWithCGImage:[[UIImage imageNamed:@"placeholder.png"] CGImage]];
+            }else{
+                inputImage = [CIImage imageWithCGImage:[image CGImage]];
+            }
+            
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@10 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];
@@ -64,119 +60,6 @@
     self.thumbNailImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     self.thumbNailImageView.layer.cornerRadius = 130/2;
     self.thumbNailImageView.clipsToBounds = YES;
-
-    
-}
-
--(void)populateSelfData{
-    self.shareOptions = [[NSMutableArray alloc] init];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
-    
-    PFQuery *query = [PFUser query];
-    [query whereKey:@"username" containsString:[myUserUsername lowercaseString]];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            //get the User object
-            PFUser *user = (PFUser *)object;  //searched user (toUser)
-            
-            PFQuery * friendRequest = [PFQuery queryWithClassName:@"FriendRequest"];
-            [friendRequest whereKey:@"toUser" equalTo:user];
-            [friendRequest whereKey:@"fromUser" equalTo:[PFUser currentUser]];
-            
-            [friendRequest getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                //if no request currently exists
-                if (!error) {
-                    NSString *status = [object objectForKey:@"status"];
-                    if ( [status  isEqual: @"accepted"]) {
-                        if ([[object objectForKey:@"email"]  isEqual: @YES]) {
-                            KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
-                            socialStuff.mediaType = @"Email";
-                            socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
-                            socialStuff.mediaData  = user.email;
-                            self.userEmail.text = user.email;
-                            [self.shareOptions addObject:socialStuff];
-                        }else{
-                            self.userEmail.text = @"request email";
-                        }
-                        
-                        if ([[object objectForKey:@"facebook"]  isEqual: @YES]) {
-                            KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-                            socialStuff.mediaType = @"Facebook";
-                            socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
-                            socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
-                            [self.shareOptions addObject:socialStuff];
-                        }
-                        
-                        
-                    }else if ([status  isEqual: @"rejected"]){
-                        NSLog(@"This User rejected you.");
-                        UIAlertView *alertView = [[UIAlertView alloc]
-                                                  initWithTitle:@"Awkward!"
-                                                  message:@"This user rejected you"
-                                                  delegate:nil cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-                        [alertView show];
-                        
-                    }else if([status  isEqual: @"requested"]){
-                        NSLog(@"This user has not responded yet.");
-                        UIAlertView *alertView = [[UIAlertView alloc]
-                                                  initWithTitle:@"Awkward!"
-                                                  message:@"This user has not responded yet"
-                                                  delegate:nil cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-                        [alertView show];
-                    }
-
-                    
-                    
-                } else {
-                   NSLog(@"Relation not found error: : %@", error);
-                }
-
-            }];
-            
-        }else {
-            NSLog(@"Error: %@", error);//, [error userInfo]);
-        }
-    }];
-
-    /*
-    
-    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
-    socialStuff.mediaType = @"Email";
-    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
-    socialStuff.mediaData  = currentUser.email;
-    [self.shareOptions addObject:socialStuff];
-    
-    
-    
-    if ([currentUser objectForKey:@"facebookURL"]) {
-        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-        socialStuff.mediaType = @"Facebook";
-        socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
-        socialStuff.mediaData  = [currentUser objectForKey:@"facebookURL"];
-        [self.shareOptions addObject:socialStuff];
-    }
-    
-    if ([currentUser objectForKey:@"instagramURL"]) {
-        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-        socialStuff.mediaType = @"Instagram";
-        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
-        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
-        [self.shareOptions addObject:socialStuff];
-    }
-    
-    if ([currentUser objectForKey:@"snapchatURL"]) {
-        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-        socialStuff.mediaType = @"Instagram";
-        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
-        socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
-        [self.shareOptions addObject:socialStuff];
-    }
-     */
 }
 
 #pragma mark - Adding to Native Contact Book
@@ -271,8 +154,6 @@
 
 - (IBAction)addContactToAddressBook:(id)sender
 {
-//    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied ||
-//        ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusRestricted){
 //        
     CNEntityType entityType = CNEntityTypeContacts;
     if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusDenied ||
@@ -288,10 +169,8 @@
         //2
         [self addToContacts];
         NSLog(@"Authorized");
-    } else{ //ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined
+    } else{
         //3
-//        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
         CNContactStore * contactStore = [[CNContactStore alloc] init];
         [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
             if (!granted){
@@ -330,8 +209,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    // NSLog(@"%lu ",self.shareOptions.count);
     return [self.shareOptions count];
 }
 
@@ -358,7 +235,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
  
-     KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
+    KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:indexPath.row];
     
 
     if ([shareStuff.mediaType isEqualToString:@"Facebook"]) {
@@ -366,9 +243,22 @@
         [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
             if (!error) {
-                NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [user objectForKey:@"facebookURL"]];
-                NSURL *url = [NSURL URLWithString:fbURL];
-                [[UIApplication sharedApplication] openURL:url];
+                NSLog(@"UserID: %@", [user objectForKey:@"facebookURL"]);
+                //Facebook
+                NSURL *facebookURL = [NSURL URLWithString:[NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [user objectForKey:@"facebookURL"]]];
+                if ([[UIApplication sharedApplication] canOpenURL:facebookURL]){
+                    [[UIApplication sharedApplication] openURL:facebookURL];
+                    return;
+                }else{
+                    // --- Fallback: Mobile Facebook in Safari
+                    NSURL *safariURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://facebook.com/%@", [user objectForKey:@"facebookURL"]]];
+                    [[UIApplication sharedApplication] openURL:safariURL];
+                    return;
+                }
+                
+//                NSString *fbURL = [NSString stringWithFormat:@"fb://profile?app_scoped_user_id=%@", [user objectForKey:@"facebookURL"]];
+//                NSURL *url = [NSURL URLWithString:fbURL];
+//                [[UIApplication sharedApplication] openURL:url];
                 
             }
         }];
@@ -377,6 +267,18 @@
         [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
             if (!error) {
+                /*
+                NSURL *instagramURL = [NSURL URLWithString:[NSString stringWithFormat:@"instagram://user?username=%@", [user objectForKey:@"instagramURL"]]];
+                if ([[UIApplication sharedApplication] canOpenURL:instagramURL]){
+                    [[UIApplication sharedApplication] openURL:instagramURL];
+                    return;
+                }else{
+                    // --- Fallback: Mobile Facebook in Safari
+                    NSURL *safariURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://instagram.com/%@", [user objectForKey:@"instagramURL"]]];
+                    [[UIApplication sharedApplication] openURL:safariURL];
+                    return;
+                }
+                */
                 NSString *fbURL = [NSString stringWithFormat:@"instagram://user?username=%@", [user objectForKey:@"instagramURL"]];
                 NSURL *url = [NSURL URLWithString:fbURL];
                 [[UIApplication sharedApplication] openURL:url];
@@ -384,11 +286,42 @@
             }
         }];
     }else if ([shareStuff.mediaType isEqualToString:@"Email"]){
-        //Open up Email to this user ... Apple Mail API
-    }
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"mailto:%@", [user objectForKey:@"email"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Phone"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"tel://%@", [user objectForKey:@"phoneNumber"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
 
-    
-  
+    }else if ([shareStuff.mediaType isEqualToString:@"Snapchat"]){
+        NSLog(@"here");
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+               // NSString *snapURL = [NSString stringWithFormat:@"http://www.snapchat.com/add/%@", [user objectForKey:@"snapchatURL"]];
+                NSString *snapURL = [NSString stringWithFormat:@"snapchat://add/%@", [user objectForKey:@"snapchatURL"]];
+                NSURL *url = [NSURL URLWithString:snapURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }
     
 }
 

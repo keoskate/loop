@@ -18,9 +18,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //set up mixpanel
-    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-    
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
@@ -50,6 +47,7 @@
             [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
         }
     }
+
     
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
@@ -66,8 +64,12 @@
              UIRemoteNotificationTypeSound)];
     }
     
+    
     [self setUpUI];
 
+    //set up mixpanel
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:launchOptions];
+    
     return YES;
 }
 
@@ -115,8 +117,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     tabBarItem3.title = @"Profile";
     tabBarItem4.title = @"Contact";
     tabBarItem5.title = @"Settings";
-    
-    
     
     [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"search-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"searchTab.png"]];
     [tabBarItem2 setFinishedSelectedImage:[UIImage imageNamed:@"requests-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"requests"]];

@@ -314,13 +314,7 @@
         [alertView show];
     }
     else {
-        
-        
-        
-        
-        
-        
-        
+    
         
         [self performSegueWithIdentifier:@"create3" sender:self];
     }
@@ -645,7 +639,7 @@
         
         NSLog(@"Token is available");
         
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(square), email"}]
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
                  NSLog(@"Fetched User Information:%@", result);
