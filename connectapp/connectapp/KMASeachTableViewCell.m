@@ -40,7 +40,7 @@
     //popover.selectionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //Set data
-    self.popover.requestName.text = [NSString stringWithFormat:@"%s/%@/%s", "What networks would you like to share with ", self.userName.text, "?"]; //;
+    self.popover.requestName.text = [NSString stringWithFormat:@"%s%@%s", "What networks would you like to share with ", self.userName.text, "?"]; //;
     self.popover.requestID.text = self.userID.text;
     self.popover.requestedUserID = self.requestedUserID;
     

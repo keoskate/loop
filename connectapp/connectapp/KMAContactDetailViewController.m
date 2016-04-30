@@ -41,7 +41,25 @@
     //[self populateSelfData];
 
     
-    [self.thumbNailImageView loadInBackground];
+//    [self.thumbNailImageView loadInBackground];
+    
+    [self.thumbNailImageView loadInBackground:^(UIImage *image, NSError *error) {
+        if (!error) {
+            /* Blur effect */
+            CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+            [gaussianBlurFilter setDefaults];
+            CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
+            [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
+            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
+            
+            CIImage *outputImage = [gaussianBlurFilter outputImage];
+            CIContext *context   = [CIContext contextWithOptions:nil];
+            CGImageRef cgimg     = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
+            self.backgroundBlur.image       = [UIImage imageWithCGImage:cgimg];
+            
+        }
+    }];
+    
     self.thumbNailImageView.layer.borderWidth = 2;
     self.thumbNailImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     self.thumbNailImageView.layer.cornerRadius = 130/2;
@@ -228,54 +246,6 @@
         return;
     }
     
-    
-    
-/*
-//    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
-//    ABRecordRef contact = ABPersonCreate();
-
-    //info
-//    ABRecordSetValue(contact, kABPersonFirstNameProperty, (__bridge CFStringRef)contactFirstName, nil);
-//    ABRecordSetValue(contact, kABPersonLastNameProperty, (__bridge CFStringRef)contactLastName, nil);
-
-    //numbers
-    
-  //  CNLabeledValue
-//    ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-//    ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)contactPhoneNumber, kABPersonPhoneMainLabel, NULL);
-//    ABRecordSetValue(contact, kABPersonPhoneProperty, phoneNumbers, nil);
-
-    //Check to see if already in contacts
- 
-    
-    NSArray *allContacts = (__bridge NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBookRef);
-    for (id record in allContacts){
-        ABRecordRef thisContact = (__bridge ABRecordRef)record;
-        if (!ABRecordCopyCompositeName(thisContact)) { // BUG - this returns null, crashes when trying to add
-            return;
-        }else if (CFStringCompare(ABRecordCopyCompositeName(thisContact),
-                            ABRecordCopyCompositeName(contact), 0) == kCFCompareEqualTo){
-            //The contact already exists!
-            UIAlertView *contactExistsAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Sorry, %@ Already Exists!", contactFirstName]
-                                                                        message:nil delegate:nil cancelButtonTitle:@"OK"
-                                                              otherButtonTitles: nil];
-            [contactExistsAlert show];
-            return;
-        }
-    }
-    
-    //pic
-    ABPersonSetImageData(contact, (__bridge CFDataRef)contactImageData, nil);
-    
-    //add/save
-    ABAddressBookAddRecord(addressBookRef, contact, nil);
-    ABAddressBookSave(addressBookRef, nil);
-
-    UIAlertView *contactAddedAlert = [[UIAlertView alloc]initWithTitle:@"Contact Added" message:nil delegate:nil
-                                                     cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [contactAddedAlert show];
- 
- */
 }
 - (void)parseContactWithContact :(CNContact* )contact
 {
@@ -352,6 +322,10 @@
 {
     // Return the number of sections.
     return 1;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70.0f;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

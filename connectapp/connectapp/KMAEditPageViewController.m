@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    [self.tableView reloadData];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     
@@ -58,38 +58,61 @@
     
     self.photoField.file = [currentUser objectForKey:@"displayPicture"];
     self.photoField.image = [UIImage imageNamed:@"placeholder.png"];
+    [self.photoField loadInBackground:^(UIImage *image, NSError *error) {
+        if (!error) {
+            /* Blur effect */
+            CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+            [gaussianBlurFilter setDefaults];
+            CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
+            [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
+            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
+            
+            CIImage *outputImage = [gaussianBlurFilter outputImage];
+            CIContext *context   = [CIContext contextWithOptions:nil];
+            CGImageRef cgimg     = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
+            self.backgroundBlur.image       = [UIImage imageWithCGImage:cgimg];
+        
+        }
+    }];
     
-   // CALayer *imageLayer = self.photoField.layer;
-//    [imageLayer setBorderWidth:2];
-//    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-//    [self.photoField.layer setCornerRadius:self.photoField.frame.size.height/2];
-//    [self.photoField.layer setMasksToBounds:YES];
-    
-    [self.photoField loadInBackground];
     self.photoField.layer.borderWidth = 2;
     self.photoField.layer.borderColor = [UIColor whiteColor].CGColor;
     self.photoField.layer.cornerRadius = 130/2;
     self.photoField.clipsToBounds = YES;
     
+
+    
+
     self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
     self.loopidLabel.text = [currentUser.username uppercaseString];
     
     self.phoneField.placeholder = [currentUser objectForKey:@"phoneNumber"];
     self.emailField.placeholder  = currentUser.email;
     
-    if (![[currentUser objectForKey:@"facebookURL"] isEqualToString:@""]) {
+    if (![[currentUser objectForKey:@"facebookURL"] isEqualToString:@""] && [currentUser objectForKey:@"facebookURL"] != nil) {
         self.fbTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.fbConnectButton.hidden = true;
+        self.fbLabel.text = @"Facebook";
+        //self.fbTableViewCell.textLabel.text = @"               Facebook";
+    }else{
+        self.fbConnectButton.hidden = false;
+        self.fbLabel.text = @"";
     }
-    if (![[currentUser objectForKey:@"linkedinURL"] isEqualToString:@""]) {
+    
+    if (![[currentUser objectForKey:@"linkedinURL"] isEqualToString:@""] && [currentUser objectForKey:@"linkedinURL"] != nil) {
         self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-         self.fbConnectButton.hidden = true;
+        self.liConnectButton.hidden = true;
+        self.liLabel.text = @"LinkedIn";
+        //self.liTableViewCell.textLabel.text = @"               LinkedIn";
+    }else{
+        self.liConnectButton.hidden = false;
+        self.liLabel.text = @"";
     }
-    if (![[currentUser objectForKey:@"instagramURL"] isEqualToString:@""]) {
+    if (![[currentUser objectForKey:@"instagramURL"] isEqualToString:@""] && [currentUser objectForKey:@"instagramURL"] != nil) {
         self.igTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.instagramField.placeholder = [currentUser objectForKey:@"instagramURL"];
     }
-    if (![[currentUser objectForKey:@"snapchatURL"] isEqualToString:@""]) {
+    if (![[currentUser objectForKey:@"snapchatURL"] isEqualToString:@""] && [currentUser objectForKey:@"snapchatURL"] != nil) {
         self.scTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.snapchatField.placeholder = [currentUser objectForKey:@"snapchatURL"];
     }
@@ -97,9 +120,14 @@
     self.fb.readPermissions = @[@"public_profile", @"email"];
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
-
-    
 }
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+}
+
+
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -125,11 +153,11 @@
 
 //function added by kay
 -(void) saveSuccessAlert{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Saving Information"
-                                                    message:@"Information Saved!"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Information Saved!"
+                                                    message:nil
                                                    delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"OK", nil];
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     [alert show];
     
 }
@@ -139,9 +167,6 @@
     [self.saveButton setTintColor:nil];
 }
 
-//end kay
-
-
 - (IBAction)saveButtonPressed:(id)sender{
     
     
@@ -149,32 +174,39 @@
     
     if (self.emailField.text.length > 0) {
         currentUser.email = self. emailField.text;
-        [self saveSuccessAlert];
+        self.emailField.placeholder = self.emailField.text;
+        self.emailField.text = @"";
     }
     if (self.phoneField.text.length > 0) {
         currentUser[@"phoneNumber"] = self.phoneField.text;
-        [self saveSuccessAlert];
+        self.phoneField.placeholder = self.phoneField.text;
+        self.phoneField.text = @"";
     }
-    if (self.facebookField.text.length > 0) {
-        currentUser[@"facebookURL"] = self.facebookField.text;
-        [self saveSuccessAlert];
-    }
-    if (self.linkedinField.text.length > 0) {
-        currentUser[@"linkedinURL"] = self.linkedinField.text;
-        [self saveSuccessAlert];
-    }
+//    if (self.facebookField.text.length > 0) {
+//        currentUser[@"facebookURL"] = self.facebookField.text;
+//        self.facebookField.text = @"";
+//    }
+//    if (self.linkedinField.text.length > 0) {
+//        currentUser[@"linkedinURL"] = self.linkedinField.text;
+//        self.linkedinField.text = @"";
+//    }
     if (self.instagramField.text.length > 0) {
         currentUser[@"instagramURL"] = self.instagramField.text;
-        [self saveSuccessAlert];
+        self.instagramField.placeholder = self.instagramField.text;
+        self.instagramField.text = @"";
     }
     if (self.snapchatField.text.length > 0) {
         currentUser[@"snapchatURL"] = self.snapchatField.text;
-        [self saveSuccessAlert];
+        self.snapchatField.placeholder = self.snapchatField.text;
+        self.snapchatField.text = @"";
     }
     
-
     NSLog(@"Saving...");
     [currentUser saveInBackground];
+    [self saveSuccessAlert];
+    [self.saveButton setEnabled:NO];
+    [self viewDidAppear:YES];
+    
 }
 
 - (IBAction)joinWithFacebook:(id)sender {
@@ -226,17 +258,5 @@
         NSLog(@"User is not Logged in");
     }
 }
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

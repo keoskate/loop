@@ -19,9 +19,6 @@ UISearchBarDelegate
 >
 {BOOL isSearching;}
 
-@property (nonatomic, strong) UISearchController *searchController;
-@property (nonatomic, strong) UITableViewController *searchResultsController;
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchSegmentedControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

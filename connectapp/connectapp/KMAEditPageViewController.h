@@ -33,6 +33,9 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *fbConnectButton;
 @property (weak, nonatomic) IBOutlet UIButton *liConnectButton;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundBlur;
+@property (weak, nonatomic) IBOutlet UILabel *fbLabel;
+@property (weak, nonatomic) IBOutlet UILabel *liLabel;
 
 
 - (IBAction)saveButtonPressed:(id)sender;

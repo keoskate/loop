@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *FacebookCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *SnapchatCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *InstagramCell;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundBlur;
 
 @property (nonatomic, strong) NSMutableArray *shareOptions;
 

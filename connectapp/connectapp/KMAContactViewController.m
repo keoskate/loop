@@ -28,6 +28,7 @@
     [self.tableView reloadData];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendsRelation"];
+    
     PFQuery *query = [self.friendsRelation query];
 #warning - sorting func
     [query orderByAscending:@"username"];
@@ -112,17 +113,11 @@
     
     contactCell.contactPic.file = user[@"displayPicture"];
     contactCell.contactPic.image = [UIImage imageNamed:@"placeholder.png"];
-    
-    
-    CALayer *imageLayer = contactCell.contactPic.layer;
-    [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:4];
-    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer setMasksToBounds:YES];
-    [contactCell.contactPic.layer setCornerRadius:contactCell.contactPic.frame.size.width/7];
-    [contactCell.contactPic.layer setMasksToBounds:YES];
-    
     [contactCell.contactPic loadInBackground];
+    contactCell.contactPic.layer.borderWidth = 1;
+    contactCell.contactPic.layer.borderColor = [UIColor whiteColor].CGColor;
+    contactCell.contactPic.layer.cornerRadius = 50/2;
+    contactCell.contactPic.clipsToBounds = YES;
 
     return contactCell;
 }
@@ -155,6 +150,7 @@
         }
     }];
 
+
     //Private
     PFUser *currentUser = [PFUser currentUser];
     PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
@@ -180,28 +176,28 @@
                 if ([[object objectForKey:@"facebook"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
                     socialStuff.mediaType = @"Facebook";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+                    socialStuff.mediaImage = [UIImage imageNamed:@"fb_circle"];
                     socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
                 if ([[object objectForKey:@"instagram"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
                     socialStuff.mediaType = @"Instagram";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+                    socialStuff.mediaImage = [UIImage imageNamed:@"insta_circle"];
                     socialStuff.mediaData  = [user objectForKey:@"instagramURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
                 if ([[object objectForKey:@"snapchat"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
                     socialStuff.mediaType = @"Snapchat";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"snapchat.png"];
+                    socialStuff.mediaImage = [UIImage imageNamed:@"snap_circle"];
                     socialStuff.mediaData  = [user objectForKey:@"snapchatURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
                 if ([[object objectForKey:@"linkedin"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
                     socialStuff.mediaType = @"LinkedIn";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"linkedin.png"];
+                    socialStuff.mediaImage = [UIImage imageNamed:@"li_circle"];
                     socialStuff.mediaData  = [user objectForKey:@"linkedinURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }

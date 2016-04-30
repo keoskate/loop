@@ -31,9 +31,14 @@
 
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
+    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+    
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
         NSLog(@"Current User: %@", currentUser.username);
+        [[PFInstallation currentInstallation] setObject:currentUser forKey:@"user"];
+        [[PFInstallation currentInstallation] setObject:currentUser.username forKey:@"loopID"];
+        [[PFInstallation currentInstallation] saveInBackground];
     }
     else {
         [self performSegueWithIdentifier:@"showLogin" sender:self];
@@ -42,55 +47,27 @@
     UITapGestureRecognizer *singleFingerTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
-    //[self.view addGestureRecognizer:singleFingerTap];
+    [self.view addGestureRecognizer:singleFingerTap];
+   
+//    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+//    gestureRecognizer.cancelsTouchesInView = NO;
+//    [self.tableView addGestureRecognizer:gestureRecognizer];
     
     /* search bar UI */
-    self.searchBar.barTintColor = [UIColor whiteColor];
-//    [self.searchBar setSearchFieldBackgroundImage:[UIImage imageNamed:@"nope-button"] forState:UIControlStateNormal];
+    //self.searchBar.barTintColor = [UIColor whiteColor];
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     
-    
-    /*
-    // segmented control ui
-    self.searchSegmentedControl.layer.cornerRadius = 0.0;
-    
-    // search bar
-    // Create a UITableViewController to present search results since the actual view controller is not a subclass of UITableViewController in this case
-
-    // Init UISearchController with the search results controller
-    _searchResultsController = [[UITableViewController alloc] init];
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:_searchResultsController];
-    
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
-    self.navigationItem.titleView = self.searchController.searchBar;
-    
-    // To ensure search results controller is presented in the current view controller
-    self.definesPresentationContext = YES;
-    
-    // Setting delegates and other stuff
-    _searchResultsController.tableView.dataSource = self;
-    self.searchController.searchBar.delegate = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
-    
-    */
-    
     [self.view addSubview:_tableView];
-    [self.searchController.searchBar becomeFirstResponder];
-
+    //[self.searchBar becomeFirstResponder];
 
 }
 
 
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSLog(@"in shouldchangetextinrange");
     NSString *newString = [[self.searchBar.text stringByReplacingCharactersInRange:range withString:text] lowercaseString];
-    NSLog(@"Input: %@ ", newString);
-    [self updateTextLabelsWithText: newString];
     
-    //    NSArray *wordsAndEmptyStrings = [newString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    //    NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+    [self updateTextLabelsWithText: newString];
     
     return YES;
 }
@@ -114,9 +91,7 @@
     
     //search using loopID
     if(searchSegmentedControl.selectedSegmentIndex == 0){
-        NSLog(@"searching by id");
         if (isSearching && searchedUser.length == 4) {
-            NSLog(@"valid loop id search");
             PFQuery *query = [PFUser query];
             [query whereKey:@"username" equalTo:searchedUser];
             //[query whereKey:@"username" containsString:searchedUser];
@@ -126,30 +101,50 @@
                     //Adding contact to friend relations
                     _foundUser = objects;  //searched user (toUser)
                     isSearching = false;
+                    [self.searchBar resignFirstResponder];
+                    [self.tableView setBackgroundView:nil];
                     [self.tableView reloadData];
                     
                 }else {
                     NSLog(@"Error: %@", error);//, [error userInfo]);
-                    //[self.tableView reloadData];
                 }
             }];
         }else{
             //NSLog(@"found user");
             _foundUser = [[NSArray alloc]init];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
             [self.tableView reloadData];
         }
     }
     
     //search using first/last name
     if (searchSegmentedControl.selectedSegmentIndex == 1) {
-        NSLog(@"searching by name");
         PFQuery *query = [PFUser query];
-        if (words.count > 1) {
-            [query whereKey:@"firstName" equalTo:[words[0] capitalizedString]];
-            [query whereKey:@"lastName" equalTo:[words[1] capitalizedString]];
+        if (isSearching && words.count == 2) {
+            //[query whereKey:@"firstName" containedIn:@[[words[0] capitalizedString], [words[1] capitalizedString]]];
+            [query whereKey:@"firstName" hasPrefix:[words[0] capitalizedString]];
+            [query whereKey:@"lastName" hasPrefix:[words[1] capitalizedString]];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
                     _foundUser = objects;
+                    //isSearching = false;
+                   
+                    [self.tableView setBackgroundView:nil];
+                    [self.tableView reloadData];
+                }else {
+                    NSLog(@"Error: %@", error);//, [error userInfo]);
+                    
+                }
+            }];
+        }else if (isSearching && words.count == 1) {
+            [query whereKey:@"firstName" hasPrefix:[words[0] capitalizedString]];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    _foundUser = objects;
+                    //isSearching = false;
+                    
+                    [self.tableView setBackgroundView:nil];
                     [self.tableView reloadData];
                 }else {
                     NSLog(@"Error: %@", error);//, [error userInfo]);
@@ -157,32 +152,35 @@
                 }
             }];
         }else{
-            //NSLog(@"found user");
             _foundUser = [[NSArray alloc]init];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
             [self.tableView reloadData];
         }
     }
-    //search using first/last name
+    
+    //search using phone number
     if (searchSegmentedControl.selectedSegmentIndex == 2) {
-        NSLog(@"searching by phone");
         PFQuery *query = [PFUser query];
-        //if (words.count > 1) {
+        if (isSearching && searchedUser.length >= 7) {
             [query whereKey:@"phoneNumber" equalTo:words[0]];
-            //[query whereKey:@"lastName" equalTo:words[1]];
-            //[query whereKey:@"lastName" equalTo:words[1]];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
                     _foundUser = objects;
+                    isSearching = false;
+                    [self.tableView setBackgroundView:nil];
                     [self.tableView reloadData];
                 }else {
-                    //NSLog(@"Error: %@", error);//, [error userInfo]);
-                    //_foundUser = nil;
-                    [self.tableView reloadData];
+                    NSLog(@"Error: %@", error);
                 }
             }];
-       // }
+        }else{
+            _foundUser = [[NSArray alloc]init];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+            [self.tableView reloadData];
+        }
     }
-
     
 }
 
@@ -191,26 +189,40 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //NSLog(@"numberofsectionsintableview");
-    // Return the number of sections.
     return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (searchSegmentedControl.selectedSegmentIndex == 0) {
+        return 300.0f;
+    }else{
+        return 78.0f;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    //NSLog(@"numberofrowsinsection");
-    //NSLog(@"[self.foundUser count] = %d", [self.foundUser count]);
     return [self.foundUser count];
 }
 
 #warning buggy
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"cellforrowatindexpath");
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier;
+    float radius;
+    if (searchSegmentedControl.selectedSegmentIndex == 0) {
+        CellIdentifier = @"Cell";
+        [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        radius = 130/2;
+        
+    }else{
+        CellIdentifier = @"DefaultCell";
+        [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+        radius = 25;
+    }
     KMASeachTableViewCell *searchCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+
     if (searchCell == nil) {
         searchCell = [[KMASeachTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
@@ -225,7 +237,7 @@
     [searchCell.userPic loadInBackground];
     searchCell.userPic.layer.borderWidth = 2;
     searchCell.userPic.layer.borderColor = [UIColor whiteColor].CGColor;
-    searchCell.userPic.layer.cornerRadius =30;
+    searchCell.userPic.layer.cornerRadius = radius;
     searchCell.userPic.clipsToBounds = YES;
     
     // rounded edges
@@ -243,19 +255,34 @@
 #pragma mark - search bar
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     isSearching = true;
-    NSLog(@"Is searching...");
+    [self.searchBar setShowsCancelButton:YES animated:YES];
 }
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+    [self.searchBar setText:@""];
+    [self.searchBar resignFirstResponder];
+    
     isSearching = false;
-    NSLog(@"Cancel clicked");
+    _foundUser = [[NSArray alloc]init];
+    
+    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView reloadData];
+    
 }
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
     
-    //Do stuff here...
-    [self performSegueWithIdentifier:@"showSearch" sender:self];
-    
-    
+    if (isSearching) {
+        isSearching = false;
+        [self.searchBar setShowsCancelButton:NO animated:YES];
+        [self.searchBar resignFirstResponder];
+    }else{
+        [self.searchBar setShowsCancelButton:YES animated:YES];
+        [self.searchBar becomeFirstResponder];
+    }
+
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -273,14 +300,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void) hideKeyboard {
+    [self.searchBar resignFirstResponder];
 }
-*/
 
 @end

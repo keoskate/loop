@@ -240,13 +240,13 @@
     }
 
 }
-- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
-    
-    //Do stuff here...
-    [self performSegueWithIdentifier:@"showSearch" sender:self];
-    
-}
+//- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+//    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+//    
+//    //Do stuff here...
+//    [self performSegueWithIdentifier:@"showSearch" sender:self];
+//    
+//}
 
 
 - (IBAction)goBack:(id)sender{

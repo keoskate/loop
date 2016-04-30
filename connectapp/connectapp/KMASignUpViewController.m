@@ -128,6 +128,7 @@
         newUser.username = [_knnctID lowercaseString];
         newUser.password = _password;
         newUser.email = [_email lowercaseString];
+#pragma mark - set first/last to lowercase string
         [newUser setObject:_firstName forKey:@"firstName"];
         [newUser setObject:_lastName forKey:@"lastName"];
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
