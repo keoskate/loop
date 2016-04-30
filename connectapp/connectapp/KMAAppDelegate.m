@@ -10,6 +10,7 @@
 #import "KMAAppDelegate.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <linkedin-sdk/LISDK.h>
 #import "Mixpanel.h"
 #define MIXPANEL_TOKEN @"9ed3003ebccc7cd883383bcbb46b43d0"
 
@@ -161,9 +162,14 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                                                         sourceApplication:sourceApplication
                                                                annotation:annotation
                     ];
+    if ([LISDKCallbackHandler shouldHandleUrl:url]) {
+        return [LISDKCallbackHandler application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+    }
+    
     // Add any custom logic here.
     return handled;
 }
+
 
 
 @end

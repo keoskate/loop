@@ -9,6 +9,8 @@
 #import "KMAEditPageViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <linkedin-sdk/LISDK.h>
+
 @interface KMAEditPageViewController ()
 
 @end
@@ -194,11 +196,14 @@
         currentUser[@"instagramURL"] = self.instagramField.text;
         self.instagramField.placeholder = self.instagramField.text;
         self.instagramField.text = @"";
+        self.igTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     if (self.snapchatField.text.length > 0) {
         currentUser[@"snapchatURL"] = self.snapchatField.text;
         self.snapchatField.placeholder = self.snapchatField.text;
         self.snapchatField.text = @"";
+        self.scTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
     }
     
     NSLog(@"Saving...");
@@ -237,7 +242,7 @@
         
         NSLog(@"Token is available");
         
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(square), email"}]
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}]
          startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
              if (!error) {
                  NSLog(@"Fetched User Information:%@", result);
@@ -247,7 +252,7 @@
                  [currentUser saveInBackground];
                  self.fbTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
                  self.fbConnectButton.hidden = true;
-                 
+                 self.fbLabel.text = @"Facebook";
              }
              else {
                  NSLog(@"Error %@",error);
@@ -258,5 +263,55 @@
         NSLog(@"User is not Logged in");
     }
 }
+
+- (IBAction)linkedinlogin:(id)sender {
+    [LISDKSessionManager
+     createSessionWithAuth:[NSArray arrayWithObjects:LISDK_BASIC_PROFILE_PERMISSION, nil]
+     state:nil
+     showGoToAppStoreDialog:YES
+     successBlock:^(NSString *returnState) {
+         NSLog(@"%s","success called!");
+         LISDKSession *session = [[LISDKSessionManager sharedInstance] session];
+         
+         NSLog(@"value=%@ isvalid=%@",[session value],[session isValid] ? @"YES" : @"NO");
+         
+         NSString *url = [NSString stringWithFormat:@"https://api.linkedin.com/v1/people/~"];
+         
+         if ([LISDKSessionManager hasValidSession]) {
+             [[LISDKAPIHelper sharedInstance] getRequest:url
+                                                 success:^(LISDKAPIResponse *response) {
+                                                     // do something with response
+                                                     NSData* data = [response.data dataUsingEncoding:NSUTF8StringEncoding];
+                                                     NSDictionary *dictResponse = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                                        
+                                                     
+                                                     PFUser *currentUser = [PFUser currentUser];
+                                                     currentUser[@"linkedinURL"] = [dictResponse valueForKey: @"id"];
+                                                     [currentUser saveInBackground];
+                                                     self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                                                     self.liConnectButton.hidden = true;
+                                                     self.liLabel.text = @"LinkedIn";
+                                                     
+                                                 
+                                                     
+                                                 }
+                                                   error:^(LISDKAPIError *apiError) {
+                                                        // do something with error
+                                                       NSLog(@"Error %@",apiError);
+                                                      
+                                                   }];
+         }
+         
+     }
+     errorBlock:^(NSError *error) {
+         NSLog(@"%s","error called!");
+     }
+     ];
+    
+
+    
+}
+
+
 
 @end

@@ -13,6 +13,7 @@
 #import "KMASocialMedia.h"
 #import <Contacts/Contacts.h>
 #import <QuartzCore/QuartzCore.h>
+#import <linkedin-sdk/LISDK.h>
 
 @interface KMAContactDetailViewController ()
 
@@ -384,9 +385,67 @@
             }
         }];
     }else if ([shareStuff.mediaType isEqualToString:@"Email"]){
-        //Open up Email to this user ... Apple Mail API
-    }
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"mailto:%@", [user objectForKey:@"email"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Phone"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                NSString *fbURL = [NSString stringWithFormat:@"tel://%@", [user objectForKey:@"phoneNumber"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
 
+    }else if ([shareStuff.mediaType isEqualToString:@"Linkedin"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                
+                DeeplinkSuccessBlock success = ^(NSString *returnState) {
+                    NSLog(@"Success with returned state: %@",returnState);
+                };
+                DeeplinkErrorBlock error = ^(NSError *error, NSString *returnState) {
+                    NSLog(@"Error with returned state: %@", returnState);
+                    NSLog(@"Error %@", error);
+                };
+
+                NSString *memberId = [user objectForKey:@"linkedinURL"];
+                
+                if ([LISDKSessionManager hasValidSession]) {
+                    
+                  [[LISDKDeeplinkHelper sharedInstance] viewOtherProfile:memberId withState:@"viewMemberProfileButton" showGoToAppStoreDialog:YES success:success error:error];
+                }
+                
+                
+            }
+        }];
+    
+    
+    }else if ([shareStuff.mediaType isEqualToString:@"Snapchat"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                //NSString *fbURL = [NSString stringWithFormat:@"http://www.snapchat.com/add/%@", [user objectForKey:@"snapchatURL"]];
+                NSString *fbURL = [NSString stringWithFormat:@"snapchat://add/%@", [user objectForKey:@"snapchatURL"]];
+                NSURL *url = [NSURL URLWithString:fbURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }
     
   
     

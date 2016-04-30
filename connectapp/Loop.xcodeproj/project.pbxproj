@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B0EF9061CD4CF0B00B9904B /* linkedin-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B0EF9051CD4CF0B00B9904B /* linkedin-sdk.framework */; };
 		7BF10B181CBB606300AC7F68 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B151CBB606300AC7F68 /* FBSDKCoreKit.framework */; };
 		7BF10B191CBB606300AC7F68 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B161CBB606300AC7F68 /* FBSDKLoginKit.framework */; };
 		7BF10B1A1CBB606300AC7F68 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF10B171CBB606300AC7F68 /* FBSDKShareKit.framework */; };
@@ -179,6 +180,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7B0EF9051CD4CF0B00B9904B /* linkedin-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "linkedin-sdk.framework"; sourceTree = "<group>"; };
 		7BF10B151CBB606300AC7F68 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		7BF10B161CBB606300AC7F68 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		7BF10B171CBB606300AC7F68 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 				7D0E739B19C452450086274C /* CoreLocation.framework in Frameworks */,
 				7D0E739C19C452450086274C /* libz.dylib in Frameworks */,
 				7D0E739D19C452450086274C /* MobileCoreServices.framework in Frameworks */,
+				7B0EF9061CD4CF0B00B9904B /* linkedin-sdk.framework in Frameworks */,
 				7D0E73C319C460F70086274C /* Parse.framework in Frameworks */,
 				7BF10B181CBB606300AC7F68 /* FBSDKCoreKit.framework in Frameworks */,
 				7D0E73A019C452450086274C /* Social.framework in Frameworks */,
@@ -684,6 +687,7 @@
 			isa = PBXGroup;
 			children = (
 				C126B81B1CD2B931008E9066 /* libicucore.tbd */,
+				7B0EF9051CD4CF0B00B9904B /* linkedin-sdk.framework */,
 				C126B8121CD2B319008E9066 /* Accelerate.framework */,
 				C126B8101CD2B30E008E9066 /* CoreTelephony.framework */,
 				C126B80E1CD2B2AA008E9066 /* WatchConnectivity.framework */,
@@ -716,17 +720,17 @@
 		7DFA5EAC19B811A900E67589 /* knnct */ = {
 			isa = PBXGroup;
 			children = (
-				C126B81D1CD2B976008E9066 /* Mixpanel */,
+				7D2A3EAD1CA29762007B5C5D /* Contacts Page */,
+				7DFA5EBE19B811AA00E67589 /* Images.xcassets */,
 				7DFA5EB519B811A900E67589 /* KMAAppDelegate.h */,
 				7DFA5EB619B811A900E67589 /* KMAAppDelegate.m */,
-				7D2A3EB21CA29914007B5C5D /* Other */,
 				7D2A3EAE1CA297AD007B5C5D /* Login/Signup Page */,
-				7D2A3EAF1CA297D6007B5C5D /* Search Page */,
-				7D2A3EB11CA2984B007B5C5D /* Requests Page */,
+				C126B81D1CD2B976008E9066 /* Mixpanel */,
+				7D2A3EB21CA29914007B5C5D /* Other */,
 				7D62329A1CCE155C0005F270 /* Profile Page */,
-				7D2A3EAD1CA29762007B5C5D /* Contacts Page */,
+				7D2A3EB11CA2984B007B5C5D /* Requests Page */,
+				7D2A3EAF1CA297D6007B5C5D /* Search Page */,
 				7D2A3EB01CA297F3007B5C5D /* Settings Page */,
-				7DFA5EBE19B811AA00E67589 /* Images.xcassets */,
 				7DFA5EAD19B811A900E67589 /* Supporting Files */,
 			);
 			name = knnct;
@@ -955,7 +959,7 @@
 				ORGANIZATIONNAME = "Keion Anvaripour";
 				TargetAttributes = {
 					7DFA5EA219B811A900E67589 = {
-						DevelopmentTeam = SRQDX8W6Z7;
+						DevelopmentTeam = ST5YJ9B7DJ;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1269,7 +1273,7 @@
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keionanvari.loop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xiao.loop;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -1293,7 +1297,7 @@
 				GCC_PREFIX_HEADER = "connectapp/Loop-Prefix.pch";
 				INFOPLIST_FILE = "connectapp/Loop-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keionanvari.loop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xiao.loop;
 				PRODUCT_NAME = Loop;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
