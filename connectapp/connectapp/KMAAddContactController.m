@@ -24,37 +24,9 @@
     self.searchName.text = [temp capitalizedString];
     temp = _searchedUserID;
     self.searchID.text = [temp uppercaseString];
-    
-//    UIVisualEffect *blurEffect;
-//    blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-//    UIVisualEffectView *visualEffectView;
-//    visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-//    visualEffectView.frame = self.view.bounds;
-//    [self.view addSubview:visualEffectView];
-    
-    // for blurring
-    /*NSLog(@"rounding and blurring");
-    UIView *view = self.view;
-    while (view != nil) {
-        view = view.superview;
-        if (view.layer.cornerRadius > 0) {
-            view.layer.cornerRadius = 2.0;
-            view = nil;
-        }
-    }*/
-    
-   
-    
-    //Thumbnail - need mask (circular)
-//    self.searchImage.file = searchedUserPicFile;
-//    self.searchImage.image = [UIImage imageNamed:@"placeholder.png"];
-//    [self.searchImage loadInBackground];
+    [self.view endEditing:YES];
     
     [self populateSelfData];
-    
-    
-//    [_gmailCheckButton addTarget:self action:@selector(checkboxSelected:) forControlEvents:UIControlEventTouchUpInside];
-//    [_facebookCheckButton addTarget:self action:@selector(checkboxSelected:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)populateSelfData{
@@ -110,8 +82,7 @@
     
     //Handle case about adding self
     if ([currentUser.username lowercaseString] == searchedUser) {
-        
-        NSLog(@"Thus booooom.");
+
         // Send push notification to query
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"loopID" equalTo:@"sk8r"];

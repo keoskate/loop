@@ -13,7 +13,7 @@
 #import "KMASocialMedia.h"
 #import <Contacts/Contacts.h>
 #import <QuartzCore/QuartzCore.h>
-
+#import <linkedin-sdk/LISDK.h>
 @interface KMAContactDetailViewController ()
 
 @end
@@ -32,6 +32,7 @@
     self.userPhone.text = myUserPhone;
     self.thumbNailImageView.file = myUserPicFile;
     self.thumbNailImageView.image = [UIImage imageNamed:@"placeholder.png"];
+    [self.backgroundColor setBackgroundColor:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
     
     [self.thumbNailImageView loadInBackground:^(UIImage *image, NSError *error) {
         if (!error) {
@@ -46,7 +47,7 @@
             }
             
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@10 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@30 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];
@@ -309,7 +310,6 @@
         }];
 
     }else if ([shareStuff.mediaType isEqualToString:@"Snapchat"]){
-        NSLog(@"here");
         PFQuery *query = [PFUser query];
         [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
@@ -321,7 +321,37 @@
                 
             }
         }];
+    }else if ([shareStuff.mediaType isEqualToString:@"LinkedIn"]){
+        NSLog(@"here");
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                
+                DeeplinkSuccessBlock success = ^(NSString *returnState) {
+                    NSLog(@"Success with returned state: %@",returnState);
+                };
+                DeeplinkErrorBlock error = ^(NSError *error, NSString *returnState) {
+                    NSLog(@"Error with returned state: %@", returnState);
+                    NSLog(@"Error %@", error);
+                };
+                
+                NSString *memberId = user[@"linkedinURL"];
+                NSLog(@"id: %@", memberId);
+                
+                [[LISDKDeeplinkHelper sharedInstance] viewOtherProfile:memberId withState:@"viewOtherProfileButton" showGoToAppStoreDialog:YES success:success error:error];
+                
+//                NSString *liURL = [NSString stringWithFormat:@"linkedin://profile?id=%@", [user objectForKey:@"linkedinURL"]];
+//                NSURL *url = [NSURL URLWithString:liURL];
+//                [[UIApplication sharedApplication] openURL:url];
+            }
+        }];
     }
+    
+}
+
+-(void)LIDeeplinkProfile{
+
     
 }
 

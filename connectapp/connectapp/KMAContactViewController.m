@@ -38,9 +38,7 @@
         }
         else {
             self.friends = objects;
-            //self.friends = [[NSMutableArray alloc] init];
             [self.tableView reloadData];
-            //[self updateFriends];
         }
     }];
     
@@ -52,37 +50,9 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    [self.refreshControl endRefreshing];
     [self reloadFriends];
 }
-
--(void)updateFriends {
-    //[self.friends removeAllObjects];
-    PFUser *currentUser = [PFUser currentUser];
-    for (PFUser *user in self.friends) {
-        
-        PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
-        [query whereKey:@"toUser" equalTo:user]; //this is what info the user sent current user
-        [query whereKey:@"fromUser" equalTo:currentUser];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if (!error) {
-                NSString *status = [object objectForKey:@"status"];
-                if ( [status  isEqual: @"accepted"]) {
-                    //[self.allUsers addObject:user];
-                    [self.tableView reloadData];
-                    NSLog(@"Added obj %@", user );
-                }
-                
-            }else {
-                NSLog(@"Error(fixbug) %@ %@",error, [error userInfo]);
-            }
-        }];
-    }
-//    
-//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"username" ascending:YES];
-//    [self.friends sortUsingDescriptors:[NSMutableArray arrayWithObject:sort]];
-}
-
 
 #pragma mark - Table view data source
 
@@ -142,6 +112,7 @@
     contactDetailViewController.myUserFirstName = [user objectForKey:@"firstName"];
     contactDetailViewController.myUserLastName = [user objectForKey:@"lastName"];
     contactDetailViewController.myUserPhone = user[@"phoneNumber"];
+    contactDetailViewController.myUserScore = user[@"score"];
     contactDetailViewController.myUserPicFile = [user objectForKey:@"displayPicture"];
     
     [contactDetailViewController.myUserPicFile getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
@@ -244,6 +215,7 @@
 
 - (void)reloadFriends
 {
+    
     self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendsRelation"];
     PFQuery *query = [self.friendsRelation query];
     [query orderByAscending:@"username"];

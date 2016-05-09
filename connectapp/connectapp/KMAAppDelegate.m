@@ -10,6 +10,7 @@
 #import "KMAAppDelegate.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <linkedin-sdk/LISDK.h>
 #import "Mixpanel.h"
 #define MIXPANEL_TOKEN @"9ed3003ebccc7cd883383bcbb46b43d0"
 
@@ -118,11 +119,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     tabBarItem4.title = @"Contact";
     tabBarItem5.title = @"Settings";
     
-    [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"search-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"searchTab.png"]];
-    [tabBarItem2 setFinishedSelectedImage:[UIImage imageNamed:@"requests-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"requests"]];
-    
-    [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"contacts-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"contacts.png"]];
-    [tabBarItem5 setFinishedSelectedImage:[UIImage imageNamed:@"settings-selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"settings.png"]];
+    [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"searchActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"search"]];
+    [tabBarItem2 setFinishedSelectedImage:[UIImage imageNamed:@"notificationsActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"notifications"]];
+    [tabBarItem3 setFinishedSelectedImage:[UIImage imageNamed:@"profileActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"profile"]];
+    [tabBarItem4 setFinishedSelectedImage:[UIImage imageNamed:@"contactsActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"contacts"]];
+    [tabBarItem5 setFinishedSelectedImage:[UIImage imageNamed:@"settingsActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"settings"]];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -156,13 +157,18 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                                  openURL:url
-                                                        sourceApplication:sourceApplication
-                                                               annotation:annotation
-                    ];
-    // Add any custom logic here.
-    return handled;
+    NSString *temp = [url absoluteString];
+    if ([temp containsString:@"fb"]) {
+        NSLog(@"fb-deeplink");
+        return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+    }else if([temp containsString:@"li"]){
+        if ([LISDKCallbackHandler shouldHandleUrl:url]) {
+            NSLog(@"li-deeplink");
+            return [LISDKCallbackHandler application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+        }
+    }
+    return YES;
+
 }
 
 

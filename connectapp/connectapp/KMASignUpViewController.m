@@ -9,6 +9,7 @@
 #import "KMASignUpViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <linkedin-sdk/LISDK.h>
 @interface KMASignUpViewController ()<FBSDKLoginButtonDelegate>
 
 @end
@@ -27,9 +28,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   // self.navigationController.navigationBarHidden = NO;
+
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
     //fix weird choppy bug
@@ -48,32 +50,45 @@
     self.firstNameField.text = self.firstName;
     self.lastNameField.text = self.lastName;
     
-    CALayer *imageLayer = self.thumbnailPic.layer;
-    [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:4];
-    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer setMasksToBounds:YES];
-    [self.thumbnailPic.layer setCornerRadius:self.thumbnailPic.frame.size.width/7];
-    [self.thumbnailPic.layer setMasksToBounds:YES];
-    
     [self.thumbnailPic loadInBackground];
+    
+    self.thumbnailPic.layer.borderWidth = 2;
+    self.thumbnailPic.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.thumbnailPic.layer.cornerRadius = 130/2;
+    self.thumbnailPic.clipsToBounds = YES;
     
     [self.textField1 becomeFirstResponder];
     
-    //self.tableView.autoresizesSubviews = true;
-    //self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
-    //self.tableView.estimatedRowHeight = 80;
-    //self.tableView.rowHeight = UITableViewAutomaticDimension;
-    /*
-    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.center = self.view.center;
-    [self.view addSubview:loginButton];
-    loginButton.readPermissions =
-    @[@"public_profile", @"email", @"user_friends"];
-    */
+    [self.fbAddButton addTarget:self
+                         action:@selector(addFBAction)
+               forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.liAddButton addTarget:self
+                         action:@selector(addLIAction)
+               forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [self setUpUI];
+    
     self.fb.readPermissions = @[@"public_profile", @"email"];
 
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+}
+
+-(void)setUpUI {
+    if (![_fbID isEqualToString:@""] && _fbID != nil) {
+        self.fbTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.fbAddButton.hidden = true;
+    }else{
+        self.fbAddButton.hidden = false;
+    }
+    if (![_liID isEqualToString:@""] && _liID != nil) {
+        self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.liAddButton.hidden = true;
+    }else{
+        self.liAddButton.hidden = false;
+    }
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -89,7 +104,6 @@
     self.skipButton.enabled = NO;
     
 //    _knnctID = [self.knnctIDField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//   
 //    _password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
     if ([_knnctID length] == 0 || [_password length] == 0 ) {
@@ -113,13 +127,8 @@
     }
     else {
 #warning - flip captured photo before saving
-//        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-//        [_pickedImage drawInRect: CGRectMake(0, 0, 640, 960)];
-//        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
-        
-        NSData *imageData = UIImagePNGRepresentation(_pickedImage);
+        //NSData *imageData = UIImagePNGRepresentation(_pickedImage);
+        NSData *imageData = UIImageJPEGRepresentation(_pickedImage, 0.05f);
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
 
         _knnctID = [_knnctID lowercaseString]; //make sure LOWERCASE
@@ -128,9 +137,9 @@
         newUser.username = [_knnctID lowercaseString];
         newUser.password = _password;
         newUser.email = [_email lowercaseString];
-#pragma mark - set first/last to lowercase string
-        [newUser setObject:_firstName forKey:@"firstName"];
-        [newUser setObject:_lastName forKey:@"lastName"];
+#pragma mark - set first/last to captilized string
+        [newUser setObject:[_firstName capitalizedString] forKey:@"firstName"];
+        [newUser setObject:[_lastName capitalizedString] forKey:@"lastName"];
         [newUser setObject:_phoneNumber forKey:@"phoneNumber"];
         
         if (_pickedImage != nil) {
@@ -140,12 +149,18 @@
         if (![_fbID isEqualToString:@""] && _fbID != nil) {
             [newUser setObject:_fbID forKey:@"facebookURL"];
         }
+        if (![_liID isEqualToString:@""] && _liID != nil) {
+            [newUser setObject:_liID forKey:@"linkedinURL"];
+        }
+
         if (![self.snapchatField.text isEqualToString:@""] && self.snapchatField.text != nil) {
             [newUser setObject:[self.snapchatField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"snapchatURL"];
         }
         if (![self.instagramField.text  isEqualToString: @""] && self.instagramField.text != nil) {
             [newUser setObject:[self.instagramField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"instagramURL"];
         }
+        
+        [newUser setObject:0 forKey:@"score"];
         
         
 #warning add more API URLs
@@ -165,8 +180,13 @@
                 self.skipButton.enabled = YES;
             }
             else {
-
+                [self.navigationController setNavigationBarHidden:YES animated:YES];
                 [self.navigationController popToRootViewControllerAnimated:YES];
+                
+                UIViewController * target = [[self.tabBarController viewControllers] objectAtIndex:1];
+                [target.navigationController popToRootViewControllerAnimated: NO];
+                [self.tabBarController setSelectedIndex:2];
+                
             }
             
          }];
@@ -288,9 +308,6 @@
 - (IBAction)skipPage:(id)sender {
     [self performSegueWithIdentifier:@"skip" sender:self];
     
-    
-    
-    
 }
 
 - (IBAction)nextPage:(id)sender {
@@ -350,10 +367,7 @@
 //        signUpView.email = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 //         [self.navigationController pushViewController:signUpView animated:YES];
         
-        
         [self performSegueWithIdentifier:@"create1" sender:self];
-        
-        
         
     }
 }
@@ -420,10 +434,21 @@
     BOOL shouldMoveToNextField = NO; //default to remaining on the current field
     
     int insertStringLength = [string length];
+    NSString *resultString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    BOOL isPressedBackspaceAfterSingleSpaceSymbol = [string isEqualToString:@""] && [resultString isEqualToString:@""] && range.location == 0 && range.length == 1;
+    if (isPressedBackspaceAfterSingleSpaceSymbol) {
+        NSInteger nextTag = 0;
+        if (textField.tag > 0) {
+            nextTag = textField.tag - 1;
+        }
+        UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
+        if (nextResponder)
+            [nextResponder becomeFirstResponder];
+    }
     if(insertStringLength == 0){ //backspace
         shouldProcess = YES; //Process if the backspace character was pressed
-    }
-    else {
+        
+    } else {
         if([[textField text] length] == 0) {
             shouldProcess = YES; //Process if there is only 1 character right now
         }
@@ -473,9 +498,14 @@
     //always return no since we are manually changing the text field
     return NO;
 }
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    
+    return YES;
+}
 
 #pragma mark - Navigation
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"create1"]) {
@@ -508,51 +538,6 @@
         
         suvc.password = [self.passwordField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     }
-    
-    if ([segue.identifier isEqualToString:@"part2"]) {
-        //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
-        KMASignUpViewController *suvc = [segue destinationViewController];
-        
-        suvc.email = self.emailField.text;
-        suvc.firstName = self.firstNameField.text;
-        suvc.lastName = self.lastNameField.text;
-        suvc.phoneNumber = self.phoneNumberField.text;
-        suvc.pickedImage = _pickedImage;
-        suvc.fbID = _fbID;
-        
-    }
-    if ([segue.identifier isEqualToString:@"skip"]) {
-        //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
-        KMASignUpViewController *suvc = [segue destinationViewController];
-        
-        //suvc.facebook = _facebook;
-        suvc.pickedImage = _pickedImage;
-        suvc.email = _email;
-        suvc.firstName = _firstName;
-        suvc.lastName = _lastName;
-        suvc.phoneNumber = _phoneNumber;
-        suvc.fbID = _fbID;
-        
-    }
-    if ([segue.identifier isEqualToString:@"basic"]) {
-        //[segue.destinationViewController setHidesBottomBarWhenPushed:YES];
-        KMASignUpViewController *suvc = [segue destinationViewController];
-        
-        //suvc.facebook = _facebook;
-        suvc.pickedImage = _pickedImage;
-        suvc.emailField.text = _email;
-        suvc.firstNameField.text = @"hello world";
-        suvc.lastNameField.text = _lastName;
-        
-        suvc.thumbnailPic.image = _pickedImage;
-        suvc.email = _email;
-        suvc.firstName = _firstName;
-        suvc.lastName = _lastName;
-        suvc.phoneNumber = _phoneNumber;
-        suvc.fbID = _fbID;
-        NSLog(@"LAST NAME: %@", _lastName);
-    }
-
 }
 
 - (void) hideKeyboard {
@@ -561,55 +546,9 @@
     [_firstNameField resignFirstResponder];
     [_lastNameField resignFirstResponder];
     [_passwordField resignFirstResponder];
+    [_instagramField resignFirstResponder];
+    [_snapchatField resignFirstResponder];
 }
-
-/*
-- (void)observeTokenChange:(NSNotification *)notfication {
- 
-    
-    if ([FBSDKAccessToken currentAccessToken]) {
-        
-        
-        FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
-                                      initWithGraphPath:@"me"
-                                      parameters:@{@"fields":  @"id, first_name, last_name, picture.type(normal), email"}
-                                      HTTPMethod:@"GET"];
-        [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
-                                              id result,
-                                              NSError *error) {
-           
-            NSLog(@"picture is %@", [result objectForKey:@"id"]);
-            NSLog(@"email: %@", _email);
-            
-            NSURL *pictureURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
-           
-            _pickedImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-            _firstName =[result objectForKey:@"first_name"];
-            _lastName = [result objectForKey:@"last_name"];
-            _email =[result objectForKey:@"email"];
-            _fbID =[result objectForKey:@"id"];
-
-            self.thumbnailPic.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-   
-            self.emailField.text = _email;
-            self.firstNameField.text = _firstName;
-            self.lastNameField.text = _lastName;
-            
-            [self performSegueWithIdentifier:@"basic" sender:self];
-            
-//            KMASignUpViewController *signUpView = [[self storyboard] instantiateViewControllerWithIdentifier:@"showBasic"];
-//            signUpView.lastNameField.text = [result objectForKey:@"last_name"];
-//            signUpView.emailField.text = [result objectForKey:@"email"];
-//            
-//             [self.navigationController pushViewController:signUpView animated:YES];
-            
-        }];
-        
-       
-    }
-
-}
-*/
 
 - (IBAction)joinWithFacebook:(id)sender {
     NSLog(@"joining with facebook ...");
@@ -630,8 +569,6 @@
         }
     }];
 }
-
-
 
 -(void)fetchUserInfo {
     
@@ -666,5 +603,80 @@
     } else {
         NSLog(@"User is not Logged in");
     }
+}
+
+
+-(void)addFBAction{
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions:@[@"email"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        if (error) {
+            // Process error
+            NSLog(@"error %@", error);
+        } else if (result.isCancelled) {
+            // Handle cancellations
+            NSLog(@"Cancelled");
+        } else {
+            if ([result.grantedPermissions containsObject:@"email"]) {
+                // Do work
+                if ([FBSDKAccessToken currentAccessToken]) {
+                    
+                    NSLog(@"Token is available");
+                    
+                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}]
+                     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                         if (!error) {
+                             NSLog(@"Fetched User Information:%@", result);
+
+                             self.fbID = [result objectForKey:@"id"];
+                             [self setUpUI];
+                         }
+                         else {
+                             NSLog(@"Error %@",error);
+                         }
+                     }];
+                    
+                } else {
+                    NSLog(@"User is not Logged in");
+                }
+
+            }
+        }
+    }];
+}
+
+- (void)addLIAction {
+    //Sync
+    [LISDKSessionManager createSessionWithAuth:[NSArray arrayWithObjects:LISDK_BASIC_PROFILE_PERMISSION, nil]
+                                         state:nil
+                        showGoToAppStoreDialog:YES
+                                  successBlock:^(NSString *returnState) {
+                                      
+                      LISDKSession *session = [[LISDKSessionManager sharedInstance] session];
+                      
+                      //Execute
+                      [[LISDKAPIHelper sharedInstance] apiRequest:@"https://www.linkedin.com/v1/people/~"
+                                                           method:@"GET"
+                                                             body:nil
+                                                          success:^(LISDKAPIResponse *response) {
+                              
+                              //Read data response
+                              NSData *jsonData = [response.data dataUsingEncoding:NSUTF8StringEncoding];
+                              NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:nil];
+                              
+                              self.liID = [JSON objectForKey:@"id"];
+                            
+                              
+                              [self setUpUI];
+                              
+                          }error:^(LISDKAPIError *apiError) {
+                                NSLog(@"LI error called %@", apiError.description);
+                                
+                          }];
+
+                  }errorBlock:^(NSError *error) {
+                        NSLog(@"%s %@","LI error called! ", [error description]);
+                  }
+     ];
+    
 }
 @end

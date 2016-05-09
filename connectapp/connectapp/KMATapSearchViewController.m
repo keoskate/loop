@@ -31,7 +31,7 @@
 
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     
-    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"searchBackground"]]];
     
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
@@ -48,7 +48,7 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.view addGestureRecognizer:singleFingerTap];
-   
+    singleFingerTap.cancelsTouchesInView = NO;
 //    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
 //    gestureRecognizer.cancelsTouchesInView = NO;
 //    [self.tableView addGestureRecognizer:gestureRecognizer];
@@ -100,8 +100,8 @@
                     NSLog(@"found user: %@", (PFUser*)objects[0]);
                     //Adding contact to friend relations
                     _foundUser = objects;  //searched user (toUser)
-                    isSearching = false;
-                    [self.searchBar resignFirstResponder];
+//                    isSearching = false;
+//                    [self.searchBar resignFirstResponder];
                     [self.tableView setBackgroundView:nil];
                     [self.tableView reloadData];
                     
@@ -112,7 +112,7 @@
         }else{
             //NSLog(@"found user");
             _foundUser = [[NSArray alloc]init];
-            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"searchBackground"]]];
             [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
             [self.tableView reloadData];
         }
@@ -153,7 +153,7 @@
             }];
         }else{
             _foundUser = [[NSArray alloc]init];
-            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"searchBackground"]]];
             [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
             [self.tableView reloadData];
         }
@@ -176,7 +176,7 @@
             }];
         }else{
             _foundUser = [[NSArray alloc]init];
-            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+            [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"searchBackground"]]];
             [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
             [self.tableView reloadData];
         }
@@ -228,6 +228,7 @@
     }
     
     PFUser *user = [self.foundUser objectAtIndex:indexPath.row];
+    
     searchCell.userID.text = [user.username uppercaseString];
     searchCell.requestedUserID = user.username;
     searchCell.userName.text = [NSString stringWithFormat:@"%@ %@", user[@"firstName"], user[@"lastName"]];
@@ -248,14 +249,19 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    [self.searchBar resignFirstResponder];
 }
 
 
-#pragma mark - search bar
+#pragma mark - search bar delegates
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     isSearching = true;
     [self.searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    isSearching = false;
+    [self.searchBar resignFirstResponder];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
@@ -266,7 +272,7 @@
     isSearching = false;
     _foundUser = [[NSArray alloc]init];
     
-    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableBG.png"]]];
+    [self.tableView setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"searchBackground"]]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView reloadData];
     
@@ -275,10 +281,11 @@
     //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
     
     if (isSearching) {
-        isSearching = false;
+        //isSearching = false;
         [self.searchBar setShowsCancelButton:NO animated:YES];
         [self.searchBar resignFirstResponder];
     }else{
+        //isSearching = true;
         [self.searchBar setShowsCancelButton:YES animated:YES];
         [self.searchBar becomeFirstResponder];
     }

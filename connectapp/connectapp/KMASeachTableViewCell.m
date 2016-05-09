@@ -29,12 +29,15 @@
     //visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     //visualEffectView.frame =
     
+    
     self.popover = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"popoverController1"];
     
 #warning buggy popover
     //popover UI setup
     self.popover.view.frame = CGRectMake(self.popover.view.frame.origin.x, self.popover.view.frame.origin.y, self.popover.view.frame.size.width-25, self.popover.view.frame.size.height-50);
     self.popover.view.alpha = 1;
+    
+    [self.popover.view endEditing:YES];
     
     //popover.selectionTableView.bounces = NO;
     //popover.selectionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -54,32 +57,24 @@
     self.popover.requestImage.file = self.userPic.file;
     self.popover.requestImage.image = [UIImage imageNamed:@"placeholder.png"];
     
-    CALayer *imageLayer = self.popover.requestImage.layer;
-    [imageLayer setCornerRadius:5];
-    [imageLayer setBorderWidth:4];
-    [imageLayer setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer setMasksToBounds:YES];
-    [self.popover.requestImage.layer setCornerRadius:self.popover.requestImage.frame.size.width/7];
-    [self.popover.requestImage.layer setMasksToBounds:YES];
-    
-    
     [self.popover.requestImage loadInBackground];
+    
+    self.popover.requestImage.layer.borderWidth = 2;
+    self.popover.requestImage.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.popover.requestImage.layer.cornerRadius = 100/2;
+    self.popover.requestImage.clipsToBounds = YES;
     
     //User image 2
     PFUser *currentUser = [PFUser currentUser];
     self.popover.userImage.file = [currentUser objectForKey:@"displayPicture"];
     self.popover.userImage.image = [UIImage imageNamed:@"placeholder.png"];
     
-    CALayer *imageLayer2 = self.popover.userImage.layer;
-    [imageLayer2 setCornerRadius:5];
-    [imageLayer2 setBorderWidth:4];
-    [imageLayer2 setBorderColor:[UIColor whiteColor].CGColor];
-    [imageLayer2 setMasksToBounds:YES];
-    [self.popover.userImage.layer setCornerRadius:self.popover.userImage.frame.size.width/7];
-    [self.popover.userImage.layer setMasksToBounds:YES];
-    
-    
     [self.popover.userImage loadInBackground];
+    
+    self.popover.userImage.layer.borderWidth = 2;
+    self.popover.userImage.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.popover.userImage.layer.cornerRadius = 100/2;
+    self.popover.userImage.clipsToBounds = YES;
     
     //API
     KLCPopupLayout layout = KLCPopupLayoutMake(KLCPopupHorizontalLayoutCustom,

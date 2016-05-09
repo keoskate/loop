@@ -62,7 +62,12 @@ UITableViewDataSource
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *fbID;
+@property (nonatomic, strong) NSString *liID;
 
+@property (weak, nonatomic) IBOutlet UITableViewCell *fbTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *liTableViewCell;
+@property (weak, nonatomic) IBOutlet UIButton *fbAddButton;
+@property (weak, nonatomic) IBOutlet UIButton *liAddButton;
 
 - (IBAction)skipPage:(id)sender;
 - (IBAction)nextPage:(id)sender;

@@ -9,6 +9,7 @@
 #import "KMAEditPageViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <linkedin-sdk/LISDK.h>
 @interface KMAEditPageViewController ()
 
 @end
@@ -21,40 +22,37 @@
     [self.tableView reloadData];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    
+    [self.backgroundColor setBackgroundColor: [UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = YES;
     [self.tableView addGestureRecognizer:gestureRecognizer];
-    
-    //kay's changes
-    //disable save button initially
-    [self.saveButton setEnabled:NO];
-    [self.saveButton setTintColor: [UIColor clearColor]];
-    
-    //enable save button again if any text fields not empty (textfield listener)
-    [_emailField addTarget:self
-                    action:@selector(textFieldDidChange:)
-          forControlEvents:UIControlEventEditingChanged];
-    [_phoneField addTarget:self
-                    action:@selector(textFieldDidChange:)
-          forControlEvents:UIControlEventEditingChanged];
-    [_facebookField addTarget:self
-                       action:@selector(textFieldDidChange:)
-             forControlEvents:UIControlEventEditingChanged];
-    [_linkedinField addTarget:self
-                       action:@selector(textFieldDidChange:)
-             forControlEvents:UIControlEventEditingChanged];
-    [_instagramField addTarget:self
-                        action:@selector(textFieldDidChange:)
-              forControlEvents:UIControlEventEditingChanged];
-    [_snapchatField addTarget:self
-                       action:@selector(textFieldDidChange:)
-             forControlEvents:UIControlEventEditingChanged];
-    // end kay's changes
 
+    [self.fbConnectButton addTarget:self
+                         action:@selector(addFBAction)
+               forControlEvents:UIControlEventTouchUpInside];
+    [self.liConnectButton addTarget:self
+                             action:@selector(addLIAction)
+                   forControlEvents:UIControlEventTouchUpInside];
     
+    [self setUpView];
+ 
+    self.fb.readPermissions = @[@"public_profile", @"email"];
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
+}
+
+-(void)setUpView{
     PFUser *currentUser = [PFUser currentUser];
+    
+    
+    self.nameField.placeholder = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
+    
+    self.emailField.placeholder = currentUser.email;
+    self.phoneField.placeholder = currentUser[@"phoneNumber"];
+    self.instagramField.placeholder = currentUser[@"instagramURL"];
+    self.snapchatField.placeholder = currentUser[@"snapchatURL"];
+    self.linkedinField.placeholder = currentUser[@"linkedinURL"];
+    self.facebookField.placeholder = currentUser[@"facebookURL"];
     
     self.photoField.file = [currentUser objectForKey:@"displayPicture"];
     self.photoField.image = [UIImage imageNamed:@"placeholder.png"];
@@ -71,7 +69,7 @@
             CIContext *context   = [CIContext contextWithOptions:nil];
             CGImageRef cgimg     = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
             self.backgroundBlur.image       = [UIImage imageWithCGImage:cgimg];
-        
+            
         }
     }];
     
@@ -81,47 +79,45 @@
     self.photoField.clipsToBounds = YES;
     
     self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
-    self.loopidLabel.text = [currentUser.username uppercaseString];
-    
-    self.phoneField.placeholder = [currentUser objectForKey:@"phoneNumber"];
-    self.emailField.placeholder  = currentUser.email;
-    
+    self.loopidLabel.text = [NSString stringWithFormat:@"%@ %@ %@%@", [currentUser.username uppercaseString], @"|", currentUser[@"score"], @"pts" ];
+  
     if (![[currentUser objectForKey:@"facebookURL"] isEqualToString:@""] && [currentUser objectForKey:@"facebookURL"] != nil) {
-        self.fbTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.fbTableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.fbConnectButton.hidden = true;
-        self.fbLabel.text = @"Facebook";
-        //self.fbTableViewCell.textLabel.text = @"               Facebook";
     }else{
         self.fbConnectButton.hidden = false;
-        self.fbLabel.text = @"";
+        self.fbTableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     if (![[currentUser objectForKey:@"linkedinURL"] isEqualToString:@""] && [currentUser objectForKey:@"linkedinURL"] != nil) {
-        self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.liTableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.liConnectButton.hidden = true;
-        self.liLabel.text = @"LinkedIn";
-        //self.liTableViewCell.textLabel.text = @"               LinkedIn";
     }else{
         self.liConnectButton.hidden = false;
-        self.liLabel.text = @"";
+        self.liTableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
+   
     if (![[currentUser objectForKey:@"instagramURL"] isEqualToString:@""] && [currentUser objectForKey:@"instagramURL"] != nil) {
-        self.igTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.instagramField.placeholder = [currentUser objectForKey:@"instagramURL"];
+        self.igTableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.instaConnectButton.hidden = true;
+    }else{
+        self.instaConnectButton.hidden = false;
+        self.igTableViewCell.accessoryType = UITableViewCellAccessoryNone;
+
     }
+
     if (![[currentUser objectForKey:@"snapchatURL"] isEqualToString:@""] && [currentUser objectForKey:@"snapchatURL"] != nil) {
-        self.scTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.snapchatField.placeholder = [currentUser objectForKey:@"snapchatURL"];
+        self.scTableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.snapConnectButton.hidden = true;
+    }else{
+        self.snapConnectButton.hidden = false;
+        self.scTableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
- 
-    self.fb.readPermissions = @[@"public_profile", @"email"];
-    [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(observeTokenChange:) name:FBSDKAccessTokenDidChangeNotification object:nil];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self setUpView];
     [self.tableView reloadData];
 }
 
@@ -141,6 +137,7 @@
     [_linkedinField resignFirstResponder];
     [_snapchatField resignFirstResponder];
     [_instagramField resignFirstResponder];
+    [_nameField resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -180,14 +177,6 @@
         self.phoneField.placeholder = self.phoneField.text;
         self.phoneField.text = @"";
     }
-//    if (self.facebookField.text.length > 0) {
-//        currentUser[@"facebookURL"] = self.facebookField.text;
-//        self.facebookField.text = @"";
-//    }
-//    if (self.linkedinField.text.length > 0) {
-//        currentUser[@"linkedinURL"] = self.linkedinField.text;
-//        self.linkedinField.text = @"";
-//    }
     if (self.instagramField.text.length > 0) {
         currentUser[@"instagramURL"] = self.instagramField.text;
         self.instagramField.placeholder = self.instagramField.text;
@@ -198,15 +187,34 @@
         currentUser[@"snapchatURL"] = self.snapchatField.text;
         self.snapchatField.placeholder = self.snapchatField.text;
         self.snapchatField.text = @"";
-        self.scTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    if (self.nameField.text.length > 0) {
+        NSArray *wordsAndEmptyStrings = [[self.nameField.text lowercaseString] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSArray *words = [wordsAndEmptyStrings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]];
+   
+        currentUser[@"firstName"] = [words[0] capitalizedString];
+        currentUser[@"lastName"] = [words[1] capitalizedString];
+        self.nameField.placeholder = self.nameField.text;
+        self.nameField.text = @"";
+    }
+    
+    if (self.pickedImage != nil) {
+        NSData *imageData = UIImageJPEGRepresentation(_pickedImage, 0.05f);
+        PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
+        [currentUser setObject:imageFile forKey:@"displayPicture"];
     }
     
     NSLog(@"Saving...");
     [currentUser saveInBackground];
     [self saveSuccessAlert];
-    [self.saveButton setEnabled:NO];
     [self viewDidAppear:YES];
     
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    
+    return YES;
 }
 
 - (IBAction)joinWithFacebook:(id)sender {
@@ -256,6 +264,198 @@
         
     } else {
         NSLog(@"User is not Logged in");
+    }
+}
+
+- (void)promptForSource {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Image Source" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Camera", @"Photo Roll", nil];
+    
+    [actionSheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex != actionSheet.cancelButtonIndex) {
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self promptForCamera];
+        } else {
+            [self promptForPhotoRoll];
+        }
+    }
+}
+
+- (void)promptForCamera {
+    UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+    controller.sourceType = UIImagePickerControllerSourceTypeCamera;
+    controller.delegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void)promptForPhotoRoll {
+    UIImagePickerController *controller = [[UIImagePickerController alloc] init];
+    controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    controller.delegate = self;
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    self.pickedImage = image;
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)setPickedImage:(UIImage *)pickedImage {
+    
+    _pickedImage = pickedImage;
+    
+    if (pickedImage == nil) {
+        
+//        [self.imageButton setImage:[UIImage imageNamed:@"icn_noimage"] forState:UIControlStateNormal];
+        
+    } else {
+        //[self.imageButton setImage:pickedImage forState:UIControlStateNormal];
+        self.photoField.image = pickedImage;
+    }
+}
+
+#pragma mark - IBActions
+- (IBAction)imageSelectionButtonWasPressed:(id)sender {
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [self promptForSource];
+    } else {
+        [self promptForPhotoRoll];
+    }
+}
+
+-(void)addFBAction{
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions:@[@"email"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        if (error) {
+            // Process error
+            NSLog(@"error %@", error);
+        } else if (result.isCancelled) {
+            // Handle cancellations
+            NSLog(@"Cancelled");
+        } else {
+            if ([result.grantedPermissions containsObject:@"email"]) {
+                // Do work
+                if ([FBSDKAccessToken currentAccessToken]) {
+                    
+                    NSLog(@"Token is available");
+                    
+                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields":  @"id, first_name, last_name, picture.type(large), email"}]
+                     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                         if (!error) {
+                             NSLog(@"Fetched User Information:%@", result);
+                             PFUser *currentUser = [PFUser currentUser];
+                             currentUser[@"facebookURL"] = [result objectForKey:@"id"];
+                             [currentUser saveInBackground];
+                             [self setUpView];
+                         }
+                         else {
+                             NSLog(@"Error %@",error);
+                         }
+                     }];
+                    
+                } else {
+                    NSLog(@"User is not Logged in");
+                }
+                
+            }
+        }
+    }];
+}
+
+
+#pragma mark - LinkedIn Functionality
+- (void)addLIAction {
+    //Sync
+    [LISDKSessionManager createSessionWithAuth:[NSArray arrayWithObjects:LISDK_BASIC_PROFILE_PERMISSION, nil]
+                                         state:nil
+                        showGoToAppStoreDialog:YES
+                                  successBlock:^(NSString *returnState) {
+                                 
+                                      LISDKSession *session = [[LISDKSessionManager sharedInstance] session];
+                                      
+                                      //Execute
+                                      [[LISDKAPIHelper sharedInstance] apiRequest:@"https://www.linkedin.com/v1/people/~"
+                                                                           method:@"GET"
+                                                                             body:nil
+                                                                          success:^(LISDKAPIResponse *response) {
+                                                                              
+                                                                              //Read data response
+                                                                              NSData *jsonData = [response.data dataUsingEncoding:NSUTF8StringEncoding];
+                                                                              NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:nil];
+                                                                              PFUser *currentUser = [PFUser currentUser];
+                                                                              currentUser[@"linkedinURL"] = [JSON objectForKey:@"id"];
+                                                                              [currentUser saveInBackground];
+
+                                                                              [self setUpView];
+                                                                              
+                                                                          }
+                                                                            error:^(LISDKAPIError *apiError) {
+                                                                                NSLog(@"LI error called %@", apiError.description);
+                                                                                
+                                                                            }];
+                                      
+                                  }
+                                    errorBlock:^(NSError *error) {
+                                        NSLog(@"%s %@","LI error called! ", [error description]);
+                                    }
+     ];
+    
+}
+
+-(void)syncLinkedInSession{
+    [LISDKSessionManager createSessionWithAuth:[NSArray arrayWithObjects:LISDK_BASIC_PROFILE_PERMISSION, nil]
+                                         state:@"some state"
+                        showGoToAppStoreDialog:YES
+                                  successBlock:^(NSString *returnState) {
+                                      
+                                      LISDKSession *session = [[LISDKSessionManager sharedInstance] session];
+                                      NSLog(@"%s","Sync success!");
+                                      
+                                  }
+                                    errorBlock:^(NSError *error) {
+                                        NSLog(@"%s %@","error called! ", [error description]);
+                                    }
+     ];
+    
+}
+
+-(void)LIDeeplinkProfile{
+    //deeplink
+    NSLog(@"LI deeplink");
+    
+    DeeplinkSuccessBlock success = ^(NSString *returnState) {
+        NSLog(@"Success with returned state: %@",returnState);
+    };
+    DeeplinkErrorBlock error = ^(NSError *error, NSString *returnState) {
+        NSLog(@"Error with returned state: %@", returnState);
+        NSLog(@"Error %@", error);
+    };
+    
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *memberId = currentUser[@"linkedinURL"];
+    NSLog(@"id: %@", memberId);
+    
+    [[LISDKDeeplinkHelper sharedInstance] viewOtherProfile:memberId withState:@"viewOtherProfileButton" showGoToAppStoreDialog:YES success:success error:error];
+    
+}
+-(void)viewLinkedInProfile:(id)sender{
+    
+    if ([LISDKSessionManager hasValidSession] == YES) {
+        [self LIDeeplinkProfile];
+    }else{
+        [self syncLinkedInSession];
+        [self LIDeeplinkProfile];
     }
 }
 

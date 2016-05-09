@@ -20,4 +20,5 @@
 @property (weak, nonatomic) NSString *contactUserID;
 @property (weak, nonatomic) NSString *contactUserName;
 
+@property (weak, nonatomic) NSMutableArray *miniIcons; 
 @end

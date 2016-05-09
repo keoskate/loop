@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UILabel *userPhone;
 @property (weak, nonatomic) IBOutlet PFImageView *thumbNailImageView;
+@property (weak, nonatomic) IBOutlet UILabel *backgroundColor;
 
 @property (weak, nonatomic) UIImage *myUserPic;
 @property (weak, nonatomic) PFFile *myUserPicFile;
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) NSString *myUserLastName;
 @property (weak, nonatomic) NSString *myUserFirstName;
 @property (weak, nonatomic) NSString *myUserPhone;
+@property (weak, nonatomic) NSString *myUserScore;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *FacebookCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *SnapchatCell;

@@ -45,7 +45,6 @@
 		7D6F5B521A0B405100E6359C /* contacts-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B391A0B405100E6359C /* contacts-selected@2x.png */; };
 		7D6F5B531A0B405100E6359C /* contacts@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3A1A0B405100E6359C /* contacts@2x.png */; };
 		7D6F5B541A0B405100E6359C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3B1A0B405100E6359C /* Default@2x.png */; };
-		7D6F5B551A0B405100E6359C /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3C1A0B405100E6359C /* facebook@2x.png */; };
 		7D6F5B561A0B405100E6359C /* gmail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3D1A0B405100E6359C /* gmail@2x.png */; };
 		7D6F5B571A0B405100E6359C /* instagram@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3E1A0B405100E6359C /* instagram@2x.png */; };
 		7D6F5B581A0B405100E6359C /* nope-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F5B3F1A0B405100E6359C /* nope-button@2x.png */; };
@@ -74,6 +73,7 @@
 		7DD3B7EE19D3C85B00EDA948 /* KMARequestsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3B7ED19D3C85B00EDA948 /* KMARequestsTableViewController.m */; };
 		7DD3B7F119D3E4AA00EDA948 /* KMARequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */; };
 		7DD823EE1CA8EA3F00567254 /* KMAEditPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD823ED1CA8EA3F00567254 /* KMAEditPageViewController.m */; };
+		7DD9D4521CE0C7DA00857E8B /* linkedin-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DD9D4511CE0C7DA00857E8B /* linkedin-sdk.framework */; };
 		7DEBA65D1A633A12005E9D3F /* loop_icon@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA65C1A633A12005E9D3F /* loop_icon@2x.jpg */; };
 		7DEBA6651A6345B1005E9D3F /* login_dividers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA6611A6345B1005E9D3F /* login_dividers@2x.png */; };
 		7DEBA6661A6345B1005E9D3F /* login_loop_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DEBA6621A6345B1005E9D3F /* login_loop_logo@2x.png */; };
@@ -227,7 +227,6 @@
 		7D6F5B391A0B405100E6359C /* contacts-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contacts-selected@2x.png"; path = "Images/contacts-selected@2x.png"; sourceTree = "<group>"; };
 		7D6F5B3A1A0B405100E6359C /* contacts@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contacts@2x.png"; path = "Images/contacts@2x.png"; sourceTree = "<group>"; };
 		7D6F5B3B1A0B405100E6359C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Images/Default@2x.png"; sourceTree = "<group>"; };
-		7D6F5B3C1A0B405100E6359C /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "facebook@2x.png"; path = "Images/facebook@2x.png"; sourceTree = "<group>"; };
 		7D6F5B3D1A0B405100E6359C /* gmail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gmail@2x.png"; path = "Images/gmail@2x.png"; sourceTree = "<group>"; };
 		7D6F5B3E1A0B405100E6359C /* instagram@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "instagram@2x.png"; path = "Images/instagram@2x.png"; sourceTree = "<group>"; };
 		7D6F5B3F1A0B405100E6359C /* nope-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nope-button@2x.png"; path = "Images/nope-button@2x.png"; sourceTree = "<group>"; };
@@ -266,6 +265,7 @@
 		7DD3B7F019D3E4AA00EDA948 /* KMARequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMARequestTableViewCell.m; sourceTree = "<group>"; };
 		7DD823EC1CA8EA3F00567254 /* KMAEditPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMAEditPageViewController.h; sourceTree = "<group>"; };
 		7DD823ED1CA8EA3F00567254 /* KMAEditPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMAEditPageViewController.m; sourceTree = "<group>"; };
+		7DD9D4511CE0C7DA00857E8B /* linkedin-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "linkedin-sdk.framework"; sourceTree = "<group>"; };
 		7DEBA65C1A633A12005E9D3F /* loop_icon@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "loop_icon@2x.jpg"; sourceTree = "<group>"; };
 		7DEBA6611A6345B1005E9D3F /* login_dividers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_dividers@2x.png"; sourceTree = "<group>"; };
 		7DEBA6621A6345B1005E9D3F /* login_loop_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_loop_logo@2x.png"; sourceTree = "<group>"; };
@@ -472,6 +472,7 @@
 				7D0E739B19C452450086274C /* CoreLocation.framework in Frameworks */,
 				7D0E739C19C452450086274C /* libz.dylib in Frameworks */,
 				7D0E739D19C452450086274C /* MobileCoreServices.framework in Frameworks */,
+				7DD9D4521CE0C7DA00857E8B /* linkedin-sdk.framework in Frameworks */,
 				7D0E73C319C460F70086274C /* Parse.framework in Frameworks */,
 				7BF10B181CBB606300AC7F68 /* FBSDKCoreKit.framework in Frameworks */,
 				7D0E73A019C452450086274C /* Social.framework in Frameworks */,
@@ -581,7 +582,6 @@
 				7D6F5B371A0B405100E6359C /* app-icon@2x.png */,
 				7D6F5B381A0B405100E6359C /* blur1.png */,
 				7D6F5B3B1A0B405100E6359C /* Default@2x.png */,
-				7D6F5B3C1A0B405100E6359C /* facebook@2x.png */,
 				7D6F5B3D1A0B405100E6359C /* gmail@2x.png */,
 				7D6F5B3E1A0B405100E6359C /* instagram@2x.png */,
 				7D6F5B3F1A0B405100E6359C /* nope-button@2x.png */,
@@ -683,6 +683,7 @@
 		7DFA5EA519B811A900E67589 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DD9D4511CE0C7DA00857E8B /* linkedin-sdk.framework */,
 				C126B81B1CD2B931008E9066 /* libicucore.tbd */,
 				C126B8121CD2B319008E9066 /* Accelerate.framework */,
 				C126B8101CD2B30E008E9066 /* CoreTelephony.framework */,
@@ -1019,7 +1020,6 @@
 				7D6F5B5E1A0B405100E6359C /* search@2x.png in Resources */,
 				7D6F5B641A0B405100E6359C /* view-button@2x.png in Resources */,
 				7DB28DA11B3A362B00C08645 /* gmail@2x.png in Resources */,
-				7D6F5B551A0B405100E6359C /* facebook@2x.png in Resources */,
 				C126B8FD1CD2BA21008E9066 /* Media.xcassets in Resources */,
 				C126B8F41CD2BA09008E9066 /* snapshot_config.json in Resources */,
 				7D6F5B621A0B405100E6359C /* snapchat@2x.png in Resources */,
@@ -1192,8 +1192,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Keion Anvaripour (SRQDX8W6Z7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Keion Anvaripour (SRQDX8W6Z7)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1212,7 +1212,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "76eeb26f-7ddf-48a0-9c53-ab76e81da68e";
+				PROVISIONING_PROFILE = "63e317d7-9bd1-493a-92d1-211388e5c152";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1233,8 +1233,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Keion Anvaripour (U2L8DVK9NP)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Keion Anvaripour (SRQDX8W6Z7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Keion Anvaripour (SRQDX8W6Z7)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1246,7 +1246,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				PROVISIONING_PROFILE = "76eeb26f-7ddf-48a0-9c53-ab76e81da68e";
+				PROVISIONING_PROFILE = "63e317d7-9bd1-493a-92d1-211388e5c152";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
