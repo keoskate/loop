@@ -28,11 +28,11 @@
     
     self.userEmail.text = myUserEmail;
     self.userName.text = [[NSString stringWithFormat:@"%@ %@", myUserFirstName, myUserLastName] capitalizedString];
-    self.userUsername.text = [myUserUsername uppercaseString];
+    self.userUsername.text = [NSString stringWithFormat:@"%@ %@ %@%@", [myUserUsername uppercaseString], @"|", _myUserScore, @"pts" ];
     self.userPhone.text = myUserPhone;
     self.thumbNailImageView.file = myUserPicFile;
     self.thumbNailImageView.image = [UIImage imageNamed:@"placeholder.png"];
-    [self.backgroundColor setBackgroundColor:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
+    //[self.backgroundColor setBackgroundColor:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
     
     [self.thumbNailImageView loadInBackground:^(UIImage *image, NSError *error) {
         if (!error) {
@@ -47,7 +47,7 @@
             }
             
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@30 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];
@@ -90,9 +90,14 @@
             contact.imageData = imageData;
         }
     }];
+    if (myUserPhone != nil && ![myUserPhone isEqualToString:@""]) {
+         contact.phoneNumbers = @[ [CNLabeledValue labeledValueWithLabel:CNLabelPhoneNumberiPhone value:[CNPhoneNumber phoneNumberWithStringValue:contactPhoneNumber]] ];
+    }
+    if (myUserEmail != nil && ![myUserEmail isEqualToString:@""]) {
+        contact.emailAddresses = @[ [CNLabeledValue labeledValueWithLabel:CNLabelEmailiCloud value:contactEmail] ];
 
-    contact.emailAddresses = @[ [CNLabeledValue labeledValueWithLabel:CNLabelEmailiCloud value:contactEmail] ];
-    contact.phoneNumbers = @[ [CNLabeledValue labeledValueWithLabel:CNLabelPhoneNumberiPhone value:[CNPhoneNumber phoneNumberWithStringValue:contactPhoneNumber]] ];
+    }
+    
     
     
     NSError* contactError;
@@ -286,28 +291,46 @@
                 
             }
         }];
-    }else if ([shareStuff.mediaType isEqualToString:@"Email"]){
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-            if (!error) {
-                NSString *fbURL = [NSString stringWithFormat:@"mailto:%@", [user objectForKey:@"email"]];
-                NSURL *url = [NSURL URLWithString:fbURL];
-                [[UIApplication sharedApplication] openURL:url];
-                
-            }
-        }];
-    }else if ([shareStuff.mediaType isEqualToString:@"Phone"]){
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-            if (!error) {
-                NSString *fbURL = [NSString stringWithFormat:@"tel://%@", [user objectForKey:@"phoneNumber"]];
-                NSURL *url = [NSURL URLWithString:fbURL];
-                [[UIApplication sharedApplication] openURL:url];
-                
-            }
-        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Contact"]){
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"Contact %@", myUserFirstName]
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+        if (myUserEmail != nil && ![myUserEmail isEqualToString:@""]) {
+            UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Email"
+                                                                  style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                                      NSString *emailURL = [NSString stringWithFormat:@"mailto:%@", myUserEmail];
+                                                                      NSURL *url = [NSURL URLWithString:emailURL];
+                                                                      [[UIApplication sharedApplication] openURL:url];
+                                                                  }]; 
+            
+            [alert addAction:firstAction];
+        }
+        
+        if (myUserPhone != nil && ![myUserPhone isEqualToString:@""]) {
+            UIAlertAction *secondAction = [UIAlertAction actionWithTitle:@"Text"
+                                                                   style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                                       NSString *phoneURL = [NSString stringWithFormat:@"sms:%@", myUserPhone];
+                                                                       NSURL *url = [NSURL URLWithString:phoneURL];
+                                                                       [[UIApplication sharedApplication] openURL:url];
+                                                                   }]; // 3
+            UIAlertAction *thirdAction = [UIAlertAction actionWithTitle:@"Call"
+                                                                  style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                                      NSString *phoneURL = [NSString stringWithFormat:@"tel://%@", myUserPhone];
+                                                                      NSURL *url = [NSURL URLWithString:phoneURL];
+                                                                      [[UIApplication sharedApplication] openURL:url];
+                                                                  }];
+            [alert addAction:secondAction];
+            [alert addAction:thirdAction];
+        }
+
+        
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            //enter hanndler
+        }]; 
+        
+        [alert addAction:defaultAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
 
     }else if ([shareStuff.mediaType isEqualToString:@"Snapchat"]){
         PFQuery *query = [PFUser query];
@@ -317,6 +340,18 @@
                // NSString *snapURL = [NSString stringWithFormat:@"http://www.snapchat.com/add/%@", [user objectForKey:@"snapchatURL"]];
                 NSString *snapURL = [NSString stringWithFormat:@"snapchat://add/%@", [user objectForKey:@"snapchatURL"]];
                 NSURL *url = [NSURL URLWithString:snapURL];
+                [[UIApplication sharedApplication] openURL:url];
+                
+            }
+        }];
+    }else if ([shareStuff.mediaType isEqualToString:@"Twitter"]){
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"username" equalTo:[myUserUsername lowercaseString]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+            if (!error) {
+                
+                NSString *twitterURL = [NSString stringWithFormat:@"twitter://user?screen_name=%@", [user objectForKey:@"twitterURL"]];
+                NSURL *url = [NSURL URLWithString:twitterURL];
                 [[UIApplication sharedApplication] openURL:url];
                 
             }
@@ -348,6 +383,39 @@
         }];
     }
     
+}
+-(void)actionSheetPressed{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"My Alert"
+                                                                   message:@"This is an action sheet."
+                                                            preferredStyle:UIAlertControllerStyleActionSheet]; // 1   //OR preferredStyle:UIAlertControllerStyleAlert
+    UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Email"
+                                                          style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                              NSLog(@"Email");
+                                                          }]; // 2
+    UIAlertAction *secondAction = [UIAlertAction actionWithTitle:@"Call"
+                                                           style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                               NSLog(@"Call");
+                                                           }]; // 3
+    UIAlertAction *thirdAction = [UIAlertAction actionWithTitle:@"Text"
+                                                           style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                               NSLog(@"Text");
+                                                           }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            NSLog(@"You pressed button Cancel");
+    }]; // 8
+    
+    [alert addAction:firstAction]; // 4
+    [alert addAction:secondAction]; // 5
+    [alert addAction:thirdAction];
+    
+//    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+//        textField.placeholder = @"Input data...";
+//    }]; // 10
+    
+     [alert addAction:defaultAction]; // 9
+    
+    [self presentViewController:alert animated:YES completion:nil]; // 6
 }
 
 -(void)LIDeeplinkProfile{

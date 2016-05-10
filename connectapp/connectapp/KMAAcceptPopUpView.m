@@ -38,31 +38,59 @@
     
     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
     socialStuff.mediaType = @"Email";
-    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+    socialStuff.mediaImage = [UIImage imageNamed:@"emailIcon"];
     socialStuff.mediaData  = currentUser.email;
+    socialStuff.isAvailable = false;
     [self.shareOptions addObject:socialStuff];
+    
+    KMASocialMedia* socialStuff2 = [[KMASocialMedia alloc]init]; //email
+    socialStuff2.mediaType = @"Phone";
+    socialStuff2.mediaImage = [UIImage imageNamed:@"phoneIcon"];
+    socialStuff2.mediaData  = currentUser[@"phoneNumber"];
+    socialStuff.isAvailable = false;
+    [self.shareOptions addObject:socialStuff2];
     
     if ([currentUser objectForKey:@"facebookURL"]) {
         KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
         socialStuff.mediaType = @"Facebook";
-        socialStuff.mediaImage = [UIImage imageNamed:@"facebook.png"];
+        socialStuff.mediaImage = [UIImage imageNamed:@"fb_circle"];
         socialStuff.mediaData  = [currentUser objectForKey:@"facebookURL"];
+        socialStuff.isAvailable = false;
+        [self.shareOptions addObject:socialStuff];
+    }
+    if ([currentUser objectForKey:@"linkedinURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"LinkedIn";
+        socialStuff.mediaImage = [UIImage imageNamed:@"li_circle"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"linkedinURL"];
+        socialStuff.isAvailable = false;
+        [self.shareOptions addObject:socialStuff];
+    }
+    
+    if ([currentUser objectForKey:@"twitterURL"]) {
+        KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+        socialStuff.mediaType = @"Twitter";
+        socialStuff.mediaImage = [UIImage imageNamed:@"twitter_circle"];
+        socialStuff.mediaData  = [currentUser objectForKey:@"twitterURL"];
+        socialStuff.isAvailable = false;
         [self.shareOptions addObject:socialStuff];
     }
     
     if ([currentUser objectForKey:@"instagramURL"]) {
         KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
         socialStuff.mediaType = @"Instagram";
-        socialStuff.mediaImage = [UIImage imageNamed:@"instagram.png"];
+        socialStuff.mediaImage = [UIImage imageNamed:@"insta_circle"];
         socialStuff.mediaData  = [currentUser objectForKey:@"instagramURL"];
+        socialStuff.isAvailable = false;
         [self.shareOptions addObject:socialStuff];
     }
     
     if ([currentUser objectForKey:@"snapchatURL"]) {
         KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
         socialStuff.mediaType = @"Snapchat";
-        socialStuff.mediaImage = [UIImage imageNamed:@"snapchat.png"];
+        socialStuff.mediaImage = [UIImage imageNamed:@"snap_circle"];
         socialStuff.mediaData  = [currentUser objectForKey:@"snapchatURL"];
+        socialStuff.isAvailable = false;
         [self.shareOptions addObject:socialStuff];
     }
 }
@@ -177,12 +205,34 @@
     for (int i = 0; i < [self.shareOptions count]; i++) {
         
         KMAShareCell *shareCell = [self.selectionTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if ([shareCell.socialCheckbox isSelected]==YES)
-            [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
-        else
-            [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
-        
+        if ([shareCell.socialCheckbox isSelected]==YES){
+            if (shareCell.socialName.text != nil && ![shareCell.socialName.text isEqualToString:@""]) {
+                [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
+            }
+        }else{
+            if (shareCell.socialName.text != nil && ![shareCell.socialName.text isEqualToString:@""]) {
+                [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
+            }
+        }
     }
+#warning HACK BUG
+    [request setObject:@YES forKey:@"email"];
+    [request setObject:@YES forKey:@"phone"];
+//    // iterate to see which cells are selected
+//    for (int i = 0; i < [self.shareOptions count]; i++) {
+//        KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:i];
+//        
+//        if ( (BOOL)[shareStuff isAvailable]==YES){
+//            
+//            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+//                [request setObject:@YES forKey:[shareStuff.mediaType lowercaseString]];
+//            }
+//        }else{
+//            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+//                [request setObject:@NO forKey:[shareStuff.mediaType lowercaseString]];
+//            }
+//        }
+//    }
 #pragma warning - not secure
     [settingACL setReadAccess:YES forUser:user];
     [settingACL setReadAccess:YES forUser:currentUser];
@@ -284,41 +334,7 @@
                     [self performSegueWithIdentifier:@"showHome" sender:self];
                 }
             }];
-//            NSLog(@"Not found, creating new request2.");
-//            [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                if (succeeded) {
-//                    //DO SUCCESFUL REQUEST SENT
-//                   
-//                    /*
-//                    PFRelation *friendsRelation = [user relationForKey:@"friendsRelation"];
-//                    [friendsRelation addObject:[PFUser currentUser]];
-//                    NSLog(@"USER: %@", user);
-//                    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                        if(succeeded){
-//                            NSLog(@"added relation 2 succeeded! ");
-//                        }
-//                        else{
-//                            NSLog(@"Error2: %@", error);
-//                            //NSLog(@"added relation 2! ");
-//                        }
-//                    }];
-//                   */
-//                    
-//                    //NSLog(@"Added to Relation!*&@^");
-//                    
-//                    UIAlertView *alertView = [[UIAlertView alloc]
-//                                              initWithTitle:@"Cool!"
-//                                              message:@"You're In The Loop Now."
-//                                              delegate:nil cancelButtonTitle:@"OK"
-//                                              otherButtonTitles:nil];
-//                    [alertView show];
-//                } else {
-//                    NSLog(@"Error3%@", error);
-//                    
-//                }
-//            }];
-            
-            
+        
         } else { // No error (reqeuest already exists ? )
             NSString *status = [object objectForKey:@"status"];
             if ([status  isEqual: @"rejected"]) {
@@ -381,7 +397,10 @@
 }
 
 #pragma mark - Table view delegate
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 71.0f;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -394,7 +413,13 @@
     // NSLog(@"%lu ",self.shareOptions.count);
     return [self.shareOptions count];
 }
-
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    
+//    static NSString *CellIdentifier = @"ShareCell";
+//    KMAShareCell *shareCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+//    [self checkboxSelected:shareCell.socialCheckbox];
+//}
 #warning bug - image becomes null
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -408,10 +433,21 @@
                                         reuseIdentifier:CellIdentifier];
         return shareCell;
     }
-    NSLog(@"image: %@", shareStuff.mediaImage);
+//    if ([shareCell.socialCheckbox isSelected]==YES) {
+//        KMASocialMedia *newStuff = shareStuff;
+//        newStuff.isAvailable = (BOOL*)YES;
+//        [self.shareOptions setObject:newStuff atIndexedSubscript:indexPath.row];
+//    }else{
+//        KMASocialMedia *newStuff = shareStuff;
+//        newStuff.isAvailable = (BOOL*)NO;
+//        [self.shareOptions setObject:newStuff atIndexedSubscript:indexPath.row];
+//    }
+
+   
     shareCell.socialImage.image = shareStuff.mediaImage;
     shareCell.socialName.text = shareStuff.mediaType;
     shareCell.socialData.text = shareStuff.mediaData;
+    //[shareCell.socialCheckbox setSelected:shareStuff.isAvailable ];
     
     return shareCell;
     

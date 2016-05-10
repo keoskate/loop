@@ -13,6 +13,6 @@
 @property (strong, nonatomic) UIImage *mediaImage;
 @property (strong, nonatomic) NSString *mediaType;
 @property (strong, nonatomic) NSString *mediaData;
-
+@property (assign, nonatomic) BOOL isAvailable;
 
 @end

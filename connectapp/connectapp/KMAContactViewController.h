@@ -16,5 +16,6 @@
 //@property (atomic,strong) NSMutableArray *allUsers;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 - (IBAction)reloadFriendsAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end

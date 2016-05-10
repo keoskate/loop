@@ -63,11 +63,21 @@ UITableViewDataSource
 @property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *fbID;
 @property (nonatomic, strong) NSString *liID;
+@property (nonatomic, strong) NSString *twitterID;
+@property (nonatomic, strong) NSString *snapID;
+@property (nonatomic, strong) NSString *instaID;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *fbTableViewCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *liTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *snapTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *instaTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *twitterTableViewCell;
 @property (weak, nonatomic) IBOutlet UIButton *fbAddButton;
 @property (weak, nonatomic) IBOutlet UIButton *liAddButton;
+@property (weak, nonatomic) IBOutlet UIButton *snapAddButton;
+@property (weak, nonatomic) IBOutlet UIButton *instaAddButton;
+@property (weak, nonatomic) IBOutlet UIButton *twitterAddButton;
+
 
 - (IBAction)skipPage:(id)sender;
 - (IBAction)nextPage:(id)sender;

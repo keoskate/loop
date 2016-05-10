@@ -41,7 +41,10 @@
             [self.tableView reloadData];
         }
     }];
-    
+    if (![[PFUser currentUser].username isEqualToString:@"ka93"]) {
+        self.editButton.enabled = false;
+        self.editButton.tintColor = [UIColor clearColor];
+    }
     
    //spinner - refresh friends - not needed 
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -111,7 +114,6 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     contactDetailViewController.myUserFirstName = [user objectForKey:@"firstName"];
     contactDetailViewController.myUserLastName = [user objectForKey:@"lastName"];
-    contactDetailViewController.myUserPhone = user[@"phoneNumber"];
     contactDetailViewController.myUserScore = user[@"score"];
     contactDetailViewController.myUserPicFile = [user objectForKey:@"displayPicture"];
     
@@ -132,16 +134,19 @@
 #warning - Add linkedin, Insta, Snap
             NSString *status = [object objectForKey:@"status"];
             if ( [status  isEqual: @"accepted"]) {
+                
                 contactDetailViewController.shareOptions = [[NSMutableArray alloc] init];
+                
                 if ([[object objectForKey:@"email"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init]; //email
-                    socialStuff.mediaType = @"Email";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"gmail.png"];
+                    socialStuff.mediaType = @"Contact";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"phoneIcon"];
                     socialStuff.mediaData  = user.email;
                     contactDetailViewController.myUserEmail = user.email;
                     [contactDetailViewController.shareOptions addObject:socialStuff];
-                }else{
-                    contactDetailViewController.myUserEmail = @"Request Email";
+                }
+                if ([[object objectForKey:@"phone"]  isEqual: @YES]) {
+                    contactDetailViewController.myUserPhone = user[@"phoneNumber"];
                 }
                 
                 if ([[object objectForKey:@"facebook"]  isEqual: @YES]) {
@@ -151,6 +156,21 @@
                     socialStuff.mediaData  = [user objectForKey:@"facebookURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
+                if ([[object objectForKey:@"linkedin"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"LinkedIn";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"li_circle"];
+                    socialStuff.mediaData  = [user objectForKey:@"linkedinURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                if ([[object objectForKey:@"twitter"]  isEqual: @YES]) {
+                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
+                    socialStuff.mediaType = @"Twitter";
+                    socialStuff.mediaImage = [UIImage imageNamed:@"twitter_circle"];
+                    socialStuff.mediaData  = [user objectForKey:@"twitterURL"];
+                    [contactDetailViewController.shareOptions addObject:socialStuff];
+                }
+                
                 if ([[object objectForKey:@"instagram"]  isEqual: @YES]) {
                     KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
                     socialStuff.mediaType = @"Instagram";
@@ -165,13 +185,7 @@
                     socialStuff.mediaData  = [user objectForKey:@"snapchatURL"];
                     [contactDetailViewController.shareOptions addObject:socialStuff];
                 }
-                if ([[object objectForKey:@"linkedin"]  isEqual: @YES]) {
-                    KMASocialMedia* socialStuff = [[KMASocialMedia alloc]init];
-                    socialStuff.mediaType = @"LinkedIn";
-                    socialStuff.mediaImage = [UIImage imageNamed:@"li_circle"];
-                    socialStuff.mediaData  = [user objectForKey:@"linkedinURL"];
-                    [contactDetailViewController.shareOptions addObject:socialStuff];
-                }
+                
                 
             }else if ([status  isEqual: @"rejected"]){
                 NSLog(@"This User rejected you.");

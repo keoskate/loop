@@ -11,6 +11,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <linkedin-sdk/LISDK.h>
+#import <Fabric/Fabric.h>
+#import <TwitterKit/TwitterKit.h>
 #import "Mixpanel.h"
 #define MIXPANEL_TOKEN @"9ed3003ebccc7cd883383bcbb46b43d0"
 
@@ -71,6 +73,10 @@
     //set up mixpanel
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN launchOptions:launchOptions];
     
+    //twitter
+    [[Twitter sharedInstance] startWithConsumerKey:@"IzYsolh7vBE4BajtnGoB2OU27" consumerSecret:@"vd2byiPtM20nhWbeUg0esCdSlM17kzoI34FXe2fXZVGmafisDg"];
+    [Fabric with:@[[Twitter class]]];
+    
     return YES;
 }
 
@@ -118,6 +124,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     tabBarItem3.title = @"Profile";
     tabBarItem4.title = @"Contact";
     tabBarItem5.title = @"Settings";
+    
+    [tabBarItem1 setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [tabBarItem2 setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [tabBarItem3 setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [tabBarItem4 setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [tabBarItem5 setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
     
     [tabBarItem1 setFinishedSelectedImage:[UIImage imageNamed:@"searchActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"search"]];
     [tabBarItem2 setFinishedSelectedImage:[UIImage imageNamed:@"notificationsActive"] withFinishedUnselectedImage:[UIImage imageNamed:@"notifications"]];

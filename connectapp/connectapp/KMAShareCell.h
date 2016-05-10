@@ -13,7 +13,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *socialImage;
 @property (weak, nonatomic) IBOutlet UILabel *socialName;
 @property (weak, nonatomic) IBOutlet UILabel *socialData;
-@property (weak, nonatomic) IBOutlet UIButton *socialCheckbox;
+@property (strong, nonatomic) IBOutlet UIButton *socialCheckbox;
+@property (weak, nonatomic) IBOutlet UIButton *addButton;
 
 
 @end

@@ -37,6 +37,7 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UITableViewCell *liTableViewCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *igTableViewCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *scTableViewCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *twTableViewCell;
 
 //Text Fields
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
@@ -45,6 +46,7 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UITextField *linkedinField;
 @property (weak, nonatomic) IBOutlet UITextField *instagramField;
 @property (weak, nonatomic) IBOutlet UITextField *snapchatField;
+@property (weak, nonatomic) IBOutlet UITextField *twitterField;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 
 // Add buttons
@@ -52,6 +54,7 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UIButton *liConnectButton;
 @property (weak, nonatomic) IBOutlet UIButton *instaConnectButton;
 @property (weak, nonatomic) IBOutlet UIButton *snapConnectButton;
+@property (weak, nonatomic) IBOutlet UIButton *twitterConnectButton;
 
 @property (weak, nonatomic) IBOutlet FBSDKLoginButton *fb;
 

@@ -10,6 +10,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <linkedin-sdk/LISDK.h>
+#import <TwitterKit/TwitterKit.h>
+
 @interface KMAEditPageViewController ()
 
 @end
@@ -22,7 +24,7 @@
     [self.tableView reloadData];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    [self.backgroundColor setBackgroundColor: [UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
+    //[self.backgroundColor setBackgroundColor: [UIColor colorWithRed:0.09 green:0.73 blue:0.98 alpha:1.0]];
     
     UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     gestureRecognizer.cancelsTouchesInView = YES;
@@ -31,9 +33,22 @@
     [self.fbConnectButton addTarget:self
                          action:@selector(addFBAction)
                forControlEvents:UIControlEventTouchUpInside];
+    
     [self.liConnectButton addTarget:self
                              action:@selector(addLIAction)
                    forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.twitterConnectButton addTarget:self
+                             action:@selector(addTwitterAction)
+                   forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.instaConnectButton addTarget:self
+                                  action:@selector(addInstaAction)
+                        forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.snapConnectButton addTarget:self
+                                  action:@selector(addSnapAction)
+                        forControlEvents:UIControlEventTouchUpInside];
     
     [self setUpView];
  
@@ -53,9 +68,11 @@
     self.snapchatField.placeholder = currentUser[@"snapchatURL"];
     self.linkedinField.placeholder = currentUser[@"linkedinURL"];
     self.facebookField.placeholder = currentUser[@"facebookURL"];
+    self.twitterField.placeholder = currentUser[@"twitterURL"];
     
     self.photoField.file = [currentUser objectForKey:@"displayPicture"];
     self.photoField.image = [UIImage imageNamed:@"placeholder.png"];
+    //[self.photoField loadInBackground];
     [self.photoField loadInBackground:^(UIImage *image, NSError *error) {
         if (!error) {
             /* Blur effect */
@@ -63,7 +80,7 @@
             [gaussianBlurFilter setDefaults];
             CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@10 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@20 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];
@@ -113,6 +130,14 @@
         self.snapConnectButton.hidden = false;
         self.scTableViewCell.accessoryType = UITableViewCellAccessoryNone;
     }
+    
+    if (![[currentUser objectForKey:@"twitterURL"] isEqualToString:@""] && [currentUser objectForKey:@"twitterURL"] != nil) {
+        self.twTableViewCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.twitterConnectButton.hidden = true;
+    }else{
+        self.twitterConnectButton.hidden = false;
+        self.twTableViewCell.accessoryType = UITableViewCellAccessoryNone;
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -137,6 +162,7 @@
     [_linkedinField resignFirstResponder];
     [_snapchatField resignFirstResponder];
     [_instagramField resignFirstResponder];
+    [_twitterField resignFirstResponder];
     [_nameField resignFirstResponder];
 }
 
@@ -154,7 +180,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    
 }
 // enables save button again when a textfield change is detected
 -(void) textFieldDidChange:(UITextField *)textField{
@@ -457,6 +482,75 @@
         [self syncLinkedInSession];
         [self LIDeeplinkProfile];
     }
+}
+
+#pragma mark - twitter
+- (void)addTwitterAction {
+    // Objective-C
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
+        if (session) {
+            NSLog(@"signed in as %@", [session userName]);
+            NSLog(@"USER ID::: %@", [session userID]);
+            PFUser *currentUser = [PFUser currentUser];
+            currentUser[@"twitterURL"] = [session userName];
+            [currentUser saveInBackground];
+            [self setUpView];
+        } else {
+            NSLog(@"error: %@", [error localizedDescription]);
+        }
+    }];
+}
+
+
+- (void)addInstaAction {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Instgram" message:@"Enter your instagram username" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+    }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        PFUser *currentUser = [PFUser currentUser];
+        currentUser[@"instagramURL"] = alert.textFields.firstObject.text;
+        [currentUser saveInBackground];
+        [self setUpView];
+        
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:defaultAction];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"@username";
+    }];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (void)addSnapAction {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Snapchat" message:@"Enter your snapchat username" preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+    }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        PFUser *currentUser = [PFUser currentUser];
+        currentUser[@"snapchatURL"] = alert.textFields.firstObject.text;
+        [currentUser saveInBackground];
+        [self setUpView];
+
+        
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:defaultAction];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"@username";
+    }];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

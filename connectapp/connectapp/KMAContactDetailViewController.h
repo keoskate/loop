@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import "KMAContactViewController.h"
 
-@interface KMAContactDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface KMAContactDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *userUsername;
 @property (weak, nonatomic) IBOutlet UILabel *userEmail;

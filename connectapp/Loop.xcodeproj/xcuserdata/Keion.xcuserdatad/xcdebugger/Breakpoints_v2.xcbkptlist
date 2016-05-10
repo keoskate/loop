@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "connectapp/KMAContactDetailViewController.m"
-            timestampString = "484475010.622548"
+            timestampString = "484551249.162262"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "-parseAddressWithContac:"
             landmarkType = "5">
          </BreakpointContent>

@@ -10,6 +10,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <linkedin-sdk/LISDK.h>
+#import <TwitterKit/TwitterKit.h>
 @interface KMASignUpViewController ()<FBSDKLoginButtonDelegate>
 
 @end
@@ -60,18 +61,26 @@
     [self.textField1 becomeFirstResponder];
     
     [self.fbAddButton addTarget:self
-                         action:@selector(addFBAction)
+                         action:@selector(addFBActionSU)
                forControlEvents:UIControlEventTouchUpInside];
     
     [self.liAddButton addTarget:self
-                         action:@selector(addLIAction)
+                         action:@selector(addLIActionSU)
                forControlEvents:UIControlEventTouchUpInside];
     
+    [self.instaAddButton addTarget:self
+                         action:@selector(addInstaActionSU)
+               forControlEvents:UIControlEventTouchUpInside];
+    [self.snapAddButton addTarget:self
+                         action:@selector(addSnapActionSU)
+               forControlEvents:UIControlEventTouchUpInside];
+    [self.twitterAddButton addTarget:self
+                           action:@selector(addTwitterActionSU)
+                 forControlEvents:UIControlEventTouchUpInside];
     
     [self setUpUI];
     
     self.fb.readPermissions = @[@"public_profile", @"email"];
-
     [FBSDKProfile enableUpdatesOnAccessTokenChange:YES];
 }
 
@@ -88,7 +97,28 @@
     }else{
         self.liAddButton.hidden = false;
     }
-
+    
+    if (![_twitterID isEqualToString:@""] && _twitterID != nil) {
+        self.twitterTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.twitterAddButton.hidden = true;
+    }else{
+        self.twitterAddButton.hidden = false;
+    }
+    
+    if (![_instaID isEqualToString:@""] && _instaID != nil) {
+        self.instaTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.instaAddButton.hidden = true;
+    }else{
+        self.instaAddButton.hidden = false;
+    }
+    
+    if (![_snapID isEqualToString:@""] && _snapID != nil) {
+        self.snapTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.snapAddButton.hidden = true;
+    }else{
+        self.snapAddButton.hidden = false;
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -153,14 +183,17 @@
             [newUser setObject:_liID forKey:@"linkedinURL"];
         }
 
-        if (![self.snapchatField.text isEqualToString:@""] && self.snapchatField.text != nil) {
-            [newUser setObject:[self.snapchatField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"snapchatURL"];
+        if (![self.snapID isEqualToString:@""] && self.snapID != nil) {
+            [newUser setObject:[self.snapID stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"snapchatURL"];
         }
-        if (![self.instagramField.text  isEqualToString: @""] && self.instagramField.text != nil) {
-            [newUser setObject:[self.instagramField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"instagramURL"];
+        if (![self.instaID  isEqualToString: @""] && self.instaID != nil) {
+            [newUser setObject:[self.instaID stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"instagramURL"];
+        }
+        if (![self.twitterID  isEqualToString: @""] && self.twitterID != nil) {
+            [newUser setObject:[self.twitterID stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"twitterURL"];
         }
         
-        [newUser setObject:0 forKey:@"score"];
+        [newUser setObject:[NSNumber numberWithInt:0] forKey:@"score"];
         
         
 #warning add more API URLs
@@ -606,7 +639,7 @@
 }
 
 
--(void)addFBAction{
+-(void)addFBActionSU {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions:@[@"email"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
@@ -644,7 +677,7 @@
     }];
 }
 
-- (void)addLIAction {
+- (void)addLIActionSU {
     //Sync
     [LISDKSessionManager createSessionWithAuth:[NSArray arrayWithObjects:LISDK_BASIC_PROFILE_PERMISSION, nil]
                                          state:nil
@@ -665,7 +698,6 @@
                               
                               self.liID = [JSON objectForKey:@"id"];
                             
-                              
                               [self setUpUI];
                               
                           }error:^(LISDKAPIError *apiError) {
@@ -678,5 +710,67 @@
                   }
      ];
     
+}
+
+- (void)addTwitterActionSU {
+    // Objective-C
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
+        if (session) {
+
+            self.twitterID = [session userName];
+            [self setUpUI];
+        } else {
+            NSLog(@"error: %@", [error localizedDescription]);
+        }
+    }];
+}
+
+
+- (void)addInstaActionSU {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Instgram" message:@"Enter your instagram username" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+    }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Connect" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        self.instaID = alert.textFields.firstObject.text;
+        [self setUpUI];
+        
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:defaultAction];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"@username";
+    }];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (void)addSnapActionSU {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Snapchat" message:@"Enter your snapchat username" preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+    }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Add" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+        self.snapID = alert.textFields.firstObject.text;
+
+        [self setUpUI];
+        
+        
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:defaultAction];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"@username";
+    }];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 @end
