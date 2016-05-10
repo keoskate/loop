@@ -1,0 +1,19 @@
+#import "<Your>TweetViewController.h"
+#######
+#import <TwitterKit/TwitterKit.h>
+#######
+
+@implementation <Your>TweetViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+#######
+    TWTRAPIClient *client = [[TWTRAPIClient alloc] init];
+    [client loadTweetWithID:@"20" completion:^(TWTRTweet *tweet, NSError *error) {
+        TWTRTweetView *tweetView = [[TWTRTweetView alloc] initWithTweet:tweet style:TWTRTweetViewStyleRegular];
+        [self.view addSubview:tweetView];
+    }];
+#######
+}
+
+@end

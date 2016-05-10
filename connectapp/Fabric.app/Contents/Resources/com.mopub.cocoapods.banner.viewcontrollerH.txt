@@ -1,0 +1,14 @@
+#######
+#import "MPAdView.h"
+#######
+
+@interface <Your>BannerViewController : UIViewController
+#######
+ <MPAdViewDelegate>
+#######
+
+#######
+@property (nonatomic, retain) MPAdView *adView;
+#######
+
+@end

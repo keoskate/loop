@@ -1,0 +1,16 @@
+import UIKit
+#######
+import TwitterKit
+#######
+
+class <Your>TweetViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+#######
+        TWTRAPIClient().loadTweetWithID("20") { (tweet, error) in
+            self.view.addSubview(TWTRTweetView(tweet: tweet))
+        }
+#######
+    }
+}
