@@ -23,10 +23,10 @@ UITableViewDataSource
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *backgroundColor;
 
-@property (weak, nonatomic) IBOutlet PFImageView *photoField;
+@property (strong, nonatomic) IBOutlet PFImageView *photoField;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundBlur;
 
-@property (nonatomic, weak) UIImage *pickedImage;
+@property (nonatomic, strong) UIImage *pickedImage;
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *loopidLabel;

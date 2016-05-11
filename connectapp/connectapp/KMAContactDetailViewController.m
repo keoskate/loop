@@ -47,7 +47,7 @@
             }
             
             [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@15 forKey:kCIInputRadiusKey];
+            [gaussianBlurFilter setValue:@20 forKey:kCIInputRadiusKey];
             
             CIImage *outputImage = [gaussianBlurFilter outputImage];
             CIContext *context   = [CIContext contextWithOptions:nil];

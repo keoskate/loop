@@ -69,26 +69,30 @@
     self.linkedinField.placeholder = currentUser[@"linkedinURL"];
     self.facebookField.placeholder = currentUser[@"facebookURL"];
     self.twitterField.placeholder = currentUser[@"twitterURL"];
-    
-    self.photoField.file = [currentUser objectForKey:@"displayPicture"];
-    self.photoField.image = [UIImage imageNamed:@"placeholder.png"];
-    //[self.photoField loadInBackground];
-    [self.photoField loadInBackground:^(UIImage *image, NSError *error) {
-        if (!error) {
-            /* Blur effect */
-            CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-            [gaussianBlurFilter setDefaults];
-            CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
-            [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
-            [gaussianBlurFilter setValue:@20 forKey:kCIInputRadiusKey];
-            
-            CIImage *outputImage = [gaussianBlurFilter outputImage];
-            CIContext *context   = [CIContext contextWithOptions:nil];
-            CGImageRef cgimg     = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
-            self.backgroundBlur.image       = [UIImage imageWithCGImage:cgimg];
-            
-        }
-    }];
+    if (self.pickedImage != nil) {
+        self.photoField.image = self.pickedImage;
+    }else {
+        self.photoField.file = [currentUser objectForKey:@"displayPicture"];
+        self.photoField.image = [UIImage imageNamed:@"placeholder.png"];
+        //[self.photoField loadInBackground];
+        [self.photoField loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                /* Blur effect */
+                CIFilter *gaussianBlurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+                [gaussianBlurFilter setDefaults];
+                CIImage *inputImage = [CIImage imageWithCGImage:[image CGImage]];
+                [gaussianBlurFilter setValue:inputImage forKey:kCIInputImageKey];
+                [gaussianBlurFilter setValue:@20 forKey:kCIInputRadiusKey];
+                
+                CIImage *outputImage = [gaussianBlurFilter outputImage];
+                CIContext *context   = [CIContext contextWithOptions:nil];
+                CGImageRef cgimg     = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
+                self.backgroundBlur.image       = [UIImage imageWithCGImage:cgimg];
+                
+            }
+        }];
+    }
+
     
     self.photoField.layer.borderWidth = 2;
     self.photoField.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -223,8 +227,8 @@
         self.nameField.text = @"";
     }
     
-    if (self.photoField.image != nil) {
-        NSData *imageData = UIImageJPEGRepresentation(self.photoField.image, 0.05f);
+    if (self.pickedImage != nil) {
+        NSData *imageData = UIImageJPEGRepresentation(self.pickedImage, 0.05f);
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
         [currentUser setObject:imageFile forKey:@"displayPicture"];
     }
@@ -343,7 +347,8 @@
         
     } else {
         //[self.imageButton setImage:pickedImage forState:UIControlStateNormal];
-        self.photoField.image = pickedImage;
+        NSLog(@"Here %@", self.pickedImage);
+        self.photoField.image = self.pickedImage;
         //[self setUpView];
     }
 }
