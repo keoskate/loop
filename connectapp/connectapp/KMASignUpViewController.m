@@ -661,7 +661,7 @@
                              NSLog(@"Fetched User Information:%@", result);
 
                              self.fbID = [result objectForKey:@"id"];
-                             [self setUpUI];
+                             
                          }
                          else {
                              NSLog(@"Error %@",error);
@@ -675,6 +675,7 @@
             }
         }
     }];
+    [self setUpUI];
 }
 
 - (void)addLIActionSU {
@@ -697,8 +698,10 @@
                               NSDictionary *JSON = [NSJSONSerialization JSONObjectWithData:jsonData options: NSJSONReadingMutableContainers error:nil];
                               
                               self.liID = [JSON objectForKey:@"id"];
+                              self.liTableViewCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                              self.liAddButton.hidden = true;
                             
-                              [self setUpUI];
+                              
                               
                           }error:^(LISDKAPIError *apiError) {
                                 NSLog(@"LI error called %@", apiError.description);
@@ -709,6 +712,7 @@
                         NSLog(@"%s %@","LI error called! ", [error description]);
                   }
      ];
+    [self setUpUI];
     
 }
 
@@ -718,11 +722,12 @@
         if (session) {
 
             self.twitterID = [session userName];
-            [self setUpUI];
+            
         } else {
             NSLog(@"error: %@", [error localizedDescription]);
         }
     }];
+    [self setUpUI];
 }
 
 

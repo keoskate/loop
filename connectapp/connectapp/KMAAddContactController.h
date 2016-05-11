@@ -29,6 +29,7 @@
 
 
 @property (nonatomic, strong) NSMutableArray *shareOptions;
+@property (nonatomic, strong) NSMutableArray *checkedData;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 
 
@@ -39,5 +40,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *myConnLabel;
 @property (weak, nonatomic) IBOutlet PFImageView *requestImage;
 @property (weak, nonatomic) IBOutlet PFImageView *userImage;
-
+-(void)onCheck:(id)sender;
 @end

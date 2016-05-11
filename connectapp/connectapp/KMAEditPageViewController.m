@@ -223,8 +223,8 @@
         self.nameField.text = @"";
     }
     
-    if (self.pickedImage != nil) {
-        NSData *imageData = UIImageJPEGRepresentation(_pickedImage, 0.05f);
+    if (self.photoField.image != nil) {
+        NSData *imageData = UIImageJPEGRepresentation(self.photoField.image, 0.05f);
         PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
         [currentUser setObject:imageFile forKey:@"displayPicture"];
     }
@@ -341,11 +341,10 @@
     
     if (pickedImage == nil) {
         
-//        [self.imageButton setImage:[UIImage imageNamed:@"icn_noimage"] forState:UIControlStateNormal];
-        
     } else {
         //[self.imageButton setImage:pickedImage forState:UIControlStateNormal];
         self.photoField.image = pickedImage;
+        //[self setUpView];
     }
 }
 
@@ -382,7 +381,7 @@
                              PFUser *currentUser = [PFUser currentUser];
                              currentUser[@"facebookURL"] = [result objectForKey:@"id"];
                              [currentUser saveInBackground];
-                             [self setUpView];
+                             
                          }
                          else {
                              NSLog(@"Error %@",error);
@@ -396,6 +395,7 @@
             }
         }
     }];
+    [self setUpView];
 }
 
 
@@ -422,8 +422,6 @@
                                                                               currentUser[@"linkedinURL"] = [JSON objectForKey:@"id"];
                                                                               [currentUser saveInBackground];
 
-                                                                              [self setUpView];
-                                                                              
                                                                           }
                                                                             error:^(LISDKAPIError *apiError) {
                                                                                 NSLog(@"LI error called %@", apiError.description);
@@ -435,7 +433,7 @@
                                         NSLog(@"%s %@","LI error called! ", [error description]);
                                     }
      ];
-    
+    [self setUpView];
 }
 
 -(void)syncLinkedInSession{
@@ -494,11 +492,12 @@
             PFUser *currentUser = [PFUser currentUser];
             currentUser[@"twitterURL"] = [session userName];
             [currentUser saveInBackground];
-            [self setUpView];
+            
         } else {
             NSLog(@"error: %@", [error localizedDescription]);
         }
     }];
+    [self setUpView];
 }
 
 

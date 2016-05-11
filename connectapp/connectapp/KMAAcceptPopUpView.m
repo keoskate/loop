@@ -201,38 +201,20 @@
         request[@"fromPicture"] = [currentUser objectForKey:@"displayPicture"];
 
     
-    //iterate to see which cells are selected
+    // iterate to see which cells are selected
     for (int i = 0; i < [self.shareOptions count]; i++) {
-        
-        KMAShareCell *shareCell = [self.selectionTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if ([shareCell.socialCheckbox isSelected]==YES){
-            if (shareCell.socialName.text != nil && ![shareCell.socialName.text isEqualToString:@""]) {
-                [request setObject:@YES forKey:[shareCell.socialName.text lowercaseString]];
+        KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:i];
+        if ( [shareStuff isAvailable]==YES){
+            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+                [request setObject:@YES forKey:[shareStuff.mediaType lowercaseString]];
             }
-        }else{
-            if (shareCell.socialName.text != nil && ![shareCell.socialName.text isEqualToString:@""]) {
-                [request setObject:@NO forKey:[shareCell.socialName.text lowercaseString]];
+        }else {
+            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+                [request setObject:@NO forKey:[shareStuff.mediaType lowercaseString]];
             }
         }
     }
-#warning HACK BUG
-    [request setObject:@YES forKey:@"email"];
-    [request setObject:@YES forKey:@"phone"];
-//    // iterate to see which cells are selected
-//    for (int i = 0; i < [self.shareOptions count]; i++) {
-//        KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:i];
-//        
-//        if ( (BOOL)[shareStuff isAvailable]==YES){
-//            
-//            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
-//                [request setObject:@YES forKey:[shareStuff.mediaType lowercaseString]];
-//            }
-//        }else{
-//            if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
-//                [request setObject:@NO forKey:[shareStuff.mediaType lowercaseString]];
-//            }
-//        }
-//    }
+
 #pragma warning - not secure
     [settingACL setReadAccess:YES forUser:user];
     [settingACL setReadAccess:YES forUser:currentUser];
@@ -265,7 +247,7 @@
             
             UIAlertView *alertView = [[UIAlertView alloc]
                                       initWithTitle:@"Cool!"
-                                      message:@"You're In The Loop Now."
+                                      message:@"You're now in the Loop."
                                       delegate:nil cancelButtonTitle:@"OK"
                                       otherButtonTitles:nil];
             [alertView show];
@@ -413,13 +395,10 @@
     // NSLog(@"%lu ",self.shareOptions.count);
     return [self.shareOptions count];
 }
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    
-//    static NSString *CellIdentifier = @"ShareCell";
-//    KMAShareCell *shareCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    [self checkboxSelected:shareCell.socialCheckbox];
-//}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 #warning bug - image becomes null
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -433,24 +412,27 @@
                                         reuseIdentifier:CellIdentifier];
         return shareCell;
     }
-//    if ([shareCell.socialCheckbox isSelected]==YES) {
-//        KMASocialMedia *newStuff = shareStuff;
-//        newStuff.isAvailable = (BOOL*)YES;
-//        [self.shareOptions setObject:newStuff atIndexedSubscript:indexPath.row];
-//    }else{
-//        KMASocialMedia *newStuff = shareStuff;
-//        newStuff.isAvailable = (BOOL*)NO;
-//        [self.shareOptions setObject:newStuff atIndexedSubscript:indexPath.row];
-//    }
-
+    
+    [shareCell.socialCheckbox addTarget:self action:@selector(onCheck:) forControlEvents:UIControlEventTouchUpInside];
+    [shareCell.socialCheckbox setTag:indexPath.row];
    
     shareCell.socialImage.image = shareStuff.mediaImage;
     shareCell.socialName.text = shareStuff.mediaType;
     shareCell.socialData.text = shareStuff.mediaData;
-    //[shareCell.socialCheckbox setSelected:shareStuff.isAvailable ];
+    [shareCell.socialCheckbox setSelected:shareStuff.isAvailable ];
     
     return shareCell;
     
+}
+
+-(void)onCheck:(id)sender {
+    if ([[self.shareOptions objectAtIndex:[sender tag]] isAvailable] == YES) {
+        [[self.shareOptions objectAtIndex:[sender tag]] setIsAvailable:NO];
+    }else{
+        [[self.shareOptions objectAtIndex:[sender tag]] setIsAvailable:YES];
+    }
+    
+    [self.selectionTableView reloadData];
 }
 
 @end
