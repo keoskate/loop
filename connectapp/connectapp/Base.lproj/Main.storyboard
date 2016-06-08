@@ -217,7 +217,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="335" height="71"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="336" height="70.5"/>
                                                 <mask key="constraints">
                                                     <exclude reference="NGo-aH-oaf"/>
                                                     <exclude reference="Uu0-Af-Ag7"/>
@@ -1021,7 +1021,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="N9q-ao-Ycl" rowHeight="68" style="IBUITableViewCellStyleDefault" id="Dyk-ui-feR">
-                                        <rect key="frame" x="0.0" y="504" width="600" height="68"/>
+                                        <rect key="frame" x="0.0" y="436" width="600" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dyk-ui-feR" id="f0n-GJ-ITE">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="67.5"/>
@@ -1038,7 +1038,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="rrF-d1-DbL" rowHeight="68" style="IBUITableViewCellStyleDefault" id="hVG-aO-0yj">
-                                        <rect key="frame" x="0.0" y="436" width="600" height="68"/>
+                                        <rect key="frame" x="0.0" y="504" width="600" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hVG-aO-0yj" id="Ker-Rm-Vo3">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="67.5"/>
@@ -2426,7 +2426,8 @@
                                                             <exclude reference="l1j-WT-YYE"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="148" y="24.5" width="84" height="29"/>
                                                         <mask key="constraints">
                                                             <include reference="l1j-WT-YYE"/>
                                                         </mask>
@@ -3780,7 +3781,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="3A7-vX-LcD"/>
                                                     <include reference="jUD-st-3A6"/>
@@ -3821,7 +3822,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="FRV-pN-fJh"/>
                                                     <include reference="qf3-0H-rZh"/>
@@ -3862,7 +3863,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="3Ad-aT-86U"/>
                                                     <include reference="4RM-Ze-TSJ"/>
@@ -3903,7 +3904,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="82"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="81.5"/>
                                                 <mask key="constraints">
                                                     <include reference="QhU-5B-Ubq"/>
                                                     <include reference="TVB-9X-UaQ"/>
@@ -4001,7 +4002,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="100"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="400" height="99.5"/>
                                                 <mask key="constraints">
                                                     <include reference="E2x-xr-Y3q"/>
                                                     <include reference="FWa-vi-QZo"/>

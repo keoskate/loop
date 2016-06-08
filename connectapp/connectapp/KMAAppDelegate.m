@@ -29,6 +29,7 @@
     [Parse setApplicationId:@"ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD"
                   clientKey:@"NhONajvTcZfylI29SVs3Tk46vuCl2940YaAf95gF"];
 
+    
     [PFImageView class];
 
     //privacy ACL
