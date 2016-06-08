@@ -112,26 +112,6 @@
     
     //Handle case about adding self
     if ([currentUser.username lowercaseString] == searchedUser) {
-
-        // Send push notification to query
-        PFQuery *pushQuery = [PFInstallation query];
-        [pushQuery whereKey:@"loopID" equalTo:@"sk8r"];
-        
-        // Send push notification to query
-        PFPush *push = [[PFPush alloc] init];
-        [push setQuery:pushQuery]; // Set our Installation query
-        [push setMessage:@"Chill."];
-        [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"The push campaign has been created.");
-            } else if (error.code == kPFErrorPushMisconfigured) {
-                NSLog(@"Could not send push. Push is misconfigured: %@", error.description);
-            } else {
-                NSLog(@"Error sending push: %@", error.description);
-            }
-        }];
-        
-        
         NSLog(@"Can't add self");
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Opps!"
@@ -141,13 +121,11 @@
         [alertView show];
         return;
     }
-    
+    //#1
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
-            
-            //Attempt to add contact to friend relations
+            //#2 Attempt to add contact to friend relations
             NSLog(@"Found: %@",[(PFUser *)object objectForKey:@"firstName"]);
-           
             [self requestFriendship:(PFUser *)object];
         }else {
             NSLog(@"ErrorA: %@", error);//, [error userInfo]);
@@ -164,21 +142,21 @@
     PFQuery * query = [PFQuery queryWithClassName:@"FriendRequest"];
     [query whereKey:@"toUser" equalTo:user];
     [query whereKey:@"fromUser" equalTo:[PFUser currentUser]];
-    
+    //#3 - See if request already exists
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        //if no request currently exists
-       
-        if (error) {
+        if (error) {   //if no request currently exists
             
+            //#4 - Initialize and create the request (1)
             PFObject *request = [PFObject objectWithClassName:@"FriendRequest"];
             PFACL *settingACL = [PFACL ACL];
             
-            //create request 1
+            request[@"status"] = @"requested";
             request[@"fromUser"] = currentUser;
             request[@"displayID"] = currentUser.username;
             request[@"toUser"] = user;
-            request[@"displayName"] = [NSString stringWithFormat:@"%@ %@", currentUser[@"firstName"], currentUser[@"lastName"]];
-            request[@"status"] = @"requested";
+            request[@"displayName"] = [NSString stringWithFormat:@"%@ %@",
+                                       currentUser[@"firstName"], currentUser[@"lastName"]];
+            
             if ([user objectForKey:@"displayPicture"] != nil)
                 request[@"toPicture"] = [user objectForKey:@"displayPicture"];
             if ([currentUser objectForKey:@"displayPicture"] != nil)
@@ -188,15 +166,15 @@
             for (int i = 0; i < [self.shareOptions count]; i++) {
                 KMASocialMedia *shareStuff = [self.shareOptions objectAtIndex:i];
                 if ( [shareStuff isAvailable]==YES){
-                    if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+                    if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""])
                         [request setObject:@YES forKey:[shareStuff.mediaType lowercaseString]];
-                    }
+                    
                     int value = [loopScore intValue];
                     loopScore = [NSNumber numberWithInt:value + 1];
                 }else {
-                    if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""]) {
+                    if (shareStuff.mediaType != nil && ![shareStuff.mediaType isEqualToString:@""])
                         [request setObject:@NO forKey:[shareStuff.mediaType lowercaseString]];
-                    }
+                    
                 }
             }
             
@@ -214,22 +192,20 @@
             [settingACL setWriteAccess:YES forUser:user];
             [settingACL setWriteAccess:YES forUser:currentUser];
             request.ACL = settingACL;
-            //currentUser.ACL = settingACL;
-
+            
+            //#5 - Save the request, handle success
             NSLog(@"Not found, creating new request.");
             [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (error) {
                     NSLog(@"Error saving request %@", error);
                 }else {//DO SUCCESFUL REQUEST SENT
                     
-                    // Send push notification to query
+                    //#6 - Send push notification to query
                     PFQuery *pushQuery = [PFInstallation query];
                     [pushQuery whereKey:@"loopID" equalTo:user.username];
-                    
                     PFPush *push = [[PFPush alloc] init];
                     [push setQuery:pushQuery]; // Set our Installation query
                     [push setMessage:[[currentUser[@"firstName"] capitalizedString] stringByAppendingString:@" wants to connect"]];
-
                     [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         if (succeeded) {
                             NSLog(@"The push campaign has been created.");
@@ -245,13 +221,14 @@
                                               //message:@"Request Sent"
                                               message:[NSString stringWithFormat:@"Request sent to %@ %@.", alertnameFirst, alertnameLast]
                                               delegate:nil cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
+                                            otherButtonTitles:nil];
+                    //#7 - Done.
                     [alertView show];
                     [self performSegueWithIdentifier:@"showHome" sender:self];
             
                 }
             }];
-            
+        // #3b - Handle circular requests
         } else {
             NSString *status = [object objectForKey:@"status"];
             NSString *alertnameFirst = user[@"firstName"];

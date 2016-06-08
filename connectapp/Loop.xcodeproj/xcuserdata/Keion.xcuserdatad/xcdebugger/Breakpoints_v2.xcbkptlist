@@ -156,39 +156,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "226"
-            endingLineNumber = "226">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[KMAAcceptPopUpView createFriendRequest:]"
-                  moduleName = "Loop"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Keion/Desktop/Spring%2016/cs404/loop/connectapp/connectapp/KMAAcceptPopUpView.m"
-                  timestampString = "484635181.298905"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "226"
-                  endingLineNumber = "226"
-                  offsetFromSymbolStart = "2324">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__42-[KMAAcceptPopUpView createFriendRequest:]_block_invoke"
-                  moduleName = "Loop"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Keion/Desktop/Spring%2016/cs404/loop/connectapp/connectapp/KMAAcceptPopUpView.m"
-                  timestampString = "484635181.299201"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "227"
-                  endingLineNumber = "227"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
+            endingLineNumber = "226"
+            landmarkName = "-createFriendRequest:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
