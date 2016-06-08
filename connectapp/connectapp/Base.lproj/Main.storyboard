@@ -217,7 +217,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="336" height="70.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="335" height="70.5"/>
                                                 <mask key="constraints">
                                                     <exclude reference="NGo-aH-oaf"/>
                                                     <exclude reference="Uu0-Af-Ag7"/>
@@ -1115,7 +1115,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="userKnnctID" destination="OqB-F8-y33" id="lKe-1k-Llh"/>
-                        <outlet property="userPicture" destination="mme-el-Dyv" id="pnZ-r0-qgD"/>
                         <segue destination="GrI-89-3VA" kind="show" identifier="showLogin" id="hTZ-so-wvf"/>
                     </connections>
                 </tableViewController>
@@ -2427,7 +2426,7 @@
                                                         </mask>
                                                     </variation>
                                                     <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="148" y="24.5" width="84" height="29"/>
+                                                        <rect key="frame" x="148" y="24" width="84" height="29"/>
                                                         <mask key="constraints">
                                                             <include reference="l1j-WT-YYE"/>
                                                         </mask>
@@ -6260,7 +6259,7 @@
         <image name="view-button.png" width="61" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="c91-9b-49d"/>
         <segue reference="St6-fG-3gO"/>
+        <segue reference="hTZ-so-wvf"/>
     </inferredMetricsTieBreakers>
 </document>

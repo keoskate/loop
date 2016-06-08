@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "KLCPopup.h"
+#import <ParseUI/ParseUI.h>
 
 @interface KMAAddContactController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 

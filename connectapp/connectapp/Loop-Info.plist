@@ -82,8 +82,12 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSExceptionDomains</key>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSExceptionDomains</key>
 		<dict>
+			<key>New item</key>
+			<string></string>
 			<key>akamaihd.net</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>

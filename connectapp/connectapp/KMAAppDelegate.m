@@ -7,6 +7,7 @@
 //
 
 #import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
 #import "KMAAppDelegate.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
@@ -26,11 +27,17 @@
                              didFinishLaunchingWithOptions:launchOptions];
     [FBSDKLoginButton class];
     // Uncomment and fill in with your Parse credentials:
-    [Parse setApplicationId:@"ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD"
-                  clientKey:@"NhONajvTcZfylI29SVs3Tk46vuCl2940YaAf95gF"];
+//    [Parse setApplicationId:@"ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD"
+//                  clientKey:@"NhONajvTcZfylI29SVs3Tk46vuCl2940YaAf95gF"];
+
+    [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration>  _Nonnull configuration) {
+        configuration.applicationId = @"ZsXOhEDjGOZXmP4eA0kWvOCUEywvGbo65vvirBdD";
+        configuration.clientKey = @"NhONajvTcZfylI29SVs3Tk46vuCl2940YaAf95gF";
+        configuration.server = @"https://loop-networking-app.herokuapp.com/parse";
+    }]];
 
     
-    [PFImageView class];
+    //[PFImageView class];  //keep this or PFImages will break app
 
     //privacy ACL
     PFACL *defaultACL = [PFACL ACL];

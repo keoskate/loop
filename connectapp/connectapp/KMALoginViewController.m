@@ -22,6 +22,12 @@
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationBarHidden = YES;
+    
+    //test -POST
+//    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+//    NSLog(@"Saved");
+//    testObject[@"foo"] = @"bar";
+//    [testObject saveInBackground];
   
 }
 //- (void)viewWillAppear:(BOOL)animated

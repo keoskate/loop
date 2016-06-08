@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
 #import "KMAContactViewController.h"
 
 @interface KMAContactDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate>

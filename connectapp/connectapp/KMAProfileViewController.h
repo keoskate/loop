@@ -6,6 +6,7 @@
 //  Copyright © 2016 Keion Anvaripour. All rights reserved.
 //
 
+#import <ParseUI/ParseUI.h>
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 

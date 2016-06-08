@@ -11,6 +11,7 @@
 #import "KMAAddContactController.h"
 #import "KMAAcceptPopUpView.h"
 //#import "FPPopoverController.h"
+#import <ParseUI/ParseUI.h>
 
 @interface KMARequestTableViewCell : UITableViewCell <UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate>
 
