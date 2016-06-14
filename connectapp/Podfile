@@ -5,6 +5,7 @@
 
 target 'Loop' do
   pod 'Parse'
+  pod 'ParseUI'
 
 end
 

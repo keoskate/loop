@@ -37,7 +37,7 @@
     }]];
 
     
-    //[PFImageView class];  //keep this or PFImages will break app
+    [PFImageView class];  //keep this or PFImages will break app
 
     //privacy ACL
     PFACL *defaultACL = [PFACL ACL];
